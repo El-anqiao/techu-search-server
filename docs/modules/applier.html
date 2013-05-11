@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>techu.libraries.middleware &mdash; Techu 1.0 documentation</title>
+    <title>techu.libraries.applier &mdash; Techu 1.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -24,7 +24,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Techu 1.0 documentation" href="../index.html" />
-    <link rel="prev" title="techu.libraries.daemon" href="daemon.html" /> 
+    <link rel="next" title="techu.libraries.daemon" href="daemon.html" />
+    <link rel="prev" title="techu.libraries.generic" href="generic.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,6 +39,9 @@
              >modules</a> |</li>
         <li class="right" >
           <a href="daemon.html" title="techu.libraries.daemon"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generic.html" title="techu.libraries.generic"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Techu 1.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,18 +52,27 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-techu.libraries.middleware">
-<span id="techu-libraries-middleware"></span><h1>techu.libraries.middleware<a class="headerlink" href="#module-techu.libraries.middleware" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-techu.libraries.applier">
+<span id="techu-libraries-applier"></span><h1>techu.libraries.applier<a class="headerlink" href="#module-techu.libraries.applier" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="techu.libraries.middleware.ConnectionMiddleware">
-<em class="property">class </em><tt class="descclassname">techu.libraries.middleware.</tt><tt class="descname">ConnectionMiddleware</tt><a class="headerlink" href="#techu.libraries.middleware.ConnectionMiddleware" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="techu.libraries.middleware.ConnectionMiddleware.process_request">
-<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#techu.libraries.middleware.ConnectionMiddleware.process_request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Automatically setup connections to the mysql41 interface
-of the Sphinx realtime indexes. 
-One connection is created for each index.</p>
-</dd></dl>
+<dt id="techu.libraries.applier.QueueDaemon">
+<em class="property">class </em><tt class="descclassname">techu.libraries.applier.</tt><tt class="descname">QueueDaemon</tt><big>(</big><em>pidfile</em>, <em>stdin='/dev/null'</em>, <em>stdout='/dev/null'</em>, <em>stderr='/dev/null'</em><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>NOTES</em>
+- different instances should be spawned for each index</p>
+<dl class="attribute">
+<dt id="techu.libraries.applier.QueueDaemon.Logger">
+<tt class="descname">Logger</tt><em class="property"> = None</em><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.Logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.applier.QueueDaemon.fetch_indexes">
+<tt class="descname">fetch_indexes</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.fetch_indexes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.applier.QueueDaemon.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -72,11 +85,14 @@ One connection is created for each index.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
+  <p class="topless"><a href="generic.html"
+                        title="previous chapter">techu.libraries.generic</a></p>
+  <h4>Next topic</h4>
   <p class="topless"><a href="daemon.html"
-                        title="previous chapter">techu.libraries.daemon</a></p>
+                        title="next chapter">techu.libraries.daemon</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/_modules/middleware.txt"
+    <li><a href="../_sources/modules/applier.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -107,6 +123,9 @@ One connection is created for each index.</p>
              >modules</a> |</li>
         <li class="right" >
           <a href="daemon.html" title="techu.libraries.daemon"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generic.html" title="techu.libraries.generic"
              >previous</a> |</li>
         <li><a href="../index.html">Techu 1.0 documentation</a> &raquo;</li> 
       </ul>

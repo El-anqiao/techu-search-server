@@ -11,12 +11,12 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   _modules/models.rst
-   _modules/views.rst
-   _modules/generic.rst
-   _modules/applier.rst
-   _modules/daemon.rst
-   _modules/middleware.rst
+   modules/models.rst
+   modules/views.rst
+   modules/generic.rst
+   modules/applier.rst
+   modules/daemon.rst
+   modules/middleware.rst
 
 Indices and tables
 ==================
