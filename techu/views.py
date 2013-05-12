@@ -94,10 +94,10 @@ def configuration(request, conf_id = 0):
 
 
 def batch_indexer(request, action, index_id):
-  ''' Pass parameters via JSON format for bulk indexing 
-  [{'content': 'some content', 'gid': 5, 'id': 1, 'title': 'document #1 title'}, 
-  {'content': 'some content for document 2', 'gid': 3, 'id': 2, 'title': 'document #2 title'}]
-  http://techu.local:81/batch/insert/23/?data=%5B%7B%22content%22%3A+%22some+content%22%2C+%22gid%22%3A+5%2C+%22id%22%3A+1%2C+%22title%22%3A+%22document+%231+title%22%7D%2C+%7B%22content%22%3A+%22some+content+for+document+2%22%2C+%22gid%22%3A+3%2C+%22id%22%3A+2%2C+%22title%22%3A+%22document+%232+title%22%7D%5D  
+  '''
+  Pass parameters via JSON format for bulk indexing 
+  [{'content': 'some content', 'gid': 5, 'id': 1, 'title': 'document #1 title'}, {'content': 'some content for document 2', 'gid': 3, 'id': 2, 'title': 'document #2 title'}]
+  _Example URL: http://techu.local:81/batch/insert/23/?data=%5B%7B%22content%22%3A+%22some+content%22%2C+%22gid%22%3A+5%2C+%22id%22%3A+1%2C+%22title%22%3A+%22document+%231+title%22%7D%2C+%7B%22content%22%3A+%22some+content+for+document+2%22%2C+%22gid%22%3A+3%2C+%22id%22%3A+2%2C+%22title%22%3A+%22document+%232+title%22%7D%5D  
   '''
   action = action.lower()
   r = request_data(request)
