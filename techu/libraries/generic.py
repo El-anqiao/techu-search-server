@@ -1,4 +1,5 @@
 import MySQLdb
+import re
 
 def cursorfetchall(cursor):
   ''' Returns all rows from a cursor as a dictionary '''
@@ -8,7 +9,7 @@ def cursorfetchall(cursor):
       for row in cursor.fetchall()
   ]
 
-def _regex_check(s, r = r'[^a-zA-Z0-9\-_]+'):
+def regex_check(s, r = r'[^a-zA-Z0-9\-_]+'):
   return (re.match(r, s) is None)
 
 def identq(s):

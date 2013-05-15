@@ -1,12 +1,12 @@
 import os, sys, datetime, codecs
-import json, time, math, re
+import json, time, math
 import uuid, string, hashlib
 import redis
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.db import IntegrityError, DatabaseError
 from django.db import connections, transaction
-from django.db.models.query import QuerySet
+from django.db import models
 from django.core import serializers
 from libraries import sphinxapi
 from libraries.generic import *
@@ -32,7 +32,8 @@ def _response(data, code = 200, serialize = True):
   r = HttpResponse()
   r.status_code = code
   if serialize:
-    if isinstance(data, QuerySet):
+    is_object = isinstance(data, models.query.QuerySet)
+    if isinstance(data, models.query.QuerySet) or (isinstance(data, list) and (isinstance(data[0], models.query.QuerySet))):
       data = serializers.serialize('json', data)
     else:
       data = json.dumps(data)
@@ -48,6 +49,51 @@ def home(request):
   ''' Home/Index page '''
   return HttpResponse("<h1>Techu Indexing Server</h1>\n")
 
+def option_list(request):
+  return _response(Option.objects.filter())
+
+def option(request, section, section_instance_id):
+  ''' Connect options with searchd, indexes & sources and store their values '''
+  section = section.lower()
+  r = request_data(request)
+  data = json.loads(r['data'])
+  options = Option.objects.filter(name__in = data.keys())
+  options_stored = []
+  for option in options:
+    if not isinstance(data[option.name], list):
+      values = [data[option.name]]
+    else:
+      values = data[option.name]
+    for value in values:
+      value = unicode(value)
+      value_hash = hashlib.md5(value).hexdigest()
+      if section == 'searchd':      
+        o = SearchdOption.objects.create(
+              sp_searchd_id = section_instance_id, 
+              sp_option_id = option.id, 
+              value = value,
+              value_hash = value_hash)
+      elif section == 'index':
+        o = IndexOption.objects.create(
+              sp_index_id = section_instance_id,
+              sp_option_id = option.id,
+              value = value,
+              value_hash = value_hash)
+      elif section == 'source':
+        o = SourceOption.objects.create(
+              sp_source_id = section_instance_id,
+              sp_option_id = option.id,
+              value = value,
+              value_hash = value_hash)
+      options_stored.append(o.id)
+  if section == 'searchd':    
+    options_stored = SearchdOption.objects.filter(id__in = options_stored)
+  elif section == 'index':    
+    options_stored = IndexOption.objects.filter(id__in = options_stored) 
+  elif section == 'source':    
+    options_stored = SourceOption.objects.filter(id__in = options_stored)
+  return _response(options_stored)
+
 def index(request, index_id = 0):
   ''' Add or modify information for an index '''
   r = request_data(request)
@@ -55,8 +101,9 @@ def index(request, index_id = 0):
   if index_id == 0:
     try:
       i = Index.objects.create(**fields)
-      if 'cid' in r:
-        ConfigurationIndex.objects.create(sp_index_id = i.id, sp_configuration_id = r['cid'], is_active = 1)
+      if 'conf_id' in r:
+        ConfigurationIndex.objects.create(sp_index_id = i.id, sp_configuration_id = r['conf_id'], is_active = 1)
+      i = Index.objects.filter(pk = i.id)
     except IntegrityError as e:
       Index.objects.filter(name = fields['name']).update(**fields)
       i = Index.objects.get(name = fields['name'])
@@ -65,15 +112,28 @@ def index(request, index_id = 0):
       i = Index.objects.get(pk = index_id)
     except:
       return _error()
-  return HttpResponse(serializers.serialize('json', [i]), mimetype = "application/json")
+  return _response(i)
 
 def index_list(request):
   ''' Return a JSON Array with all indexes '''
-  return HttpResponse(serializers.serialize('json', Index.objects.all()), mimetype = "application/json")
+  return _response(Index.objects.all())
 
 def configuration_list(request):
   ''' Return a JSON Array with all configurations '''
-  return HttpResponse(serializers.serialize('json', Configuration.objects.all()), mimetype = "application/json")
+  return _response( Configuration.objects.all())
+
+def searchd(request, searchd_id = 0):
+  r = request_data(request)
+  fields = model_fields(Searchd, r)
+  if searchd_id > 0:
+    s = Searchd.objects.filter(pk = searchd_id).update(**fields)
+  else:
+    s = Searchd.objects.create(**fields)
+    searchd_id = s.id
+    s = Searchd.objects.filter(pk = searchd_id)
+  if 'conf_id' in r:
+    cs = ConfigurationSearchd.objects.create(sp_configuration_id = int(r['conf_id']), sp_searchd_id = searchd_id)
+  return _response(s)
 
 def configuration(request, conf_id = 0):
   ''' Get or update information for a configuration '''
@@ -82,15 +142,18 @@ def configuration(request, conf_id = 0):
   if conf_id > 0:
     c = Configuration.objects.get(pk = conf_id)
   else:
-    if not _regex_check(r['name']):
+    if not regex_check(r['name']):
       return _error('Illegal configuration name "%s"' % r['name'])
     try:
       c = Configuration.objects.create(**fields)
       c.hash = hashlib.md5(str(c.id) + c.name).hexdigest()
       c.save(update_fields = ['hash'])
-    except IntegrityError as e:
+      c = Configuration.objects.filter(pk = c.id)
+    except Exception as e:
       return _error(str(e))
-  return HttpResponse(serializers.serialize('json', [c]), mimetype = "application/json")
+    except IntegrityError as e:
+      return _error('IntegrityError: ' + str(e))
+  return _response(c)
 
 
 def batch_indexer(request, action, index_id):
@@ -134,6 +197,7 @@ def indexer(request, action, index_id, doc_id):
   ''' Add, delete, update documents '''
   action = action.lower()
   r = request_data(request)
+  data = json.loads(r['data'])
   r['id'] = int(doc_id)
   queue = False  
   resp = None
@@ -141,9 +205,9 @@ def indexer(request, action, index_id, doc_id):
     queue = (int(r['queue']) == 1)
     del r['queue']
   if action == 'insert':
-    resp = insert(index_id, r.keys(), [ r.values() ], queue)
+    resp = insert(index_id, data.keys(), [ data.values() ], queue)
   elif action == 'update':
-    resp = update(index_id, doc_id, r.keys(), r.values(), queue) 
+    resp = update(index_id, doc_id, data.keys(), data.values(), queue) 
   elif action == 'delete':
     resp = delete(index_id, doc_id, queue) 
   else:

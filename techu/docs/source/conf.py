@@ -12,7 +12,7 @@
 # serve to show the default.
 
 import sys, os
-sys.path.append('/home/techu/techu') # The directory that contains settings.py
+sys.path.append('/home/techu-search-server/techu/') # The directory that contains settings.py
 
 # Set up the Django settings/environment
 from django.core.management import setup_environ
