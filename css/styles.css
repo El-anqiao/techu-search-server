@@ -34,6 +34,10 @@ h2 {
   margin-bottom: 40px;  
 }
 
+.content-wrapper h2 {
+  margin-top: 20px;
+}
+
 #logo {
   font-size: 165px;  
 }
