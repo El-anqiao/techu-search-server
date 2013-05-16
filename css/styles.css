@@ -4,8 +4,13 @@
   font-size: 16px;
 }  
 
+body {
+  background-color: #252525;
+}
+
 h1, h2, h3, h4 {
   font-family: Oswald, Arial;
+  margin: 0;
 }
 
 h1, h2 {
@@ -13,13 +18,20 @@ h1, h2 {
   font-weight: 400;
 }
 
+h2 {
+  font-size: 20px;
+  margin-top: 39px;
+  margin-bottom: 39px;
+  margin-left: 39px;
+}
+
 #logo {
   font-size: 165px;
   margin-left: 39px;
 }
 
-#wrapper {
-  width: 80%;
+.content-wrapper {
+  width: 960px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -33,11 +45,185 @@ h1, h2 {
   margin: 0;
 }
 
-#top-menu li {
+#top-menu li {  
+  font-weight: 400;
   height: 20px;
   line-height: 20px;
   padding: 4px 0;
   float: left;
   margin-right: 26px;
+  margin-top: 20px;
   letter-spacing: 6px;
 }
+
+#top-menu li a {
+  text-decoration: none;
+}
+
+#top-menu li a:hover {
+  border-bottom: 1px solid #fff;
+}
+
+#features {
+  background-color: #222824;    
+}
+
+#features-container {
+  float: left;
+  width: 50%;
+}
+
+#gears {
+  background: url(../img/gears.png) #222824 right 0 no-repeat;
+  float: right;
+  width: 300px;
+  height: 294px;
+}
+
+#feature-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-left: 40px;    
+}
+
+#feature-list li {
+  background: url(../img/check.png) left center no-repeat;    
+  height: 40px;
+  width: 95%;  
+}
+
+#feature-list li span {
+  height: 40px;
+  line-height: 40px;
+  margin-left: 50px;
+  padding-left: 15px;
+  background-color: #1B211D;
+  width: 100%;
+  display: block;
+}
+
+#how-it-works-text-container {
+  background-color: #CDE7C0;
+  width: 50%;
+  height: 824px;
+  float: left;
+}
+
+#how-it-works-text {
+  float: right;
+  width: 480px;
+}
+
+#how-it-works-text h2 {
+  color: #000;
+}
+
+#how-it-works-diagram-container {
+  width: 50%;  
+  background: url('../img/bg_grey.jpg') repeat;
+  float: left;
+}
+
+#how-it-works-diagram-wrapper {
+  width: 480px;  
+  float: left;
+}
+
+#how-it-works-diagram {
+  margin: 40px auto;  
+  width: 429px;
+  height: 744px;  
+  background: url(../img/workflow.png) no-repeat;
+} 
+
+#whats-next {
+  background-color: #222824;
+}
+
+#arrows {
+  background: url(../img/arrows.png) #222824 right 0 no-repeat;
+  float: right;
+  width: 209px;
+  height: 207px;
+}
+
+
+#installation {
+  background-color: #23A65A;
+}
+
+#installation h3 {
+  color: #000;
+  margin-left: 39px;
+  font-weight: 400;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+ul.command-list {
+  list-style-type: none;
+  margin: 0 0 0 39px;
+  padding: 0;
+  text-indent: 0;
+}
+
+.command-list li {
+  height: 50px;
+  line-height: 50px;  
+}
+
+.number {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  float: left;
+  text-align: center;
+}
+
+.command {
+  height: 50px;
+  line-height: 50px;
+  float: left;
+  padding: 0 10px;
+  width: 400px;
+}
+
+.even .number {
+  background-color: #1E8C4D;
+}
+
+.odd .number {
+  background-color: #1D8548;
+}
+
+.odd .command {
+  background-color: #219D55;
+}
+
+.even .command {
+  background-color: #24AB5E;
+}
+
+#examples {
+  background-color: #CCE6C1;
+}
+
+#footer {
+  background: url('../img/bg_green.jpg');  
+  height: 60px;
+  line-height: 60px;
+}
+
+.small {
+  font-size: 14px;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+

@@ -12,10 +12,10 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/jquery-plugins/jquery.snippet.min.css">
   <link href="http://fonts.googleapis.com/css?family=Oswald:400,700,300&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
-
   <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-18744331-4']);
@@ -32,16 +32,93 @@
 <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 <![endif]-->
 <div id="wrapper">
-  <div id="header">  
-    <ul id="top-menu" class="clearfix">
-      <li>HOW IT WORKS</li>
-      <li>INSTALLATION</li>
-      <li>EXAMPLES</li>
-      <li>DOCS</li>
-    </ul>    
-    <h1 id="logo">TECHU</h1>
+  <div id="header">
+    <div class="content-wrapper"> 
+      <ul id="top-menu" class="clearfix">
+        <li><a href="#features">FEATURES</a></li>
+        <li><a href="#how-it-works">HOW IT WORKS</a></li>
+        <li><a href="#installation">INSTALLATION</a></li>
+        <li><a href="#examples">EXAMPLES</a></li>
+        <li><a href="./docs">DOCS</a></li>
+      </ul>    
+      <h1 id="logo">TECHU</h1>
+    </div>
+  </div>
+  <div id="features" class="clearfix">
+    <div class="content-wrapper" class="clearfix">
+      <h2>FEATURES</h2>
+      <div id="features-container">
+        <ul id="feature-list">
+         <li><span>Index, search &amp; excerpts highlighting</span></li> 
+        </ul>
+      </div>
+      <div id="gears"></div>
+    </div>
+  </div>
+  <div id="how-it-works" class="clearfix">    
+    <div id="how-it-works-text-container">
+      <div id="how-it-works-text">
+        <h2>HOW IT WORKS</h2>
+      </div>
+    </div>
+    <div id="how-it-works-diagram-container">
+      <div id="how-it-works-diagram-wrapper" class="clearfix">
+        <div id="how-it-works-diagram">
+        </div>
+      </div>
+    </div>    
+  </div>
+  <div id="whats-next" class="clearfix">
+    <div class="content-wrapper" class="clearfix">
+      <h2>WHAT'S NEXT</h2>
+      <div id="features-container">        
+        <ul id="feature-list">
+         <li><span>Automatic batching of queued operations</span></li> 
+        </ul>
+      </div>
+      <div id="arrows"></div>
+    </div>
+  </div>
+  <div id="installation" class="clearfix">
+    <div class="content-wrapper" class="clearfix">
+      <h2>INSTALLATION</h2>
+      <h3>UBUNTU PACKAGES</h3>    
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">apt-get install python-setuptools build-essential</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">apt-get install mysql-server mysql-client</div>
+        </li>
+        <li class="odd">
+          <div class="number">3.</div>
+          <div class="command">apt-get install redis-server</div>
+        </li>
+        <li class="even">
+          <div class="number">4.</div>
+          <div class="command">apt-get install nginx</div>
+        </li>
+        <li class="odd">
+          <div class="number">5.</div>
+          <div class="command">apt-get install python-mysqldb python-flup</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="footer">
+    <div class="content-wrapper">
+      <div class="pull-left small">
+        Techu was one of the names of the Egyptian god of wisdom and scribe of the Gods
+      </div>
+      <div class="pull-right small">
+        Techu 2013 - <a href="http://opensource.org/licenses/MIT" target="_blank" class="small">MIT Licence</a>
+      </div>
+    </div>
   </div>
 </div>
+
 <!--
   <div id="wrapper">
     <div id="page-header">
@@ -181,5 +258,6 @@
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/jquery-plugins/jquery.snippet.min.js"></script>
 </body>
 </html>
