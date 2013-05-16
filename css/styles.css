@@ -21,13 +21,11 @@ h1, h2 {
 h2 {
   font-size: 20px;
   margin-top: 39px;
-  margin-bottom: 39px;
-  margin-left: 39px;
+  margin-bottom: 39px;  
 }
 
 #logo {
-  font-size: 165px;
-  margin-left: 39px;
+  font-size: 165px;  
 }
 
 .content-wrapper {
@@ -83,8 +81,7 @@ h2 {
 #feature-list {
   list-style-type: none;
   padding: 0;
-  margin: 0;
-  margin-left: 40px;    
+  margin: 0;      
 }
 
 #feature-list li {
@@ -154,8 +151,7 @@ h2 {
 }
 
 #installation h3 {
-  color: #000;
-  margin-left: 39px;
+  color: #000;  
   font-weight: 400;
   font-size: 18px;
   margin-bottom: 20px;
@@ -163,9 +159,10 @@ h2 {
 
 ul.command-list {
   list-style-type: none;
-  margin: 0 0 0 39px;
+  margin: 0;
   padding: 0;
   text-indent: 0;
+  margin-bottom: 30px;
 }
 
 .command-list li {
@@ -205,9 +202,75 @@ ul.command-list {
   background-color: #24AB5E;
 }
 
-#examples {
-  background-color: #CCE6C1;
+#examples {  
+  background: url(../img/bg_light_green.jpg) #CCE6C1;
 }
+
+#examples h2 {
+  color: #000;
+}
+
+.example-title {
+  color: #20A75A;
+  font-size: 16px;
+  margin-bottom: 10px; 
+}
+
+.example-box {
+  border-left: 8px solid #20A75A;
+  background-color: #DAF4CD;
+  position: relative;  
+  min-height: 200px;
+  margin-bottom: 40px;
+}
+
+.example-box-content{
+  padding: 20px 0;
+  float: left;
+  margin-left: 40px;
+}
+
+.example-toggle {
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  right: 0;  
+  background-color: #23A65A;
+  width: 45px;
+  height: 45px;
+}
+
+.example-command {
+  background-color: #24AB5E;
+  width: 800px;
+  padding: 10px;
+  font-family: Monospace, Courier New, Arial;
+  font-weight: bold; 
+}
+
+.example-result {
+  display : none;
+  font-family: Monospace, Courier New, Arial;
+  background-color: #C2EBBF;  
+}
+.example-result pre {
+  font-family: Monospace, Courier New, Arial;
+  color: #000;
+  padding: 10px;
+}
+
+.minus {
+  background-image: url(../img/minus.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.plus {
+  background-image: url(../img/plus.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
 
 #footer {
   background: url('../img/bg_green.jpg');  

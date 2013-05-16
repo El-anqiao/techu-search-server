@@ -6,8 +6,9 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Techu Indexing Server v0.1-beta</title>
-  <meta name="description" content="Sphinx full-text search engine, realtime document indexing, Redis queueing">
+  <title>Techu Search Server v0.1-beta</title>
+  <meta name="description" content="Techu is a REST API implementing Sphinx full-text search engine realtime document indexing and 
+  accepting JSON formatted requests. Works along with Redis for buffering and request queueing. Powered by Nginx and the Django Python framework.">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
@@ -105,12 +106,64 @@
           <div class="command">apt-get install python-mysqldb python-flup</div>
         </li>
       </ul>
+      <h3>PYTHON PACKAGES (REQUIRED)</h3>    
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">easy_install redis</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">easy_install django</div>
+        </li>
+        </ul>
+      <h3>PYTHON PACKAGES (OPTIONAL)</h3>    
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">easy_install hiredis</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">easy_install beautifulsoup4</div>
+        </li>        
+      </ul>
+    </div>
+  </div>
+  <div id="examples" class="clearfix">
+    <div class="content-wrapper" class="clearfix">
+      <h2>EXAMPLES</h2>
+      <div class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">CREATE A NEW CONFIGURATION</div>
+          <div class="example-command">
+            curl 'http://techu.local:81/configuration/?name=stackoverflow&description=StackOverflow Posts Indexing Configuration'
+          </div>
+          <div class="example-result">
+            <pre>
+[
+    {
+        "fields": {
+            "date_inserted": "2013-05-14T19:29:49",
+            "description": "StackOverflow Posts Indexing Configuration",
+            "hash": "46ee0a09bcbb064b49b224a9e8efd39a",
+            "is_active": 1,
+            "name": "stackoverflow"
+        },
+        "model": "techu.configuration",
+        "pk": 25
+    }
+]           </pre>
+          </div>          
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
     </div>
   </div>
   <div id="footer">
     <div class="content-wrapper">
       <div class="pull-left small">
-        Techu was one of the names of the Egyptian god of wisdom and scribe of the Gods
+        Techu was the Egyptian god of wisdom and scribe of the Gods
       </div>
       <div class="pull-right small">
         Techu 2013 - <a href="http://opensource.org/licenses/MIT" target="_blank" class="small">MIT Licence</a>
