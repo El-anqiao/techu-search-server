@@ -16,12 +16,22 @@ h1, h2, h3, h4 {
 h1, h2 {
   letter-spacing: 6px;
   font-weight: 400;
+  margin: 0;
+}
+
+#header h2 {
+  margin-bottom: 10px;
+}
+
+#header p {
+  padding: 0 0 20px 0;
+  width: 900px;
+  text-align: justify;    
 }
 
 h2 {
-  font-size: 20px;
-  margin-top: 39px;
-  margin-bottom: 39px;  
+  font-size: 20px;  
+  margin-bottom: 40px;  
 }
 
 #logo {
@@ -41,6 +51,7 @@ h2 {
 #top-menu {
   list-style-type : none;
   margin: 0;
+  padding: 0;
 }
 
 #top-menu li {  
@@ -225,8 +236,7 @@ ul.command-list {
 }
 
 .example-box-content{
-  padding: 20px 0;
-  float: left;
+  padding: 20px 0;  
   margin-left: 40px;
 }
 
