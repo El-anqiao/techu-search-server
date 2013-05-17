@@ -1,8 +1,12 @@
-*, body {
+html > *, body {
   font-family: "Open Sans", Arial;
   color: #fff;
   font-size: 16px;
 }  
+
+a {
+  color: #fff;
+}
 
 body {
   background-color: #252525;
@@ -10,13 +14,21 @@ body {
 
 h1, h2, h3, h4 {
   font-family: Oswald, Arial;
-  margin: 0;
+  margin: 0;    
 }
 
 h1, h2 {
   letter-spacing: 6px;
   font-weight: 400;
-  margin: 0;
+  margin: 50px 0;  
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 18px;
 }
 
 #header h2 {
@@ -24,22 +36,14 @@ h1, h2 {
 }
 
 #header p {
-  padding: 0 0 20px 0;
+  padding: 0 0 50px 0;
   width: 900px;
   text-align: justify;    
 }
 
-h2 {
-  font-size: 20px;  
-  margin-bottom: 40px;  
-}
-
-.content-wrapper h2 {
-  margin-top: 20px;
-}
-
 #logo {
-  font-size: 165px;  
+  font-size: 165px;
+  margin-bottom: 0;  
 }
 
 .content-wrapper {
@@ -118,18 +122,30 @@ h2 {
 #how-it-works-text-container {
   background-color: #CDE7C0;
   width: 50%;
-  height: 824px;
   float: left;
+  color: #000;
 }
 
 #how-it-works-text {
   float: right;
   width: 480px;
+  color: #000;  
+}
+
+#how-it-works-text p, #how-it-works-text a {
+  line-height: 22px;
+  font-size: 14px;
+  text-align: justify;
+  width: 90%;
+  color: #000;
+}
+
+#how-it-works-text h3 {
+  margin: 4px 0;
 }
 
 #how-it-works-text h2 {
-  color: #000;
-  margin-top: 20px;
+  color: #000;  
 }
 
 #how-it-works-diagram-container {
@@ -139,7 +155,7 @@ h2 {
 }
 
 #how-it-works-diagram-wrapper {
-  width: 480px;  
+  width: 480px;    
   float: left;
 }
 
@@ -291,7 +307,6 @@ ul.command-list {
   background-repeat: no-repeat;
   background-position: center center;
 }
-
 
 #footer {
   background: url('../img/bg_green.jpg');  

@@ -8,7 +8,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Techu Search Server v0.1-beta</title>
   <meta name="description" content="Techu is a REST API implementing Sphinx full-text search engine realtime document indexing and 
-  accepting JSON formatted requests. Works along with Redis for buffering and request queueing. Powered by Nginx and the Django Python framework.">
+  accepting JSON formatted requests. Works along with Redis for buffering and request queueing. 
+  Powered by Nginx and the Django Python framework.">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
@@ -72,8 +73,47 @@
   </div>
   <div id="how-it-works" class="clearfix">    
     <div id="how-it-works-text-container">
-      <div id="how-it-works-text">
+      <div id="how-it-works-text" class="clearfix">
         <h2>HOW IT WORKS</h2>
+        <p>
+        The logic behind Techu is pretty straightforward, as you can see in the flow diagram to the right. 
+        Application code sends an HTTP request that corresponds to a specific action. 
+        There are 2 major groups of operations; <i>indexing</i> &amp; <i>searching</i>. 
+        Indexing involves inserting or deleting a document from the index or modifying attributes or text fields for a document.  
+        Searching on the other hand involves performing full-text searches and retrieving highlighted excerpts.  
+        </p>
+        <p>
+        In the current beta version, most request data are passed 
+        via a single <code>data</code> parameter with a JSON-formatted value, with some exceptions 
+        usually involving requests for the Sphinx configurations handling,
+        but in the future <strong>all</strong> requests will be following this protocol for simplicity and uniformity.
+        Oh, and yes, now you can keep you Sphinx configurations in order, by storing them in Techu's MySQL DB schema 
+        (although this feature can be bypassed also). On each regeneration command Techu will 
+        automatically restart the corresponding searchd.             
+        </p>
+        <p>
+        After the application dispatches a request, Nginx receives it and the Django Python Web framework processes the request.
+        As you can see in the diagram, indexing operations can be optionally queued for asynchronous execution. 
+        In that case, a Redis key is returned as a response and the request 
+        is later converted to SphinxQL and sent to Sphinx with the script referred as <i>applier</i> 
+        (we probably should find a better name for this). 
+        </p>
+        <p>If no queueing is required, then the data are converted to SphinxQL 
+        statement (or statements if you are batch inserting documents).
+        For a searching operation, either full-text search or highlighted excerpts, 
+        the response can either originate directly from Redis (cache) or if there is no cache entry, the attribute filters and the query
+        will be converted to SphinxQL and retrieved from Sphinx directly.     
+        </p>
+        <h3>Why Redis?</h3>
+        <p>Key-value storage, optionally persistent, with very large value length limit (512M) capable of storing a lot of text. 
+          Redis list and hash structures are key components of the caching and queueing sub-systems.</p>
+        <h3>Why SphinxQL?</h3>
+        <p>It is faster than the API.</p>
+        <h3>Why Nginx?</h3>
+        <p>Faster web server, ensures high concurrency and low latency</p>
+        <h3>Why these components overall?</h3>
+        <p>Every component is well established software and excels in its area. Also they can be commonly found in most stacks. 
+        We wouldn't like to reinvent the wheel, plus there is no need for some exotic configuration for you to learn or setup!</p>    
       </div>
     </div>
     <div id="how-it-works-diagram-container">
@@ -195,7 +235,7 @@ server {
       <div class="example-box clearfix">        
         <div class="example-box-content">
           <div class="example-title">CREATE A NEW CONFIGURATION</div>
-          <div class="example-command">
+          <div class="command">
             curl 'http://techu.local:81/configuration/?name=stackoverflow&description=StackOverflow Posts Indexing Configuration'
           </div>
           <div class="example-result">
