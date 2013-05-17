@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/jquery-plugins/jquery.snippet.min.css">
   <link href="http://fonts.googleapis.com/css?family=Oswald:400,700,300&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
@@ -42,15 +41,13 @@
         <li><a href="#examples">EXAMPLES</a></li>
         <li><a href="./docs">DOCS</a></li>
       </ul>    
-      <h1 id="logo">TECHU</h1>
+      <h1 id="logo">TECHU</h1>      
       <h2>RESTFUL REALTIME FULL-TEXT SEARCH</h2>
       <p>
         Techu exposes a RESTful API for realtime indexing and searching with the   
         <a href="http://sphinxsearch.com/" target="_blank">Sphinx full-text search engine</a>.
-        We leverage the <a href="http://redis.io" target="_blank">Redis</a> key-value storage engine for buffering and asynchronous
-        execution of incoming requests. <a href="http://nginx.org/" target="_blank">Nginx</a> ensures high concurrency and low latency 
-        and <a href="https://www.djangoproject.com/" target="_blank">Django framework</a> 
-        allows for easy customization and extensibility. Every component is included in modern, common stacks.  
+        <br />We leverage <a href="http://redis.io" target="_blank">Redis</a>, <a href="http://nginx.org/" target="_blank">Nginx</a> 
+        and the Python <a href="https://www.djangoproject.com/" target="_blank">Django framework</a> to make searching easier to handle.
       </p>
     </div>
   </div>
@@ -59,7 +56,15 @@
       <h2>FEATURES</h2>
       <div id="features-container">
         <ul id="feature-list">
-         <li><span>Index, search &amp; excerpts highlighting</span></li> 
+          <li><span>Realtime indexing with HTTP calls and JSON data format</span></li>
+          <li><span> Redis request buffering and asynchronous statement execution to increase throughput and reduce application latency</span></li>
+          <li><span>Batch insert for faster index rebuilding</span></li>
+          <li><span>Searching with a simplified JSON interface for specifying filters, sorting and grouping</span></li>
+          <li><span>Highlighted excerpts that comply to Sphinx query syntax</span></li>
+          <li><span>Manage your index and searchd configuration in a relational MySQL schema</span></li>
+          <li><span>High concurrency with the Nginx web server</span></li>
+          <li><span>Ability to extend by writing and attaching scripts to the Python Django Web framework</span></li>
+          <li><span>Lightweight with simple deployment and installation</span></li> 
         </ul>
       </div>
       <div id="gears"></div>
@@ -77,17 +82,6 @@
         </div>
       </div>
     </div>    
-  </div>
-  <div id="whats-next" class="clearfix">
-    <div class="content-wrapper" class="clearfix">
-      <h2>WHAT'S NEXT</h2>
-      <div id="features-container">        
-        <ul id="feature-list">
-         <li><span>Automatic batching of queued operations</span></li> 
-        </ul>
-      </div>
-      <div id="arrows"></div>
-    </div>
   </div>
   <div id="installation" class="clearfix">
     <div class="content-wrapper" class="clearfix">
@@ -114,6 +108,10 @@
           <div class="number">5.</div>
           <div class="command">apt-get install python-mysqldb python-flup</div>
         </li>
+        <li class="even">
+          <div class="number">6.</div>
+          <div class="command">apt-get install git</div>
+        </li>
       </ul>
       <h3>PYTHON PACKAGES (REQUIRED)</h3>    
       <ul class="command-list">
@@ -137,6 +135,58 @@
           <div class="command">easy_install beautifulsoup4</div>
         </li>        
       </ul>
+      <h3>SPHINX</h3>
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">wget http://sphinxsearch.com/files/sphinx-2.1.1-beta.tar.gz</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">tar -zxvf sphinx-2.1.1-beta.tar.gz</div>
+        </li> 
+        <li class="odd">
+          <div class="number">3.</div>
+          <div class="command">cd sphinx-2.1.1-beta</div>
+        </li>
+        <li class="even">
+          <div class="number">4.</div>
+          <div class="command">./configure &amp;&amp; make install</div>
+        </li>       
+      </ul>              
+      <h3>CONFIGURATION</h3>
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">git clone https://github.com/georgepsarakis/techu-search-server.git</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">vim /etc/nginx/sites-available/techu</div>          
+        </li>                                    
+      </ul>
+      <div class="example-result" style="display: block;">
+<pre># ---------------------#
+# Virtual host contents#
+# ---------------------#    
+server {
+  listen 81;
+  server_name techu;
+  access_log /var/log/nginx/techu.access.log;
+  error_log /var/log/nginx/techu.error.log;
+
+  location / {
+    include fastcgi_params;
+    fastcgi_pass 127.0.0.1:8080;
+    fastcgi_split_path_info ^()(.*)$;
+  }
+}</pre>
+      </div>
+      <p style="width: 640px;">
+        <span class="small"><sup>*</sup>Add the domain <i class="small">techu</i> (or <i class="small">techu.local</i>) 
+        in your <i class="small">/etc/hosts</i> file, pointing to your server's internal IP, not <i class="small">localhost</i> 
+        in order to connect to Sphinx <i class="small">searchd</i> with the MySQL protocol on a specific port.</small>
+      </p>
     </div>
   </div>
   <div id="examples" class="clearfix">
@@ -167,6 +217,31 @@
         </div>
         <div class="example-toggle plus" title="Show JSON response"></div>
       </div>
+    </div>
+  </div>
+  <div id="whats-next" class="clearfix">
+    <div class="content-wrapper" class="clearfix">
+      <h2>WHAT'S NEXT</h2>
+      <div id="features-container">        
+        <ul id="feature-list">
+          <li><span>Automatic batching of queued operations. Smart cancelling of overlapping statements.</span></li>
+          <li><span>Cache structures to Redis (fields & attributes, index names, connection data)</span></li>
+          <li><span>Search &amp; Highlighted Excerpts Cache Invalidations and TTL</span></li>
+          <li><span>Explicit index flushing</span></li>
+          <li><span>Faceting</span></li>
+          <li><span>Scripting</span></li>
+          <li><span>Clustering</span></li>
+          <li><span>Request Hooks</span></li>
+          <li><span>Server Statistics Page (
+              Cache hit/miss ratios, 
+              Requests/sec
+              Requests in queue,
+              Executed Statements/sec
+            )
+              </span></li> 
+        </ul>
+      </div>
+      <div id="arrows"></div>
     </div>
   </div>
   <div id="footer">
@@ -320,6 +395,5 @@
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/jquery-plugins/jquery.snippet.min.js"></script>
 </body>
 </html>

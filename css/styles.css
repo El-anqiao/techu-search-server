@@ -96,20 +96,20 @@ h2 {
 #feature-list {
   list-style-type: none;
   padding: 0;
-  margin: 0;      
+  margin: 0 0 20px 0;        
 }
 
-#feature-list li {
-  background: url(../img/check.png) left center no-repeat;    
-  height: 40px;
-  width: 95%;  
+#feature-list > li {
+  background: url(../img/check.png) left center no-repeat;      
+  width: 95%;
+  margin-bottom: 10px;
+  line-height: 24px;    
 }
 
-#feature-list li span {
-  height: 40px;
-  line-height: 40px;
+#feature-list > li span {
+  line-height: 24px;
   margin-left: 50px;
-  padding-left: 15px;
+  padding: 8px;
   background-color: #1B211D;
   width: 100%;
   display: block;
@@ -129,6 +129,7 @@ h2 {
 
 #how-it-works-text h2 {
   color: #000;
+  margin-top: 20px;
 }
 
 #how-it-works-diagram-container {
@@ -158,6 +159,9 @@ h2 {
   float: right;
   width: 209px;
   height: 207px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 160px;
 }
 
 
@@ -198,7 +202,7 @@ ul.command-list {
   line-height: 50px;
   float: left;
   padding: 0 10px;
-  width: 400px;
+  width: 600px;
 }
 
 .even .number {
@@ -259,18 +263,21 @@ ul.command-list {
   width: 800px;
   padding: 10px;
   font-family: Monospace, Courier New, Arial;
-  font-weight: bold; 
+  font-weight: bold;
+  margin-bottom: 8px; 
 }
 
 .example-result {
   display : none;
   font-family: Monospace, Courier New, Arial;
-  background-color: #C2EBBF;  
+  background-color: #C2EBBF;
+  width: 800px;
+  padding: 10px;  
 }
+
 .example-result pre {
-  font-family: Monospace, Courier New, Arial;
-  color: #000;
-  padding: 10px;
+  font-family: Monospace, Courier New, Arial;  
+  color: #000;      
 }
 
 .minus {
