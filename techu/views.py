@@ -193,26 +193,27 @@ def batch_indexer(request, action, index_id):
     return _error(message = 'Unknown action. Valid types are [ insert, update, delete ]')
   return _response(responses)    
 
-def indexer(request, action, index_id, doc_id):
+def indexer(request, action, index_id, doc_id = 0):
   ''' Add, delete, update documents '''
   action = action.lower()
   r = request_data(request)
-  data = json.loads(r['data'])
-  r['id'] = int(doc_id)
+  if 'data' in r:
+    data = json.loads(r['data'])
+    if 'id' in data and doc_id == 0:
+      doc_id = int(data['id'])
   queue = False  
-  resp = None
   if 'queue' in r:
     queue = (int(r['queue']) == 1)
     del r['queue']
   if action == 'insert':
-    resp = insert(index_id, data.keys(), [ data.values() ], queue)
+    response = insert(index_id, data.keys(), [ data.values() ], queue)
   elif action == 'update':
-    resp = update(index_id, doc_id, data.keys(), data.values(), queue) 
+    response = update(index_id, doc_id, data.keys(), data.values(), queue) 
   elif action == 'delete':
-    resp = delete(index_id, doc_id, queue) 
+    response = delete(index_id, doc_id, queue) 
   else:
-    raise Exception()
-  return HttpResponse(json.dumps(resp.strip() + "\n"), mimetype = "application/json")
+    return _error('Invalid action "%s"' % (action,))
+  return _response(response)
 
 def insert(index_id, fields, values, queue = True):
   ''' 
@@ -220,24 +221,17 @@ def insert(index_id, fields, values, queue = True):
   Supports multiple VALUES sets for batch inserts.
   '''
   index = fetch_index_name(index_id)
-  sql = "INSERT INTO %s(%s) VALUES" % (index, ',' . join(fields))
-  values_sql = ''
-  for value_set in values:
-    values_sql += '('
-    for v in value_set:
-      values_sql += q(v) + ','
-    values_sql = values_sql.rstrip(',') + '),'
-  sql += values_sql.rstrip(',')
-  if queue:
-    queue = 'insert'  
-  return add_to_index(index, sql, queue)
+  sql  = "INSERT INTO %s(%s) VALUES" % (index, ',' . join(fields))
+  sql += '(' + ','.join([ '%s' for v in values[0] ]) + ')'
+  '''
+  Possible issue when quoting signed rt_attr_bigint values (could this originate from 32-bit systems arch?)
+  '''
+  return add_to_index(index, sql, queue, values)
 
 def delete(index_id, doc_id, queue = True):
   ''' Build DELETE statement '''
   index = fetch_index_name(index_id)
-  sql = 'DELETE FROM ' + identq(index) + ' WHERE id = %s' % (q(doc_id),)
-  if queue:
-    queue = 'delete'
+  sql = 'DELETE FROM ' + identq(index) + ' WHERE id = %d' % (int(doc_id),)
   return add_to_index(index, sql, queue)
 
 def update(index_id, doc_id, fields, values, queue = True):
@@ -245,14 +239,11 @@ def update(index_id, doc_id, fields, values, queue = True):
   index = fetch_index_name(index_id)
   sql = 'UPDATE %s SET ' % (identq(index),)
   for n, v in enumerate(values):
-    sql += fields[n] + ' = %s,' % (q(v),)
-  sql = sql.rstrip(',') + ' WHERE id = %s' % (doc_id,)
-  if queue:
-    queue = 'update'
-  return add_to_index(index, sql, queue)
+    sql += fields[n] + ' = %s,'
+  sql = sql.rstrip(',') + ' WHERE id = ' + str(int(doc_id))
+  return add_to_index(index, sql, queue, values)
 
-@transaction.commit_manually
-def add_to_index(index, sql, queue, retries = 0):
+def add_to_index(index, sql, queue, values = None, retries = 0):
   ''' 
   Either adds to index directly or queues statements 
   for async execution by storing them in Redis 
@@ -261,24 +252,36 @@ def add_to_index(index, sql, queue, retries = 0):
   '''
   if retries > settings.MAX_RETRIES: 
     return _error(message = 'Maximum retries %d exceeded' % MAX_RETRIES)
+  queue_action = None
+  if sql.find('INSERT') == 0:
+    queue_action = 'insert'
+  elif sql.find('UPDATE') == 0:
+    queue_action = 'update'
+  elif sql.find('DELETE') == 0:
+    queue_action = 'delete'
+  response = None
   if not queue:
     try:
       c = connections['sphinx:' + index]
       cursor = c.cursor()
-      sql = ' ' . join(sql)
-      cursor.execute( sql )
-      c.commit()
+      if queue_action == 'delete':
+        cursor.execute( sql )
+      elif queue_action == 'update':
+        cursor.execute(sql, values)
+      elif queue_action == 'insert':
+        cursor.executemany(sql, values)
       r = redis.StrictRedis()
-      r.hset(index + ':last-modified', queue, int(time.time()*10**6))
+      r.hset(index + ':last-modified', queue_action, int(time.time()*10**6))
+      response = {'searchd' : 'ok'}
     except Exception as e:
-      c.rollback()
-      add_to_index(index, sql, True, retries + 1)
+      response = add_to_index(index, sql, True, values, retries + 1)
   else:
     try:
-      return rqueue(queue, index, sql)
+      rkey = rqueue(queue_action, index, sql, values)
+      response = { 'redis' : rkey }
     except Exception as e:
-      add_to_index(index, sql, False, retries + 1)
-  return True
+      response = add_to_index(index, sql, False, values, retries + 1)
+  return response
 
 def fetch_index_name(index_id):
   ''' Fetch index name by id '''
@@ -287,7 +290,7 @@ def fetch_index_name(index_id):
   except Exception as e:
     return _error(message = 'No such index')
 
-def rqueue(queue, index, data):
+def rqueue(queue, index, sql, values):
   '''
   Redis queue for incoming requests
   Applier daemon continuously reads from this queue 
@@ -297,10 +300,11 @@ def rqueue(queue, index, data):
   c = r.incr(settings.TECHU_COUNTER)
   request_time = int(time.time()*10**6)
   key = ':' . join(map(str, [ queue, index, request_time, c ]))
-  if isinstance(data, list):
-    data = ' '.join(data)
-  if not isinstance(data, basestring):
-    data = json.dumps(data)
+  if queue == 'delete':
+    data = { 'sql' : sql, 'values' : [] }
+  else:
+    data = { 'sql' : sql, 'values' : values }
+  data = json.dumps(data)
   ''' Transaction '''
   p = r.pipeline()
   p.rpush('queue:' + index, key)

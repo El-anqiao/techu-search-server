@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import imp, os, sys
+import imp, os, sys, json
 import time, redis, re 
 from django.core.management import setup_environ
 settings_path = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[0:-1])
@@ -38,16 +38,17 @@ class QueueDaemon(Daemon):
         keys = r.lrange('queue:' + index, 0, -1)
         if keys:
           for key in keys:
-            sql = r.get(key)
-            self.Logger.info('Applying key ' + key + '->' + sql.replace("\n", ' '))
+            data = r.get(key)
+            data = json.loads(data) 
+            self.Logger.info('Applying key ' + key)
             action = key.split(':')[0]
             try:
-              m.execute(sql)
+              m.executemany(data['sql'], data['values'])
             except IntegrityError as e:
               pass
             except DatabaseError as e:
               if action == 'insert':
-                m.execute(replace.sub('REPLACE ', sql))
+                m.executemany(replace.sub('REPLACE ', data['sql']), data['values'])
               else:
                 pass
             p = r.pipeline()

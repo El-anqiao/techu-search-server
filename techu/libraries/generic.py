@@ -17,8 +17,10 @@ def identq(s):
   return '`' + s.replace('`', '') + '`'
 
 def q(s):
-  ''' Escape SQL parameter '''
-  return "'" + MySQLdb.escape_string(unicode(s)) + "'"
+  ''' DEPRECATED: Escape SQL parameter '''
+  if not isinstance(s, basestring):
+    s = unicode(s)
+  return "'" + MySQLdb.escape_string(s) + "'"
 
 def model_to_dict(instance):
   data = {}

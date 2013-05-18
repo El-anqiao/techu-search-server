@@ -15,7 +15,7 @@ url = 'http://api.stackexchange.com/2.1/posts?page=%d&pagesize=100&order=desc&so
 
 ''' Download 20x100 posts (questions & answers) from StackOverflow '''
 fw = codecs.open('data.json', mode = 'a', encoding = 'utf-8')
-for n in range(8, 41):
+for n in range(1, 21):
   print 'Downloading page', n
   cmd = fetch_url % { 'url' : url % n, 'json' : 'page.%d.json' % n }
   print cmd
@@ -34,6 +34,10 @@ for n in range(8, 41):
     post_item['last_activity_date'] = item['last_activity_date']
     post_item['is_answer'] = int(item['post_type'] == 'answer')
     post_item['score'] = item['score']
+    if 'owner' in item:
+      post_item['user_id'] = item['owner']['user_id']
+    else:
+      post_item['user_id'] = 0
     html = requests.get(item['link'])
     soup = bs(html.text)
     body = ''
