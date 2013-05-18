@@ -124,12 +124,16 @@ h3 {
   width: 50%;
   float: left;
   color: #000;
+  position: relative; /* required for scrollbar plugin */
+  height: 824px;
+  overflow: hidden;
 }
 
 #how-it-works-text {
   float: right;
   width: 480px;
   color: #000;  
+  height: 1400px;
 }
 
 #how-it-works-text p, #how-it-works-text a {
@@ -284,16 +288,42 @@ ul.command-list {
 }
 
 .example-result {
+  border-left: 50px solid;  
   display : none;
   font-family: Monospace, Courier New, Arial;
   background-color: #C2EBBF;
-  width: 800px;
+  width: 600px;
   padding: 10px;  
 }
 
+.even .example-result {
+  border-color: #1E8C4D;
+  background-color: #24AB5E;
+}
+
+.odd .example-result {
+  border-color: #1D8548;
+  background-color: #219D55;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0!important;
+}
+
+.example-box-content .command-list li {
+  min-height: 50px;
+  height: auto!important;
+}
+
+.example-box-content .command {
+  height: auto!important;
+  line-height: 24px;
+  min-height: 50px;
+}
+
 .example-result pre {
-  font-family: Monospace, Courier New, Arial;  
-  color: #000;      
+  font-family: "Open Sans";
+  margin: 0;
 }
 
 .minus {
@@ -326,3 +356,17 @@ ul.command-list {
   float: right;
 }
 
+.note {
+  background: url(../img/note.png) 0 0 no-repeat;
+  width: 220px;
+  height: 237px;
+  position: absolute;
+  top: -50px;
+  right:0;  
+}
+
+.note .content {
+  margin-top: 24px;
+  color: #000;  
+  padding: 0 12px;
+}

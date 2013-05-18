@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/perfect-scrollbar.css">
   <link href="http://fonts.googleapis.com/css?family=Oswald:400,700,300&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
@@ -104,14 +105,14 @@
         the response can either originate directly from Redis (cache) or if there is no cache entry, the attribute filters and the query
         will be converted to SphinxQL and retrieved from Sphinx directly.     
         </p>
-        <h3>Why Redis?</h3>
+        <h3>WHY REDIS?</h3>
         <p>Key-value storage, optionally persistent, with very large value length limit (512M) capable of storing a lot of text. 
           Redis list and hash structures are key components of the caching and queueing sub-systems.</p>
-        <h3>Why SphinxQL?</h3>
+        <h3>WHY SPHINXQL?</h3>
         <p>It is faster than the API.</p>
-        <h3>Why Nginx?</h3>
+        <h3>WHY NGINX?</h3>
         <p>Faster web server, ensures high concurrency and low latency</p>
-        <h3>Why these components overall?</h3>
+        <h3>WHY THESE COMPONENTS OVERALL?</h3>
         <p>Every component is well established software and excels in its area. Also they can be commonly found in most stacks. 
         We wouldn't like to reinvent the wheel, plus there is no need for some exotic configuration for you to learn or setup!</p>    
       </div>
@@ -195,7 +196,7 @@
         </li>       
       </ul>              
       <h3>CONFIGURATION</h3>
-      <ul class="command-list">
+      <ul class="command-list no-margin-bottom">
         <li class="odd">
           <div class="number">1.</div>
           <div class="command">git clone https://github.com/georgepsarakis/techu-search-server.git</div>
@@ -205,11 +206,17 @@
           <div class="command">vim /etc/nginx/sites-available/techu</div>          
         </li>                                    
       </ul>
-      <div class="example-result" style="display: block;">
-<pre># ---------------------#
-# Virtual host contents#
-# ---------------------#    
-server {
+      <div class="even" style="position: relative;">
+      <div class="note">
+        <div class="content">
+          <span class="small">Add the domain <b class="small">techu</b> (or <b class="small">techu.local</b>) 
+          in your <b class="small">/etc/hosts</b> file, pointing to your server's internal IP, not <b class="small">localhost</b> 
+          in order to connect to Sphinx <b class="small">searchd</b> with the MySQL protocol on a specific port.
+          </span>
+        </div>
+      </div>
+      <div class="example-result" style="display:block">
+<pre>server {
   listen 81;
   server_name techu;
   access_log /var/log/nginx/techu.access.log;
@@ -222,11 +229,7 @@ server {
   }
 }</pre>
       </div>
-      <p style="width: 640px;">
-        <span class="small"><sup>*</sup>Add the domain <i class="small">techu</i> (or <i class="small">techu.local</i>) 
-        in your <i class="small">/etc/hosts</i> file, pointing to your server's internal IP, not <i class="small">localhost</i> 
-        in order to connect to Sphinx <i class="small">searchd</i> with the MySQL protocol on a specific port.</small>
-      </p>
+      </div>
     </div>
   </div>
   <div id="examples" class="clearfix">
@@ -235,10 +238,16 @@ server {
       <div class="example-box clearfix">        
         <div class="example-box-content">
           <div class="example-title">CREATE A NEW CONFIGURATION</div>
-          <div class="command">
-            curl 'http://techu.local:81/configuration/?name=stackoverflow&description=StackOverflow Posts Indexing Configuration'
-          </div>
-          <div class="example-result">
+          <ul class="command-list no-margin-bottom">
+            <li class="odd">
+              <div class="number">1.</div>
+              <div class="command">
+              curl 'http://techu.local:81/configuration/?name=stackoverflow&description=StackOverflow Posts Indexing Configuration'
+              </div>
+            </li>
+          </ul>
+          <div class="odd">
+            <div class="example-result">
             <pre>
 [
     {
@@ -253,7 +262,8 @@ server {
         "pk": 25
     }
 ]           </pre>
-          </div>          
+            </div>
+          </div>
         </div>
         <div class="example-toggle plus" title="Show JSON response"></div>
       </div>
@@ -295,144 +305,11 @@ server {
     </div>
   </div>
 </div>
-
-<!--
-  <div id="wrapper">
-    <div id="page-header">
-      <h1>Techu</h1>
-      <small>Realtime Document Indexing &amp; Search</small>
-    </div>
-
-    <div class="tab pull-left">
-      <h3>Interface</h3>
-      <ul>
-        <li>REST</li>
-        <li>HTTP</li>
-        <li>Pass data in JSON format</li>
-        <li>Optional request queueing</li>
-        <li>Easy setup</li>
-      </ul>
-    </div>
-    <div class="tab pull-left">
-      <h3>Features</h3>
-      <ul>
-        <li>Index, search &amp; excerpts highlighting</li>
-        <li>Realtime indexing allows instant index modifications</li>
-        <li>Manage index options and generate configuration files</li>
-      </ul>
-    </div>
-    <div class="tab pull-left">
-      <h3>Internals</h3>
-      <ul>
-        <li>Manage multiple searchd configurations and indexes via HTTP</li>
-        <li>Queue requests with Redis for asynchronous operations</li>
-        <li>Index documents with batch or simple indexer calls</li>
-        <li>Cache search and highlighted excerpts in Redis</li>
-        <li>High concurrency and response speed with Nginx web server and the Django framework</li>
-      </ul>
-    </div>
-    <div class="tab pull-left">
-      <h3>Components</h3>
-      <ul>
-        <li>Nginx</li>
-        <li>Django</li>
-        <li>
-          Redis
-          <li>Queueing/Buffering</li>
-          <li>Caching</li>
-        </li>
-        <li>
-          SphinxSearch
-          <ul>
-            <li>Realtime Indexes</li>
-            <li>SphinxQL</li>
-          </ul>
-        </li>
-        <li>MySQL</li>
-      </ul>
-    </div>
-    <div class="tab tab-full pull-left">
-      <h3>What's next</h3>
-      <ul>
-        <li>Automatic batch of queued operations</li>
-        <li>Cache structures to Redis (fields &amp; attributes, index names, connection data)</li>
-        <li>Search &amp; Highlighted Excerpts Cache Invalidations and TTL</li>
-        <li>Explicit index flushing</li>
-        <li>Faceting</li>
-        <li>Scripting</li>
-      </ul>
-      <ul>
-        <li>Clustering</li>
-        <li>Request Hooks</li>
-        <li>Server Statistics Page
-          <ul>
-            <li>Cache hit/miss ratios</li>
-            <li>Requests/sec</li>
-            <li>Requests in queue</li>
-            <li>Executed Statements/sec</li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="clearfix"></div> 
-    <h2 id="installation" class="section">Installation</h2>
-    <h3>Ubuntu Packages</h3>
-    <pre class="highlight">
-    apt-get install python-setuptools build-essential
-    apt-get install mysql-server mysql-client
-    apt-get install redis-server
-    apt-get install nginx
-    apt-get install python-mysqldb python-flup
-    </pre>
-    <h3>Python Packages (Required)</h3>
-    <pre class="highlight">
-    easy_install redis
-    easy_install django
-    </pre>
-    <h3>Python Packages (Optional)</h3>
-    <pre class="highlight">
-    easy_install hiredis
-    </pre>
-    <h3>Sphinx</h3>
-    <pre class="highlight">
-    wget http://sphinxsearch.com/files/sphinx-2.1.1-beta.tar.gz
-    tar -zxvf sphinx-2.1.1-beta.tar.gz
-    cd sphinx-2.1.1-beta
-    ./configure &amp;&amp; make install
-    </pre>
-    <h3>Configure Nginx</h3>
-    <pre class="highlight">
-    vim /etc/nginx/sites-available/techu
-      # ---------------------#
-      # Virtual host contents#
-      # ---------------------#    
-      server {
-        listen 81;
-        server_name techu;
-        access_log /var/log/nginx/techu.access.log;
-        error_log /var/log/nginx/techu.error.log;
-
-        location / {
-          include fastcgi_params;
-          fastcgi_pass 127.0.0.1:8080;
-          fastcgi_split_path_info ^()(.*)$;
-        }
-      }      
-    </pre>
-    <sup>*</sup>Add the domain <i>techu</i> in your <i>/etc/hosts</i> file.
-<div class="clearfix"></div>
-    <div id="footer">
-      <div id="footer-content">
-        <i><a href="http://en.wikipedia.org/wiki/Thoth#Further_names_and_spellings" target="_blank">Techu</a></i> 
-           was the Egyptian god of wisdom and the scribe of the gods.
-      </div>
-      <div id="copyright">Techu &copy; 2013</div>
-    </div>
-  </div> 
-   --> <!-- wrapper -->
-  
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+  <script src="js/jquery-plugins/jquery.mousewheel.js"></script>
+  <script src="js/jquery-plugins/jquery.perfect-scrollbar.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
 </body>

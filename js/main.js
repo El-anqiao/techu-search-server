@@ -8,5 +8,8 @@ $(document).ready(function(){
     }
     $(el).slideToggle();
   });
-  $('#how-it-works-diagram-container').height($('#how-it-works-text').height());
+  $('#how-it-works-text-container').perfectScrollbar({
+    wheelSpeed: 20,
+    wheelPropagation: true
+  });
 });
