@@ -7,6 +7,8 @@ html > *, body {
 
 a {
   color: #fff;
+  border-bottom: 1px solid #fff;
+  text-decoration: none;
 }
 
 body {
@@ -71,7 +73,8 @@ h3 {
 #logo, #logo a {
   font-size: 165px;
   margin-bottom: 0;
-  text-decoration: none;  
+  text-decoration: none;
+  border: 0;  
 }
 
 .content-wrapper {
@@ -95,7 +98,7 @@ h3 {
   font-size: 18px;
   height: 20px;
   line-height: 20px;
-  padding: 4px 0;
+  padding: 4px 0;  
   float: left;
   margin-right: 26px;
   margin-top: 20px;
@@ -104,6 +107,7 @@ h3 {
 
 #top-menu li a {
   text-decoration: none;
+  border: 0;
 }
 
 #top-menu li a:hover {
@@ -299,7 +303,7 @@ ul.command-list {
 }
 
 .example-box-content {
-  padding: 45px 0 0 0;  
+  padding: 45px 0 45px 0;  
   margin-left: 45px;  
 }
 
@@ -327,7 +331,8 @@ ul.command-list {
   width: 726px;
   padding: 20px;    
   position: relative;
-  overflow: hidden;    
+  overflow: hidden;
+  margin-bottom: 45px;    
 }
 
 .json-400 {
