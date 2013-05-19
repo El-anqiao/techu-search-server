@@ -34,7 +34,7 @@
 <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 <![endif]-->
 <div id="wrapper">
-  <div id="header">
+  <div id="header" class="clearfix">
     <div class="content-wrapper"> 
       <ul id="top-menu" class="clearfix">
         <li><a href="#features">FEATURES</a></li>
@@ -42,22 +42,25 @@
         <li><a href="#installation">INSTALLATION</a></li>
         <li><a href="#examples">EXAMPLES</a></li>
         <li><a href="./docs">DOCS</a></li>
-      </ul>    
-      <h1 id="logo">TECHU</h1>      
+      </ul>          
+      <h1 id="logo"><a href="./">TECHU</a></h1>      
       <h2>RESTFUL REALTIME FULL-TEXT SEARCH</h2>
       <p>
         Techu exposes a RESTful API for realtime indexing and searching with the   
         <a href="http://sphinxsearch.com/" target="_blank">Sphinx full-text search engine</a>.
         <br />We leverage <a href="http://redis.io" target="_blank">Redis</a>, <a href="http://nginx.org/" target="_blank">Nginx</a> 
-        and the Python <a href="https://www.djangoproject.com/" target="_blank">Django framework</a> to make searching easier to handle.
+        and the Python <a href="https://www.djangoproject.com/" target="_blank">Django framework</a> to make searching easy to handle &amp; flexible.
       </p>
+      <a id="download-button" href="https://github.com/georgepsarakis/techu-search-server/archive/master.zip">
+        DOWNLOAD TECHU
+      </a>      
     </div>
   </div>
   <div id="features" class="clearfix">
     <div class="content-wrapper" class="clearfix">
       <h2>FEATURES</h2>
       <div id="features-container">
-        <ul id="feature-list">
+        <ul class="feature-list">
           <li><span>Realtime indexing with HTTP calls and JSON data format</span></li>
           <li><span> Redis request buffering and asynchronous statement execution to increase throughput and reduce application latency</span></li>
           <li><span>Batch insert for faster index rebuilding</span></li>
@@ -68,6 +71,7 @@
           <li><span>Ability to extend by writing and attaching scripts to the Python Django Web framework</span></li>
           <li><span>Lightweight with simple deployment and installation</span></li> 
         </ul>
+        <div class="clearfix" style="height: 30px;"></div>
       </div>
       <div id="gears"></div>
     </div>
@@ -75,7 +79,7 @@
   <div id="how-it-works" class="clearfix">    
     <div id="how-it-works-text-container">
       <div id="how-it-works-text" class="clearfix">
-        <h2>HOW IT WORKS</h2>
+        <h2 style="margin-top: 0;">HOW IT WORKS</h2>
         <p>
         The logic behind Techu is pretty straightforward, as you can see in the flow diagram to the right. 
         Application code sends an HTTP request that corresponds to a specific action. 
@@ -85,7 +89,7 @@
         </p>
         <p>
         In the current beta version, most request data are passed 
-        via a single <code>data</code> parameter with a JSON-formatted value, with some exceptions 
+        via a single <i>data</i> parameter with a JSON-formatted value, with some exceptions 
         usually involving requests for the Sphinx configurations handling,
         but in the future <strong>all</strong> requests will be following this protocol for simplicity and uniformity.
         Oh, and yes, now you can keep you Sphinx configurations in order, by storing them in Techu's MySQL DB schema 
@@ -196,7 +200,7 @@
         </li>       
       </ul>              
       <h3>CONFIGURATION</h3>
-      <ul class="command-list no-margin-bottom">
+      <ul class="command-list">
         <li class="odd">
           <div class="number">1.</div>
           <div class="command">git clone https://github.com/georgepsarakis/techu-search-server.git</div>
@@ -215,7 +219,7 @@
           </span>
         </div>
       </div>
-      <div class="example-result" style="display:block">
+      <div class="file-contents">
 <pre>server {
   listen 81;
   server_name techu;
@@ -230,6 +234,44 @@
 }</pre>
       </div>
       </div>
+      <div class="clearfix" style="height: 30px;"></div>
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">3.</div>
+          <div class="command">vim techu-search-server/techu/settings.py</div>
+        </li>                                  
+      </ul>
+      <div class="odd" style="position: relative;">
+      <div class="note">
+        <div class="content">
+          Change database settings in Django and setup MySQL schema
+        </div>
+      </div>
+      <div class="file-contents">      
+<pre>DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'techu',                              
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',                  
+        'PORT': '3306',                       # Set to empty string for default.
+    },
+}</pre>
+      </div>      
+      </div>
+      <div class="clearfix" style="height: 30px;"></div>      
+      <ul class="command-list no-margin-top no-margin-bottom">
+        <li class="even">
+          <div class="number">4.</div>
+          <div class="command">cat techu-search-server/techu/sql/schema.latest.sql | mysql -uroot -p</div>
+        </li>
+        <li class="odd">
+          <div class="number">5.</div>
+          <div class="command">cd techu-search-server &amp;&amp; ./run #Start FastCGI processes for Nginx</div>
+        </li>
+      </ul>
+      <div class="clearfix" style="height: 50px"></div>                
     </div>
   </div>
   <div id="examples" class="clearfix">
@@ -238,7 +280,7 @@
       <div class="example-box clearfix">        
         <div class="example-box-content">
           <div class="example-title">CREATE A NEW CONFIGURATION</div>
-          <ul class="command-list no-margin-bottom">
+          <ul class="command-list">
             <li class="odd">
               <div class="number">1.</div>
               <div class="command">
@@ -267,32 +309,765 @@
         </div>
         <div class="example-toggle plus" title="Show JSON response"></div>
       </div>
+      <div class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">CREATE A SEARCHD AND ASSOCIATE WITH THE NEW CONFIGURATION</div>
+          <ul class="command-list">
+            <li class="odd">
+              <div class="number">1.</div>
+              <div class="command single-line">
+              curl 'http://techu.local:81/searchd/?name=stackoverflow&conf_id=25'
+              </div>
+            </li>
+          </ul>
+          <div class="odd">
+            <div class="example-result">
+            <pre>
+[
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T18:11:41",
+            "date_modified": "2013-05-15T18:11:41",
+            "is_active": 1,
+            "name": "stackoverflow"
+        },
+        "model": "techu.searchd",
+        "pk": 6
+    }
+]</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
+      <div id="searchd-options-setup" class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">SEARCHD OPTIONS</div>
+          <ul class="command-list">
+            <li class="odd">
+              <div class="number">1.</div>
+              <div class="command">
+python techu-search-server/techu/data/encode.py data '{"listen" : ["9312", "9306:mysql41"], "workers" : "threads", "pid_file" : "/var/run/stackoverfow_searchd.pid", "max_matches" : 1000 }'
+              </div>
+            </li>
+            <li class="even">
+              <div class="number">2.</div>
+              <div class="command single-line">
+                <div class="command-inner">
+                  curl 'http://techu.local:81/option/searchd/6/' -d 'data=%7B%22listen%22+%3A+%5B%229312%22%2C+%229306%3Amysql41%22%5D%2C+%22workers%22+%3A+%22threads%22%2C+%22pid_file%22+%3A+%22%2Fvar%2Frun%2Fstackoverfow_searchd.pid%22%2C+%22max_matches%22+%3A+1000+%7D'
+                </div> 
+              </div>
+            </li>          
+          </ul>
+          <div class="even">
+            <div id="searchd-options-setup-json" class="example-result 400">
+            <pre>[
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 138, 
+            "sp_searchd_id": 6, 
+            "value": "9312", 
+            "value_hash": "b6dfd41875bc090bd31d0b1740eb5b1b"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 138, 
+            "sp_searchd_id": 6, 
+            "value": "9306:mysql41", 
+            "value_hash": "73da79255eec41caa827f711f4d287a0"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 148, 
+            "sp_searchd_id": 6, 
+            "value": "1000", 
+            "value_hash": "a9b7ba70783b617e9998dc4dd82eb3c5"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 16
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 147, 
+            "sp_searchd_id": 6, 
+            "value": "/var/run/stackoverfow_searchd.pid", 
+            "value_hash": "c3a29d1b495b5f6a29a2f84f51bb935c"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 17
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 165, 
+            "sp_searchd_id": 6, 
+            "value": "threads", 
+            "value_hash": "0919fe44fdbbd233e5e2e8587006b7b2"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 18
+    }
+]</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
+      <div class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">CREATE AN INDEX AND ASSOCIATE WITH THE NEW CONFIGURATION</div>
+          <ul class="command-list">
+            <li class="odd">
+              <div class="number">1.</div>
+              <div class="command single-line">
+              curl 'http://techu.local:81/index/?name=so_posts_rt&conf_id=25'
+              </div>
+            </li>
+          </ul>
+          <div class="odd">
+            <div class="example-result">
+            <pre>
+[
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T18:21:11",
+            "date_modified": "2013-05-15T18:21:11",
+            "index_type": 1,
+            "is_active": 1,
+            "name": "so_posts_rt",
+            "parent_id": 0
+        },
+        "model": "techu.index",
+        "pk": 28
+    }
+]</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
+      <div id="index-options-setup" class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">INDEX OPTIONS</div>
+          <ul class="command-list">
+            <li class="odd" style="height: 72px!important;">
+              <div class="number" style="height: 72px!important;">1.</div>
+              <div class="command">
+python techu-search-server/techu/data/encode.py data '{"rt_field" : ["title", "body"], "rt_attr_timestamp" : ["creation_date", "last_activity_date"], "rt_attr_uint" : ["is_answer","user_id"], "rt_attr_bigint" : "score","type" : "rt", "path" : "/usr/local/sphinx/data/so_posts_rt"}' 
+              </div>
+            </li>
+            <li class="even">
+              <div class="number">2.</div>
+              <div class="command single-line">
+                <div class="command-inner">
+curl 'http://techu.local:81/option/index/28/' -d 'data=%7B%22rt_field%22+%3A+%5B%22title%22%2C+%22body%22%5D%2C+%22rt_attr_timestamp%22+%3A+%5B%22creation_date%22%2C+%22last_activity_date%22%5D%2C+%22rt_attr_uint%22+%3A+%5B%22is_answer%22%2C%22user_id%22%5D%2C+%22rt_attr_bigint%22+%3A+%22score%22%2C%22type%22+%3A+%22rt%22%2C+%22path%22+%3A+%22%2Fusr%2Flocal%2Fsphinx%2Fdata%2Fso_posts_rt%22%7D
+                </div> 
+              </div>
+            </li>          
+          </ul>
+          <div class="even">
+            <div id="index-options-setup-json" class="example-result json-400">
+            <pre>[
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 3, 
+            "value": "/usr/local/sphinx/data/so_posts_rt", 
+            "value_hash": "911f381580aa9d7f3b92ba810a7b0603"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 39
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 59, 
+            "value": "creation_date", 
+            "value_hash": "8424d087ffe39bb2ee8db173c7e07ba5"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 40
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 59, 
+            "value": "last_activity_date", 
+            "value_hash": "bf84b3567d0bdc4db28495bbbd52f728"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 41
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 54, 
+            "value": "is_answer", 
+            "value_hash": "ee945c9fbab205b74e166342a3f53218"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 42
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 54, 
+            "value": "user_id", 
+            "value_hash": "e8701ad48ba05a91604e480dd60899a3"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 43
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 55, 
+            "value": "score", 
+            "value_hash": "ca1cd3c3055991bf20499ee86739f7e2"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 44
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 53, 
+            "value": "title", 
+            "value_hash": "d5d3db1765287eef77d7927cc956f50a"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 45
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 53, 
+            "value": "body", 
+            "value_hash": "841a2d689ad86bd1611447453c22c6fc"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 46
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 1, 
+            "value": "rt", 
+            "value_hash": "822050d9ae3c47f54bee71b85fce1487"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 47
+    }
+]</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>           
+            
+      <div class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">GENERATE CONFIGURATION FILE AND (RE)START SEARCHD</div>
+          <ul class="command-list">
+            <li class="odd">
+              <div class="number">1.</div>
+              <div class="command single-line">
+              curl 'http://techu.local:81/generate/25/'
+              </div>
+            </li>
+          </ul>
+          <div class="odd">
+            <div class="example-result">
+            <pre>{
+    "configuration": "index so_posts_rt {
+      type                           = rt
+      path                           = /usr/local/sphinx/data/so_posts_rt
+      rt_field                       = body
+      rt_field                       = title
+      rt_attr_uint                   = user_id
+      rt_attr_uint                   = is_answer
+      rt_attr_bigint                 = score
+      rt_attr_timestamp              = creation_date
+      rt_attr_timestamp              = last_activity_date
+    }
+    searchd {
+      listen                         = 9306:mysql41
+      listen                         = 9312
+      pid_file                       = /var/run/stackoverfow_searchd.pid
+      max_matches                    = 1000
+      workers                        = threads
+    }
+    ",
+    "started": {
+        "command": "searchd --config /home/techu-search-server/techu/sphinx-conf/stackoverflow.conf --iostats --cpustats",
+        "status": true
+    },
+    "stopped": {
+        "command": "searchd --config /home/techu-search-server/techu/sphinx-conf/stackoverflow.conf --stopwait",
+        "status": true
+    }
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
+      <div class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">INSERT A DOCUMENT TO THE INDEX</div>
+          <ul class="command-list">
+            <li class="odd" style="height: 270px!important;">
+              <div class="number" style="height: 270px!important; line-height: 50px!important;">1.</div>
+              <div class="command" style="height: 270px!important;">
+python techu-search-server/techu/data/encode.py data '{"body": "\nI have in my Symfony 2.1 RC app a simple Comment model (using Doctrine 2). Every comment has a user and a message.\nCurrently, the CommentBundle manages comments on articles. I'd like it to be more generic to be able to comment any kind of entity without copying code across different bundles dedicated to comments...\nFor this to work, I also need a way to reference any entity from the comment one. I think having two fields entity_type and entity_id can be a nice solution. However, I can't get the object from these without mapping entity_type to classes manually and using the find method.\nSo how do I reference an entity from a comment ? And how can I create generic behavior working  on several entities ?\n", "user_id": 893390, "title": "Generic comment system in Symfony2", "last_activity_date": 1368868178, "creation_date": 1346167729, "score": 1, "is_answer": 0, "id": 12162609}' 
+              </div>
+            </li>
+            <li class="even">
+              <div class="number">2.</div>
+              <div class="command single-line" style="height: 50px!important; line-height: 50px!important;">
+                <div class="command-inner">
+curl --silent 'http://techu.local:81/indexer/insert/28/' -d 'data=%7B%22body%22%3A+%22%5CnI+have+in+my+Symfony+2.1+RC+app+a+simple+Comment+model+%28using+Doctrine+2%29.+Every+comment+has+a+user+and+a+message.%5CnCurrently%2C+the+CommentBundle+manages+comments+on+articles.+I%27d+like+it+to+be+more+generic+to+be+able+to+comment+any+kind+of+entity+without+copying+code+across+different+bundles+dedicated+to+comments...%5CnFor+this+to+work%2C+I+also+need+a+way+to+reference+any+entity+from+the+comment+one.+I+think+having+two+fields+entity_type+and+entity_id+can+be+a+nice+solution.+However%2C+I+can%27t+get+the+object+from+these+without+mapping+entity_type+to+classes+manually+and+using+the+find+method.%5CnSo+how+do+I+reference+an+entity+from+a+comment+%3F+And+how+can+I+create+generic+behavior+working++on+several+entities+%3F%5Cn%22%2C+%22user_id%22%3A+893390%2C+%22title%22%3A+%22Generic+comment+system+in+Symfony2%22%2C+%22last_activity_date%22%3A+1368868178%2C+%22creation_date%22%3A+1346167729%2C+%22score%22%3A+1%2C+%22is_answer%22%3A+0%2C+%22id%22%3A+12162609%7D%0A'
+                </div> 
+              </div>
+            </li>          
+          </ul>
+          <div class="even">
+            <div class="example-result">
+              <pre>{ 
+    "searchd" : "ok" 
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
+
+      <div class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">DELETE A DOCUMENT FROM THE INDEX</div>
+          <ul class="command-list">
+            <li class="odd">
+              <div class="number">1.</div>
+              <div class="command single-line">
+curl 'http://techu.local:81/indexer/delete/28/16528355' 
+              </div>
+            </li>          
+          </ul>
+          <div class="odd">
+            <div class="example-result">
+              <pre>{
+  "searchd" : "ok" 
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
+            
+      <div class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">UPDATE A DOCUMENT IN THE INDEX</div>
+          <ul class="command-list">
+            <li class="odd">
+              <div class="number">1.</div>
+              <div class="command">
+python techu-search-server/techu/data/encode.py data '{ "title" : "Generic comment system in Symfony2 framework", "last_activity_date" : 1368868278 }' 
+              </div>
+            </li>
+            <li class="even" style="height: 80px!important;">
+              <div class="number" style="height: 80px!important;">2.</div>
+              <div class="command" style="height: 80px!important;">curl --silent 'http://techu.local:81/indexer/update/28/' -d 'data=%7B+%22title%22+%3A+%22Generic+comment+system+in+Symfony2+framework%22%2C+%22last_activity_date%22+%3A+1368868278+%7D'</div>
+            </li>          
+          </ul>
+          <div class="odd">
+            <div class="example-result">
+              <pre>{ "searchd" : "ok" }</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
+      
+      <div class="example-box clearfix">        
+        <div class="example-box-content">
+          <div class="example-title">SEARCH</div>
+          <ul class="command-list">
+            <li class="odd">
+              <div class="number">1.</div>
+              <div class="command single-line">
+python techu-search-server/techu/data/encode.py data '{ "q" : "(mysql+php+issue) | python" }'
+              </div>
+            </li>
+            <li class="even">
+              <div class="number">2.</div>
+              <div class="command">
+curl 'http://techu.local:81/search/28/' -d 'data=%7B%22q%22+%3A+%22%28mysql+php+issue%2A%29%7Cpython%22%7D'  
+              </div>
+            </li>          
+          </ul>
+          <div class="even">
+            <div id="search-json" class="example-result json-400">
+              <pre>{
+    "meta": [
+        {
+            "Value": "40", 
+            "Variable_name": "total"
+        }, 
+        {
+            "Value": "40", 
+            "Variable_name": "total_found"
+        }, 
+        {
+            "Value": "0.001", 
+            "Variable_name": "time"
+        }, 
+        {
+            "Value": "1.284", 
+            "Variable_name": "cpu_time"
+        }, 
+        {
+            "Value": "0.000", 
+            "Variable_name": "agents_cpu_time"
+        }, 
+        {
+            "Value": "0.000", 
+            "Variable_name": "io_read_time"
+        }, 
+        {
+            "Value": "0", 
+            "Variable_name": "io_read_ops"
+        }, 
+        {
+            "Value": "0.0", 
+            "Variable_name": "io_read_kbytes"
+        }, 
+        {
+            "Value": "0.000", 
+            "Variable_name": "io_write_time"
+        }, 
+        {
+            "Value": "0", 
+            "Variable_name": "io_write_ops"
+        }, 
+        {
+            "Value": "0.0", 
+            "Variable_name": "io_write_kbytes"
+        }, 
+        {
+            "Value": "0.000", 
+            "Variable_name": "agent_io_read_time"
+        }, 
+        {
+            "Value": "0", 
+            "Variable_name": "agent_io_read_ops"
+        }, 
+        {
+            "Value": "0.0", 
+            "Variable_name": "agent_io_read_kbytes"
+        }, 
+        {
+            "Value": "0.000", 
+            "Variable_name": "agent_io_write_time"
+        }, 
+        {
+            "Value": "0", 
+            "Variable_name": "agent_io_write_ops"
+        }, 
+        {
+            "Value": "0.0", 
+            "Variable_name": "agent_io_write_kbytes"
+        }, 
+        {
+            "Value": "mysql", 
+            "Variable_name": "keyword[0]"
+        }, 
+        {
+            "Value": "28", 
+            "Variable_name": "docs[0]"
+        }, 
+        {
+            "Value": "78", 
+            "Variable_name": "hits[0]"
+        }, 
+        {
+            "Value": "php", 
+            "Variable_name": "keyword[1]"
+        }, 
+        {
+            "Value": "104", 
+            "Variable_name": "docs[1]"
+        }, 
+        {
+            "Value": "467", 
+            "Variable_name": "hits[1]"
+        }, 
+        {
+            "Value": "issue", 
+            "Variable_name": "keyword[2]"
+        }, 
+        {
+            "Value": "89", 
+            "Variable_name": "docs[2]"
+        }, 
+        {
+            "Value": "115", 
+            "Variable_name": "hits[2]"
+        }, 
+        {
+            "Value": "python", 
+            "Variable_name": "keyword[3]"
+        }, 
+        {
+            "Value": "39", 
+            "Variable_name": "docs[3]"
+        }, 
+        {
+            "Value": "88", 
+            "Variable_name": "hits[3]"
+        }
+    ], 
+    "results": [
+        {
+            "creation_date": 1360030771, 
+            "id": 14699117, 
+            "is_answer": 0, 
+            "last_activity_date": 1368863555, 
+            "score": 0, 
+            "user_id": 1248745
+        }, 
+        {
+            "creation_date": 1287060242, 
+            "id": 3933197, 
+            "is_answer": 0, 
+            "last_activity_date": 1368867016, 
+            "score": 0, 
+            "user_id": 412528
+        }, 
+        {
+            "creation_date": 1368864670, 
+            "id": 16622092, 
+            "is_answer": 0, 
+            "last_activity_date": 1368865202, 
+            "score": 0, 
+            "user_id": 637888
+        }, 
+        {
+            "creation_date": 1368827484, 
+            "id": 16618456, 
+            "is_answer": 0, 
+            "last_activity_date": 1368859423, 
+            "score": 1, 
+            "user_id": 974369
+        }, 
+        {
+            "creation_date": 1368861382, 
+            "id": 16621724, 
+            "is_answer": 0, 
+            "last_activity_date": 1368861382, 
+            "score": 0, 
+            "user_id": 2396228
+        }, 
+        {
+            "creation_date": 1368866680, 
+            "id": 16622305, 
+            "is_answer": 0, 
+            "last_activity_date": 1368866680, 
+            "score": 0, 
+            "user_id": 1119216
+        }, 
+        {
+            "creation_date": 1253101777, 
+            "id": 1432480, 
+            "is_answer": 0, 
+            "last_activity_date": 1368868136, 
+            "score": 18, 
+            "user_id": 130758
+        }, 
+        {
+            "creation_date": 1330010318, 
+            "id": 9415785, 
+            "is_answer": 0, 
+            "last_activity_date": 1368865096, 
+            "score": 2, 
+            "user_id": 842837
+        }, 
+        {
+            "creation_date": 1368830820, 
+            "id": 16618945, 
+            "is_answer": 0, 
+            "last_activity_date": 1368866858, 
+            "score": 0, 
+            "user_id": 2386518
+        }, 
+        {
+            "creation_date": 1368858021, 
+            "id": 16621351, 
+            "is_answer": 0, 
+            "last_activity_date": 1368866236, 
+            "score": 2, 
+            "user_id": 2395938
+        }, 
+        {
+            "creation_date": 1368865881, 
+            "id": 16622217, 
+            "is_answer": 0, 
+            "last_activity_date": 1368866056, 
+            "score": 2, 
+            "user_id": 1742632
+        }, 
+        {
+            "creation_date": 1368861397, 
+            "id": 16621726, 
+            "is_answer": 0, 
+            "last_activity_date": 1368863461, 
+            "score": 0, 
+            "user_id": 728286
+        }, 
+        {
+            "creation_date": 1368865418, 
+            "id": 16622171, 
+            "is_answer": 1, 
+            "last_activity_date": 1368865418, 
+            "score": 3, 
+            "user_id": 2096752
+        }, 
+        {
+            "creation_date": 1368866802, 
+            "id": 16622317, 
+            "is_answer": 1, 
+            "last_activity_date": 1368866802, 
+            "score": 0, 
+            "user_id": 2389851
+        }, 
+        {
+            "creation_date": 1368867520, 
+            "id": 16622423, 
+            "is_answer": 0, 
+            "last_activity_date": 1368867520, 
+            "score": 0, 
+            "user_id": 2351696
+        }, 
+        {
+            "creation_date": 1368856133, 
+            "id": 16621152, 
+            "is_answer": 1, 
+            "last_activity_date": 1368863075, 
+            "score": 0, 
+            "user_id": 320726
+        }, 
+        {
+            "creation_date": 1368859602, 
+            "id": 16621526, 
+            "is_answer": 0, 
+            "last_activity_date": 1368859784, 
+            "score": 0, 
+            "user_id": 2125893
+        }, 
+        {
+            "creation_date": 1368863067, 
+            "id": 16621926, 
+            "is_answer": 0, 
+            "last_activity_date": 1368863067, 
+            "score": 0, 
+            "user_id": 1460235
+        }, 
+        {
+            "creation_date": 1368865015, 
+            "id": 16622132, 
+            "is_answer": 0, 
+            "last_activity_date": 1368865015, 
+            "score": 0, 
+            "user_id": 1578927
+        }, 
+        {
+            "creation_date": 1368806615, 
+            "id": 16613501, 
+            "is_answer": 0, 
+            "last_activity_date": 1368866968, 
+            "score": 0, 
+            "user_id": 1044110
+        }
+    ]
+}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="example-toggle plus" title="Show JSON response"></div>
+      </div>
+                                  
     </div>
   </div>
   <div id="whats-next" class="clearfix">
     <div class="content-wrapper" class="clearfix">
       <h2>WHAT'S NEXT</h2>
       <div id="features-container">        
-        <ul id="feature-list">
-          <li><span>Automatic batching of queued operations. Smart cancelling of overlapping statements.</span></li>
-          <li><span>Cache structures to Redis (fields & attributes, index names, connection data)</span></li>
-          <li><span>Search &amp; Highlighted Excerpts Cache Invalidations and TTL</span></li>
-          <li><span>Explicit index flushing</span></li>
+        <ul class="feature-list">
+          <li><span>Automatic batching of queued operations & <br />cancelling of overlapping statements.</span></li>
+          <li><span>Cache structures in Redis <br />(index names, fields &amp; attributes, connection data)</span></li>
+          <li><span>Search &amp; Highlighted Excerpts cache invalidations and TTL</span></li>          
           <li><span>Faceting</span></li>
           <li><span>Scripting</span></li>
-          <li><span>Clustering</span></li>
+          <li><span>Streaming responses (aggregated data or search results)</span></li>
+          <li><span>Clustering &amp; distributed indexing/searching</span></li>
           <li><span>Request Hooks</span></li>
-          <li><span>Server Statistics Page (
-              Cache hit/miss ratios, 
-              Requests/sec
+          <li><span>Server Statistics Web Page <br />(Cache hit/miss ratios, 
+              Requests/sec,
               Requests in queue,
-              Executed Statements/sec
-            )
-              </span></li> 
+              Executed Statements/sec)
+              </span></li>
+          <li>Much more elaborate documentation on each request parameters!</li>    
         </ul>
+        <div class="clearfix" style="height: 20px;"></div>
       </div>
-      <div id="arrows"></div>
-    </div>
+      <div id="arrows"></div>      
+    </div>    
   </div>
   <div id="footer">
     <div class="content-wrapper">
@@ -307,10 +1082,10 @@
 </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-
   <script src="js/jquery-plugins/jquery.mousewheel.js"></script>
   <script src="js/jquery-plugins/jquery.perfect-scrollbar.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+  <!--<script src="js/zero-clipboard/ZeroClipboard.min.js"></script>-->
 </body>
 </html>

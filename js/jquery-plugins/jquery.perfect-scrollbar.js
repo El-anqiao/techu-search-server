@@ -96,7 +96,6 @@
       if (scrollbarXLeft >= containerWidth - scrollbarXWidth) {
         scrollbarXLeft = containerWidth - scrollbarXWidth;
       }
-
       $scrollbarX.css({left: scrollbarXLeft + $this.scrollLeft(), bottom: scrollbarXBottom - $this.scrollTop(), width: scrollbarXWidth});
       $scrollbarY.css({top: scrollbarYTop + $this.scrollTop(), right: scrollbarYRight - $this.scrollLeft(), height: scrollbarYHeight});
     };

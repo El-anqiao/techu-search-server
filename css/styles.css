@@ -1,7 +1,8 @@
 html > *, body {
   font-family: "Open Sans", Arial;
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
+  word-wrap: break-word;
 }  
 
 a {
@@ -24,26 +25,53 @@ h1, h2 {
 }
 
 h2 {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 h3 {
   font-size: 18px;
 }
 
+#download-button {
+  display: block;      
+  padding: 18px 14px 16px 18px;
+  margin-left: 24px;
+  width: 218px;
+  text-align: center;
+  line-height: 18px;  
+  border: 1px solid #fff;
+  text-decoration : none;
+  font-size: 18px;
+  font-weight : 400;
+  letter-spacing: 6px;
+  font-family: Oswald, Arial;
+  margin-bottom: 100px;
+}
+
+#download-button:hover {
+  color: #219e56;
+  background-color: #fff;
+}
+
 #header h2 {
+  margin-top: 0;
   margin-bottom: 10px;
+  margin-left: 24px;
 }
 
 #header p {
-  padding: 0 0 50px 0;
+  padding: 0;
+  line-height: 24px;
   width: 900px;
-  text-align: justify;    
+  text-align: left;
+  margin-left: 24px;
+  margin-bottom: 38px;        
 }
 
-#logo {
+#logo, #logo a {
   font-size: 165px;
-  margin-bottom: 0;  
+  margin-bottom: 0;
+  text-decoration: none;  
 }
 
 .content-wrapper {
@@ -62,8 +90,9 @@ h3 {
   padding: 0;
 }
 
-#top-menu li {  
-  font-weight: 400;
+#top-menu li {
+  font-family: Oswald, Arial;    
+  font-size: 18px;
   height: 20px;
   line-height: 20px;
   padding: 4px 0;
@@ -95,22 +124,23 @@ h3 {
   float: right;
   width: 300px;
   height: 294px;
+  margin-top: 130px;
 }
 
-#feature-list {
+.feature-list {
   list-style-type: none;
   padding: 0;
   margin: 0 0 20px 0;        
 }
 
-#feature-list > li {
+.feature-list > li {
   background: url(../img/check.png) left center no-repeat;      
   width: 95%;
   margin-bottom: 10px;
   line-height: 24px;    
 }
 
-#feature-list > li span {
+.feature-list > li span {
   line-height: 24px;
   margin-left: 50px;
   padding: 8px;
@@ -119,13 +149,18 @@ h3 {
   display: block;
 }
 
+#how-it-works {
+  background-color: #CDE7C0;
+}
+            
 #how-it-works-text-container {
+  margin-top: 50px;
   background-color: #CDE7C0;
   width: 50%;
   float: left;
   color: #000;
   position: relative; /* required for scrollbar plugin */
-  height: 824px;
+  height: 736px;
   overflow: hidden;
 }
 
@@ -133,7 +168,7 @@ h3 {
   float: right;
   width: 480px;
   color: #000;  
-  height: 1400px;
+  height: 1250px;
 }
 
 #how-it-works-text p, #how-it-works-text a {
@@ -164,7 +199,7 @@ h3 {
 }
 
 #how-it-works-diagram {
-  margin: 40px auto;  
+  margin: 70px auto;  
   width: 429px;
   height: 744px;  
   background: url(../img/workflow.png) no-repeat;
@@ -184,12 +219,11 @@ h3 {
   margin-top: 160px;
 }
 
-
 #installation {
   background-color: #23A65A;
 }
 
-#installation h3 {
+#installation h3, #how-it-works-text h3 {
   color: #000;  
   font-weight: 400;
   font-size: 18px;
@@ -252,7 +286,8 @@ ul.command-list {
 .example-title {
   color: #20A75A;
   font-size: 16px;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
+  font-weight: 600; 
 }
 
 .example-box {
@@ -263,9 +298,13 @@ ul.command-list {
   margin-bottom: 40px;
 }
 
-.example-box-content{
-  padding: 20px 0;  
-  margin-left: 40px;
+.example-box-content {
+  padding: 45px 0 0 0;  
+  margin-left: 45px;  
+}
+
+.example-box-content .command-list {
+  margin-bottom: 10px;
 }
 
 .example-toggle {
@@ -278,36 +317,57 @@ ul.command-list {
   height: 45px;
 }
 
-.example-command {
-  background-color: #24AB5E;
-  width: 800px;
-  padding: 10px;
-  font-family: Monospace, Courier New, Arial;
-  font-weight: bold;
-  margin-bottom: 8px; 
+.example-box-content .command {  
+  width: 700px;    
+  color: #000;   
 }
 
-.example-result {
-  border-left: 50px solid;  
-  display : none;
-  font-family: Monospace, Courier New, Arial;
+.example-result {    
+  display: none;  
+  width: 726px;
+  padding: 20px;    
+  position: relative;
+  overflow: hidden;    
+}
+
+.json-400 {
+  height: 400px!important;
+}
+
+.example-box-content .number {
+  color: #000;
+}
+
+.example-box-content .even .number {
+  background-color: #A7DCA8;
+}
+
+.example-box-content .odd .number {
+  background-color: #94CD9A;
+}
+
+.example-box-content .odd .command {  
+  background-color: #C2EBBF;  
+}
+
+.example-box-content .even .command {  
+  background-color: #DEFAD1;  
+}
+
+.example-box-content .odd .example-result {
   background-color: #C2EBBF;
-  width: 600px;
-  padding: 10px;  
 }
 
-.even .example-result {
-  border-color: #1E8C4D;
-  background-color: #24AB5E;
-}
-
-.odd .example-result {
-  border-color: #1D8548;
-  background-color: #219D55;
+.example-box-content .even .example-result {  
+  background-color: #DEFAD1;  
 }
 
 .no-margin-bottom {
   margin-bottom: 0!important;
+}
+
+.no-margin-top {
+  margin-top:0!important;
 }
 
 .example-box-content .command-list li {
@@ -324,6 +384,36 @@ ul.command-list {
 .example-result pre {
   font-family: "Open Sans";
   margin: 0;
+  color: #000;  
+}
+
+.file-contents {
+  width: 630px;
+  padding: 20px;
+  color: #fff;
+}
+
+.file-contents pre {
+  font-family: "Open Sans";
+  margin: 0;
+  color: #fff;    
+}
+
+.odd .file-contents {
+  background-color: #219D55;
+}
+
+.even .file-contents {
+  background-color: #24AB5E;
+}
+
+.example-box-content .command.single-line {
+  line-height: 50px;
+  overflow: hidden;
+}
+
+.example-box-content .command-inner {
+  width: 4000px;
 }
 
 .minus {
@@ -361,12 +451,12 @@ ul.command-list {
   width: 220px;
   height: 237px;
   position: absolute;
-  top: -50px;
-  right:0;  
+  top: -80px;
+  right: 0;  
 }
 
 .note .content {
-  margin-top: 24px;
+  margin-top: 34px;
   color: #000;  
-  padding: 0 12px;
+  padding: 0 22px;
 }
