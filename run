@@ -1,5 +1,4 @@
 #!/bin/bash
 # temporary version - will be replaced with newer version that will restart the FastCGI processes on code modifications (for development purposes)
-cd /home/techu-search-server #replace with your installation directory
 ps uxa|grep runfcgi|grep -v grep|awk '{print $2}'|xargs kill
 python ./manage.py runfcgi host=localhost port=8080 > server.out&

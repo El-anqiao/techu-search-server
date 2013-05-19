@@ -20,9 +20,11 @@ Components:
 * Redis in-memory key-value storage
 * MySQL
 
+Take a look at the [overview page](http://georgepsarakis.github.io/techu-search-server/).
+
 -----
 
-Still a beta version and requires a lot of work to be done (and more documentation as well!). I am also preparing some benchmarks. I would be very thankful for any constructive criticism and anyone willing to test it!
+Still a beta version and requires a lot of work to be done (and much more documentation as well, especially regarding the */search* request!). I am also preparing some benchmarks. I would be very thankful for any constructive criticism and anyone willing to test it!
 
 Stay tuned!
 
@@ -35,10 +37,4 @@ TODO
 - Parallelize applier based on doc_id
 - Revisions for configuration options
 
-NOTES
-----
-* Indexes Backup
-  http://sphinxsearch.com/blog/2011/11/18/backing-up-rt-indexes/
-* Clustering
-  Testing on add/remove node, check node health
 

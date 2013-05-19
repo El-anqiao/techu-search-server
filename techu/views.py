@@ -11,6 +11,7 @@ from django.core import serializers
 from libraries import sphinxapi
 from libraries.generic import *
 from techu.models import *
+from libraries.sphinxapi import *
 import settings 
 
 def _error(code = 500, **kwargs):
@@ -312,10 +313,14 @@ def rqueue(queue, index, sql, values):
   p.execute()
   return key
 
-def search(request, index):
+def search(request, index_id):
+  index = fetch_index_name(index_id)
   ''' Search wrapper with SphinxQL '''
   r = request_data(request)
+  if 'data' in r:
+    r = r['data']
   cache_key = hashlib.md5(index + json.dumps(r)).hexdigest()
+  r = json.loads(r)
   if settings.SEARCH_CACHE:
     try:   
       R = redis.StrictRedis()
@@ -338,7 +343,6 @@ def search(request, index):
       'sortby'      : '',
       'mode'        : 'extended',
       'groupby'     : '',
-      'limit'       : 1000,
       'groupsort'   : '',
       'offset'      : 0,
       'limit'       : 1000,
@@ -376,6 +380,7 @@ def search(request, index):
     '1'    : 'ASC',
     'ASC'  : 'ASC',
   }
+
   try:
     ''' Check attributes from request with stored options (sp_index_option) '''
     ''' Preload host and ports per index '''
@@ -393,55 +398,57 @@ def search(request, index):
     '''
     sql_sequence = [ ('SELECT', 'fields'), ('FROM', 'indexes'), ('WHERE', 'where'), 
                      ('GROUP BY', 'group_by'), ('WITHIN GROUP ORDER BY', 'order_within_group'), 
-                     ('ORDER BY', 'order_by',) ('LIMIT', 'limit'), ('OPTION', 'option') ]
+                     ('ORDER BY', 'order_by'), ('LIMIT', 'limit'), ('OPTION', 'option') ]
     sql = {}
-    for clause in sql_sequence:
-      sql[clause[1]] = ''
-    sql['indexes'] = index + ',' + r['indexes']
-    sql['indexes'] = sql['indexes'].strip(',')
-    if r['groupby'] != '':
+    for sql_clause, key in sql_sequence:
+      sql[key] = ''
+      if not key in r:
+        r[key] = ''
+    sql['indexes'] = index + ','.join( r['indexes'] )
+    if isinstance(r['fields'], list):
+      sql['fields'] = ',' . join(r['fields'])
+    else:
+      sql['fields'] = options['fields']
+    if r['group_by'] != '':
       sql['group_by'] = r['groupby']
-    r['orderby'] = json.loads(r['orderby']) #list of dictionaries
-    r['limit'] = json.loads(r['limit'])
-    if not 'offset' in r['limit']:
-      r['limit']['offset'] = '0'
+    if not isinstance(r['limit'], dict):
+      r['limit'] = { 'offset' : '0', 'count' : options['limit'] }
     r['limit'] = '%(offset)s, %(count)s' % r['limit']
-    sql['order_by'] = ',' . join([ '%s %s' % (order[0], order_direction(order[1].upper())) for order in r['orderby'] ])
-    if r['group_order'] != '':
-      sql['order_within_group'] = ',' . join([ '%s %s' % (order[0], order_direction(order[1].upper())) for order in r['group_order'] ])
-    sql['where'] = json.loads(r['where']) #dictionary e.g. { 'date_from' : [[ '>' , 13445454350] ] }    
-    sql['where'] = []
-    for field, conditions in sql['where'].iteritems():
-      for condition in conditions:
-        operator, value = condition
-        sql['where'].append('%s%s%s' % (field, operator, q(value)))
+    sql['order_by'] = ',' . join([ '%s %s' % (order[0], order_direction(order[1].upper())) for order in r['order_by'] ])
+    if r['order_within_group'] != '':
+      sql['order_within_group'] = ',' . join([ '%s %s' % (order[0], order_direction(order[1].upper())) for order in r['order_within_group'] ])
+    sql['where'] = [] #dictionary e.g. { 'date_from' : [[ '>' , 13445454350] ] } 
+    if isinstance(r['where'], dict):
+      for field, conditions in r['where'].iteritems():
+        for condition in conditions:
+          operator, value = condition
+          sql['where'].append('%s%s%s' % (field, operator, q(value)))
     sql['where'].append('MATCH(%s)' % (q(r['q']),))
     sql['where'] = ' ' . join(sql['where'])
-    r['option'] = json.loads(r['option']) #dictionary 
-    sql['option'] = []
-    for option_name, option_value in r['option'].iteritems():
-      if isinstance(option_value, dict): 
-        option_value = '(' + (','. join([ '%s = %s' % (k, option_value[k]) for k in option_value.keys() ])) + ')'
-        sql['option'].append('%s = %s' % (option_name, option_value))
-    sql['option'] = ',' . join(sql['option'])
-
+    if isinstance(r['option'], dict):
+      return debug(r)
+      sql['option'] = []
+      for option_name, option_value in r['option'].iteritems():
+        if isinstance(option_value, dict): 
+          option_value = '(' + (','. join([ '%s = %s' % (k, option_value[k]) for k in option_value.keys() ])) + ')'
+          sql['option'].append('%s = %s' % (option_name, option_value))
+      sql['option'] = ',' . join(sql['option'])
+    response = { 'results' : None, 'meta' : None }
     try:    
       cursor = connections['sphinx:' + index].cursor()
-      cursor.execute( ' ' . join([ clause[0] + ' ' + sql[clause[1]] for clause in sql_sequence ]) )
-      results = cursorfetchall(cursor)
+      sql =  ' ' . join([ clause[0] + ' ' + sql[clause[1]] for clause in sql_sequence if sql[clause[1]] != '' ]) 
+      ''' q function is deprecated so replace with placeholders for parameter escaping '''
+      cursor.execute(sql)
+      response['results'] = cursorfetchall(cursor)
     except Exception as e:
       error_message = 'Sphinx Search Query failed with error "%s"' % str(e)
       return _error(message = error_message)
-    response = {}
-    response['meta'] = None
     try:
       cursor.execute('SHOW META')
-      results_meta = cursorfetchall(cursor)
-      response['meta'] = results_meta
+      response['meta'] = cursorfetchall(cursor)
     except:
       pass
-    response['results'] = results
-    sresponse = serializers.serialize('json', response)
+    sresponse = json.dumps(response)
     if settings.SEARCH_CACHE:
       cache_time = str(int(time.time() * 10**6))
       R = redis.StrictRedis()
@@ -451,13 +458,15 @@ def search(request, index):
       p.execute()
   except Exception as e:
     return _error(message = str(e))
-  return _response(sresponse, 200, False)
+  return _response(response)
 
-def excerpts(request, index):
+def excerpts(request, index_id):
   ''' 
+  --- FEATURE UNDER CONSTRUCTION ---
   Returns highlighted snippets 
   Caches responses in Redis
   '''
+  index = fetch_index_name(index_id)
   r = request_data(request)
   R = redis.StrictRedis()  
   cache_key = hashlib.md5(index + json.dumps(r)).hexdigest()
