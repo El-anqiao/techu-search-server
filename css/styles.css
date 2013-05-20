@@ -34,25 +34,29 @@ h3 {
   font-size: 18px;
 }
 
-#download-button {
+#github-repo-button {
   display: block;      
-  padding: 18px 14px 16px 18px;
+  padding: 18px 10px 16px 14px;
   margin-left: 24px;
-  width: 218px;
+  margin-bottom: 20px;
+  width: 190px;
   text-align: center;
   line-height: 18px;  
-  border: 1px solid #fff;
   text-decoration : none;
+  border: 0;
   font-size: 18px;
   font-weight : 400;
   letter-spacing: 6px;
   font-family: Oswald, Arial;
-  margin-bottom: 100px;
-}
-
-#download-button:hover {
   color: #219e56;
   background-color: #fff;
+}
+
+#download-source {
+  margin-bottom: 100px;
+  margin-left: 24px;
+  display: block;  
+  width: 135px;
 }
 
 #header h2 {
