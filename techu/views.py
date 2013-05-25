@@ -1,18 +1,30 @@
 import os, sys, datetime, codecs
 import json, time, math
-import uuid, string, hashlib
-import redis
+import string, hashlib
+import marshal
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.db import IntegrityError, DatabaseError
 from django.db import connections, transaction
 from django.db import models
 from django.core import serializers
-from libraries import sphinxapi
 from libraries.generic import *
 from techu.models import *
 from libraries.sphinxapi import *
+from libraries.caching import Cache
 import settings 
+
+modules = None
+
+def _import(module_list):
+  ''' 
+  Dynamic imports may boost performance since functions require different packages 
+  e.g. libraries.sphinxapi is only used for search and excerpts calls
+  '''
+  global modules
+  for m in map(__import__, module_list):
+    if not m in modules:
+      modules.append(m)
 
 def _error(code = 500, **kwargs):
   ''' Return an HttpResponse with error code '''
@@ -27,7 +39,7 @@ def _error(code = 500, **kwargs):
 
 def _response(data, code = 200, serialize = True):
   ''' 
-  Return a successful normal HttpResponse (code 200). 
+  Return a successful, normal HttpResponse (code 200). 
   Serializes by default any object passed.
   '''
   r = HttpResponse()
@@ -124,6 +136,7 @@ def configuration_list(request):
   return _response( Configuration.objects.all())
 
 def searchd(request, searchd_id = 0):
+  ''' Store a new searchd '''
   r = request_data(request)
   fields = model_fields(Searchd, r)
   if searchd_id > 0:
@@ -156,12 +169,9 @@ def configuration(request, conf_id = 0):
       return _error('IntegrityError: ' + str(e))
   return _response(c)
 
-
 def batch_indexer(request, action, index_id):
   '''
-  Pass parameters via JSON format for bulk indexing 
-  [{'content': 'some content', 'gid': 5, 'id': 1, 'title': 'document #1 title'}, {'content': 'some content for document 2', 'gid': 3, 'id': 2, 'title': 'document #2 title'}]
-  _Example URL: http://techu.local:81/batch/insert/23/?data=%5B%7B%22content%22%3A+%22some+content%22%2C+%22gid%22%3A+5%2C+%22id%22%3A+1%2C+%22title%22%3A+%22document+%231+title%22%7D%2C+%7B%22content%22%3A+%22some+content+for+document+2%22%2C+%22gid%22%3A+3%2C+%22id%22%3A+2%2C+%22title%22%3A+%22document+%232+title%22%7D%5D  
+  Bulk indexing 
   '''
   action = action.lower()
   r = request_data(request)
@@ -227,13 +237,13 @@ def insert(index_id, fields, values, queue = True):
   '''
   Possible issue when quoting signed rt_attr_bigint values (could this originate from 32-bit systems arch?)
   '''
-  return add_to_index(index, sql, queue, values)
+  return modify_index(index_id, sql, queue, values)
 
 def delete(index_id, doc_id, queue = True):
   ''' Build DELETE statement '''
   index = fetch_index_name(index_id)
   sql = 'DELETE FROM ' + identq(index) + ' WHERE id = %d' % (int(doc_id),)
-  return add_to_index(index, sql, queue)
+  return modify_index(index_id, sql, queue)
 
 def update(index_id, doc_id, fields, values, queue = True):
   ''' Build UPDATE statement '''
@@ -242,9 +252,9 @@ def update(index_id, doc_id, fields, values, queue = True):
   for n, v in enumerate(values):
     sql += fields[n] + ' = %s,'
   sql = sql.rstrip(',') + ' WHERE id = ' + str(int(doc_id))
-  return add_to_index(index, sql, queue, values)
+  return modify_index(index_id, sql, queue, values)
 
-def add_to_index(index, sql, queue, values = None, retries = 0):
+def modify_index(index_id, sql, queue, values = None, retries = 0):
   ''' 
   Either adds to index directly or queues statements 
   for async execution by storing them in Redis 
@@ -261,6 +271,7 @@ def add_to_index(index, sql, queue, values = None, retries = 0):
   elif sql.find('DELETE') == 0:
     queue_action = 'delete'
   response = None
+  cache = Cache()
   if not queue:
     try:
       c = connections['sphinx:' + index]
@@ -271,17 +282,16 @@ def add_to_index(index, sql, queue, values = None, retries = 0):
         cursor.execute(sql, values)
       elif queue_action == 'insert':
         cursor.executemany(sql, values)
-      r = redis.StrictRedis()
-      r.hset(index + ':last-modified', queue_action, int(time.time()*10**6))
-      response = {'searchd' : 'ok'}
+      cache.dirty(index_id)
+      response = { 'searchd' : 'ok' }
     except Exception as e:
-      response = add_to_index(index, sql, True, values, retries + 1)
+      response = modify_index(index_id, sql, True, values, retries + 1)
   else:
     try:
-      rkey = rqueue(queue_action, index, sql, values)
+      rkey = rqueue(queue_action, index_id, sql, values)
       response = { 'redis' : rkey }
     except Exception as e:
-      response = add_to_index(index, sql, False, values, retries + 1)
+      response = modify_index(index_id, sql, False, values, retries + 1)
   return response
 
 def fetch_index_name(index_id):
@@ -291,13 +301,14 @@ def fetch_index_name(index_id):
   except Exception as e:
     return _error(message = 'No such index')
 
-def rqueue(queue, index, sql, values):
+def rqueue(queue, index_id, sql, values):
   '''
   Redis queue for incoming requests
   Applier daemon continuously reads from this queue 
-  and executes asynchronously (TODO: check if it works better with Pub/Sub)
+  and executes asynchronously 
+  TODO: check if it works better with Pub/Sub
   '''
-  r = redis.StrictRedis()
+  r = redis26()
   c = r.incr(settings.TECHU_COUNTER)
   request_time = int(time.time()*10**6)
   key = ':' . join(map(str, [ queue, index, request_time, c ]))
@@ -305,30 +316,49 @@ def rqueue(queue, index, sql, values):
     data = { 'sql' : sql, 'values' : [] }
   else:
     data = { 'sql' : sql, 'values' : values }
-  data = json.dumps(data)
+  ''' marshal serialization is much faster than JSON '''
+  data = marshal.dumps(data)
   ''' Transaction '''
   p = r.pipeline()
-  p.rpush('queue:' + index, key)
+  p.rpush('queue:' + str(index_id), key)
   p.set(key, data)
   p.execute()
   return key
 
 def search(request, index_id):
+  cache = Cache()
   index = fetch_index_name(index_id)
   ''' Search wrapper with SphinxQL '''
   r = request_data(request)
   if 'data' in r:
     r = r['data']
-  cache_key = hashlib.md5(index + json.dumps(r)).hexdigest()
-  r = json.loads(r)
   if settings.SEARCH_CACHE:
+    cache_key = hashlib.md5(index + r).hexdigest()
+    lock_key = 'lock:' + cache_key
+    version = cache.version(index_id)
+    cache_key = 'cache:search:%s:%d:%s' % (cache_key, index_id, version)
     try:   
-      R = redis.StrictRedis()
-      sresponse = R.get(cache_key) 
-      if not sresponse is None:
-        return _response(sresponse, 200, False)
+      response = cache.get(cache_key) 
+      if not response is None:
+        return _response(response, 200, False)
+      else:
+        ''' lock this key for re-caching '''
+        start = time.time()
+        lock = cache.get(lock_key)
+        while ( not lock is None ):
+          lock = cache.get(lock_key)
+          if (time.time() - start) > settings.CACHE_LOCK_TIMEOUT:
+            return _error(message = 'Cache lock wait timeout exceeded')
+        ''' check if key now exists in cache '''
+        response = cache.get(cache_key)
+        if not response is None:
+          return _response(response, 200, False)
+        ''' otherwise acquire lock for this session '''
+        cache.set(lock_key, 1, True, settings.CACHE_LOCK_TIMEOUT) # expire in 10sec        
     except:
       pass    
+  
+  r = json.loads(r)  
   option_mapping = {
     'mode' : {
         'extended' : SPH_MATCH_EXTENDED2,
@@ -418,15 +448,17 @@ def search(request, index_id):
     if r['order_within_group'] != '':
       sql['order_within_group'] = ',' . join([ '%s %s' % (order[0], order_direction(order[1].upper())) for order in r['order_within_group'] ])
     sql['where'] = [] #dictionary e.g. { 'date_from' : [[ '>' , 13445454350] ] } 
+    value_list = []
     if isinstance(r['where'], dict):
       for field, conditions in r['where'].iteritems():
         for condition in conditions:
           operator, value = condition
-          sql['where'].append('%s%s%s' % (field, operator, q(value)))
-    sql['where'].append('MATCH(%s)' % (q(r['q']),))
+          value_list.append(value)
+          sql['where'].append('%s%s%%s' % (field, operator,))
+    value_list.append(r['q'])
+    sql['where'].append('MATCH(%%s)')
     sql['where'] = ' ' . join(sql['where'])
     if isinstance(r['option'], dict):
-      return debug(r)
       sql['option'] = []
       for option_name, option_value in r['option'].iteritems():
         if isinstance(option_value, dict): 
@@ -437,8 +469,7 @@ def search(request, index_id):
     try:    
       cursor = connections['sphinx:' + index].cursor()
       sql =  ' ' . join([ clause[0] + ' ' + sql[clause[1]] for clause in sql_sequence if sql[clause[1]] != '' ]) 
-      ''' q function is deprecated so replace with placeholders for parameter escaping '''
-      cursor.execute(sql)
+      cursor.execute(sql, value_list)
       response['results'] = cursorfetchall(cursor)
     except Exception as e:
       error_message = 'Sphinx Search Query failed with error "%s"' % str(e)
@@ -448,19 +479,14 @@ def search(request, index_id):
       response['meta'] = cursorfetchall(cursor)
     except:
       pass
-    sresponse = json.dumps(response)
     if settings.SEARCH_CACHE:
-      cache_time = str(int(time.time() * 10**6))
-      R = redis.StrictRedis()
-      p = R.pipeline()
-      p.set(cache_key, sresponse)
-      p.rpush('search:' + cache_time[0:-5], cache_key + ':' + cache_time)
-      p.execute()
+      cache.set(cache_key, response, True, SEARCH_CACHE_EXPIRE, lock_key)
   except Exception as e:
     return _error(message = str(e))
   return _response(response)
 
 def excerpts(request, index_id):
+  cache = Cache()
   ''' 
   --- FEATURE UNDER CONSTRUCTION ---
   Returns highlighted snippets 
@@ -468,15 +494,33 @@ def excerpts(request, index_id):
   '''
   index = fetch_index_name(index_id)
   r = request_data(request)
-  R = redis.StrictRedis()  
-  cache_key = hashlib.md5(index + json.dumps(r)).hexdigest()
+  cache_key = hashlib.md5(index + r['data']).hexdigest()
+  lock_key = 'lock:' + cache_key
+  version = cache.version(index_id)
+  cache_key = 'cache:excerpts:%s:%d:%s' % (cache_key, index_id, version)
   if settings.EXCERPTS_CACHE:
     try:   
-      sresponse = R.get(cache_key) 
-      if not sresponse is None:
-        return _response(sresponse, 200, False)
+      response = cache.get(cache_key) 
+      if not response is None:
+        return _response(response, 200, False) 
+      ''' lock this key for re-caching '''
+      start = time.time()
+      lock = cache.get(lock_key)
+      while ( not lock is None ):
+        lock = cache.get(lock_key)
+        if (time.time() - start) > settings.CACHE_LOCK_TIMEOUT:
+          return _error(message = 'Cache lock wait timeout exceeded')
+      ''' check if key now exists in cache '''
+      response = cache.get(cache_key)
+      if not response is None:
+        return _response(response, 200, False)
+      ''' otherwise acquire lock for this session '''
+      cache.set(lock_key, 1, True, settings.CACHE_LOCK_TIMEOUT) # expire in 10sec         
     except:
       pass    
+  else:
+    r = json.loads(r['data'])
+
   options = {
       "before_match"      : '<b>',
       "after_match"       : '</b>',
@@ -504,21 +548,47 @@ def excerpts(request, index_id):
         options[k] = bool(r[k])
       else:
         options[k] = r[k]
-  r['docs'] = json.loads(r['docs'])
+  if 'ttl' in r:      
+    cache_expiration = int(r['ttl'])
+  else:
+    cache_expiration = settings.EXCERTS_CACHE_EXPIRE
+  if isinstance(r['docs'], dict):
+    document_ids = r['docs'].keys()
+    documents = r['docs'].values()
+  elif isinstance(r['docs'], list):
+    document_ids = range(len(r['docs'])) # get a list of numeric indexes from the list
+    documents = r['docs']
+  else:
+    return _error('Documents are passed as a list or dictionary structure')
+  del r['docs'] # free up some memory
+  '''
+  docs = { 838393 : 'a document with lots of text', 119996 : 'another document with text' }
+  '''
+  ci = ConfigurationIndex.objects.filter(sp_index_id = index_id)
+  searchd_id = ConfigurationSearchd.objects.filter(sp_configuration_id = ci.sp_configuration_id)
+  so = SearchdOption.objects.filter(sp_searchd_id = searchd_id, sp_option_id = 138,).exclude(value__endswith = ':mysql41')
+  sphinx_port = int(so.value)
+  so = SearchdOption.objects.filter(sp_searchd_id = searchd_id, sp_option_id = 188,)
+  try:
+    sphinx_host = so.value
+  except:
+    sphinx_host = 'localhost'
   try:
     cl = SphinxClient()
-    excerpts = cl.BuildExcerpts(r['docs'], index, r['q'], options)   
+    cl.SetServer(host = sphinx_host, port = sphinx_port)
+    excerpts = cl.BuildExcerpts( documents, index, r['q'], options)
+    del documents
     if not excerpts:
-      return  _error(message = 'Sphinx Excerpts Error: ' + cl.GetLastError())
-    else:
-      excerpts = serializers.serialize('json', excerpts)
+      return _error(message = 'Sphinx Excerpts Error: ' + cl.GetLastError())
+    else:      
+      cache_key = ''
       if settings.EXCERPTS_CACHE:
-        cache_time = str(int(time.time() * 10**6))
-        p = R.pipeline()
-        p.set(cache_key, excerpts) 
-        p.rpush('excerpts:' + cache_time[0:-5], cache_key + ':' + cache_time)
-        p.execute()
-      return _response(excerpts, 200, False)
+        cache.set(cache_key, excerpts, True, cache_expiration, lock_key)
+      excerpts = { 
+        'excerpts' : dict(zip(document_ids, excerpts)), 
+        'cache-key' : cache_key,        
+        }
+      return _response(json.dumps(excerpts), 200, False)
   except Exception as e:
     return _error(message = 'Error while building excerpts ' + str(e))
 

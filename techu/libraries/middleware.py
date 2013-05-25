@@ -23,8 +23,7 @@ class ConnectionMiddleware(object):
     for row in cursorfetchall(cursor):
       hosts[row['sp_searchd_id']] = row['value']
 
-    sql = '''SELECT sci.sp_index_id, 
-             (SELECT name FROM sp_indexes si WHERE si.id = sci.sp_index_id) AS index_name 
+    sql = '''SELECT sci.sp_index_id 
              FROM sp_configuration_index sci 
              JOIN sp_configuration_searchd scs 
              ON sci.sp_configuration_id = scs.sp_configuration_id
@@ -33,12 +32,12 @@ class ConnectionMiddleware(object):
       cursor.execute(sql % searchd)
       r = cursorfetchall(cursor)
       for row in r:
-        alias = 'sphinx:' + str(row['index_name'])
+        alias = 'sphinx:' + str(row['sp_index_id'])
         connections.databases[alias] = deepcopy(connections.databases['default'])
         connections.databases[alias]['NAME'] = '_'
         connections.databases[alias]['USER'] = ''
         connections.databases[alias]['PASSWORD'] = ''
-        host = 'techu.local'
+        host = settings.APPHOST
         if searchd in hosts:
           host = hosts[searchd]
         connections.databases[alias]['HOST'] = host

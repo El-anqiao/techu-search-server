@@ -110,12 +110,10 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-#    'django.contrib.auth',
     'django.contrib.contenttypes',
-#    'django.contrib.sessions',
     'django.contrib.sites',
-#    'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_graceful',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -161,4 +159,13 @@ SEARCH_FAIL_WARNING = 2
 SEARCH_FAILURE_LEVEL = SEARCH_FAIL_WARNING
 SEARCH_CACHE = True
 EXCERPTS_CACHE = True
-
+EXCERPTS_CACHE_EXPIRE = 10 # Cache expiration in seconds
+APPHOST = 'techu.local'
+CACHE_LOCK_TIMEOUT = 10
+SEARCH_CACHE_EXPIRE = 120.
+''' Redis '''
+REDIS_PORT = 6379
+REDIS_HOST = 'localhost'
+REDIS_PASSWORD = None
+''' Graceful restart (thanks to https://github.com/andreiko/django_graceful) '''
+GRACEFUL_STATEDIR = '/home/techu-search-server/run/'

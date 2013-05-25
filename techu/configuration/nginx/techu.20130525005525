@@ -1,0 +1,12 @@
+server {
+    listen 81;
+    server_name techu;
+    access_log /var/log/nginx/techu.access.log;
+    error_log /var/log/nginx/techu.error.log;
+
+    location / {
+        include fastcgi_params;
+        fastcgi_pass unix:/home/techu-search-server/run/fastcgi.socket;
+        fastcgi_split_path_info ^()(.*)$;
+    }
+}
