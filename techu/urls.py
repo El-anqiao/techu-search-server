@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('techu.views',
   url(r'^configuration[/]*$', 'configuration', name = 'configuration_insert'),
   url(r'^configuration/list[/]*$', 'configuration_list', name = 'configuration_list'),
-  url(r'^configuration/(?P<conf_id>\d+)[/]*$', 'configuration', name = 'configuration'),
+  url(r'^configuration/(?P<configuration_id>\d+)[/]*$', 'configuration', name = 'configuration'),
   url(r'^searchd[/]*(?P<searchd_id>\d+)[/]*$', 'searchd', name = 'searchd'),
   url(r'^searchd[/]*$', 'searchd', name = 'searchd'),
   url(r'^option/list[/]*$', 'option_list', name = 'option_list'),

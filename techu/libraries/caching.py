@@ -8,7 +8,7 @@ class Cache:
   def __init__(self):
     self.R = redis26()
   
-  def __delete(self, keys, expires = 500):
+  def delete(self, keys, expires = 500):
     ''' Set key expiration at specified time in milliseconds  '''
     if isinstance(keys, basestring):
       keys = [keys]
@@ -27,17 +27,38 @@ class Cache:
       return False
     return True
 
+  def exists(self, key):
+    return self.R.exists(key)
+
+  def hget(self, key):
+    return self.R.hgetall(key)
+
   def get(self, key, unserialize = True):
+    value = self.R.get(key)
+    if value is None:
+      return None
     if unserialize:
-      return marshal.loads(self.R.get(key))
+      return marshal.loads(value)
     else:
-      return self.R.get(key)
+      return value
+
+  def hset(self, key, inner_key, value, watch = False, expire = 0., lock = None):
+    r = None
+    try:
+      p = self.R.pipeline()
+      p.hset(key, inner_key, value)
+      if watch:
+        p.watch(key)
+      r = p.execute()
+    except:
+      r = False
+    return r
 
   def set(self, key, value, watch = False, expire = 0., lock = None, keylist = None):
     ''' expire parameter is float -> multiplied by 10**3 and passed to pexpire '''
     try:
       cache_time = int(time.time() * 10**6)
-      marshal.dumps(value)
+      value = marshal.dumps(value)
       p = self.R.pipeline()      
       if watch:
         p.watch(key)
@@ -56,7 +77,7 @@ class Cache:
   def invalidate(self, index_id, version):
     version_pattern = '*:%d:%s' % (index_id, version)
     p = self.R.pipeline()
-    self.__delete( self.R.keys(version_pattern) )
+    self.delete( self.R.keys(version_pattern) )
   
   def version(self, index_id):
     index_key = 'version:%d' % (index_id,)

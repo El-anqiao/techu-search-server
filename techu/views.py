@@ -1,13 +1,9 @@
-import os, sys, datetime, codecs
-import json, time, math
-import string, hashlib
+import os
+import json, time, datetime
+from hashlib import md5
 import marshal
 from django.http import HttpResponse
-from django.shortcuts import render
-from django.db import IntegrityError, DatabaseError
-from django.db import connections, transaction
-from django.db import models
-from django.core import serializers
+from django.db import connections, models, IntegrityError, DatabaseError
 from libraries.generic import *
 from techu.models import *
 from libraries.sphinxapi import *
@@ -26,6 +22,27 @@ def _import(module_list):
     if not m in modules:
       modules.append(m)
 
+class Serializer(json.JSONEncoder):
+  ''' JSON serializer for list, dict and QuerySet objects '''
+  def default(self, o):
+    if is_queryset(o):
+      obj = []
+      for q in o:
+        opts = q._meta
+        data = {}
+        for field in opts.fields:
+          if field.name == 'id':
+            value = q.pk 
+          else:
+            value = field.value_from_object(q)
+          name = field.name                      
+          data[name] = value
+        obj.append(data)
+      return obj
+    if isinstance(o, datetime.datetime):
+      return int( time.mktime(o.timetuple()) )
+    return json.JSONEncoder.default(self, o)
+
 def _error(code = 500, **kwargs):
   ''' Return an HttpResponse with error code '''
   response = HttpResponse()
@@ -37,22 +54,35 @@ def _error(code = 500, **kwargs):
   response.content = message
   return response
 
-def _response(data, code = 200, serialize = True):
+def _response(data, request = None, **kwargs):
   ''' 
   Return a successful, normal HttpResponse (code 200). 
   Serializes by default any object passed.
   '''
+  if not request is None:
+    if 'pretty' in request.REQUEST:
+      kwargs['pretty'] = (request.REQUEST['pretty'].lower() in [ '1', 'true'])
   r = HttpResponse()
-  r.status_code = code
-  if serialize:
-    is_object = isinstance(data, models.query.QuerySet)
-    if isinstance(data, models.query.QuerySet) or (isinstance(data, list) and (isinstance(data[0], models.query.QuerySet))):
-      data = serializers.serialize('json', data)
-    else:
-      data = json.dumps(data)
+  defaults = { 'code' : 200, 'serialize' : True, 'pretty' : False }
+  kwargs = dict(defaults.items() + kwargs.items())
+  r.status_code = kwargs['code']
+  if kwargs['pretty']:
+    indent = 4
+    separators = (',', ': ')
+  else:
+    indent = None
+    separators = (',', ':')
+  if kwargs['serialize']:
+    data = json.dumps(data, cls=Serializer, indent = indent, separators = separators)
   r.content = data
   r.content_type = 'application/json;charset=utf-8'
   return r
+
+def is_queryset(o):
+  return isinstance(o, models.query.QuerySet)
+
+def is_model(o):
+  return isinstance(o, models.Model)
 
 def debug(r):
   ''' Serialize and return object for debugging '''
@@ -63,15 +93,16 @@ def home(request):
   return HttpResponse("<h1>Techu Indexing Server</h1>\n")
 
 def option_list(request):
-  return _response(Option.objects.filter())
+  return _response(Option.objects.all(), request)
 
 def option(request, section, section_instance_id):
   ''' Connect options with searchd, indexes & sources and store their values '''
   section = section.lower()
-  r = request_data(request)
-  data = json.loads(r['data'])
+  data = request_data(request)
   options = Option.objects.filter(name__in = data.keys())
   options_stored = []
+  options_created = 0  
+  options_found = 0
   for option in options:
     if not isinstance(data[option.name], list):
       values = [data[option.name]]
@@ -79,111 +110,112 @@ def option(request, section, section_instance_id):
       values = data[option.name]
     for value in values:
       value = unicode(value)
-      value_hash = hashlib.md5(value).hexdigest()
+      value_hash = md5(value).hexdigest()
       if section == 'searchd':      
-        o = SearchdOption.objects.create(
+        o = SearchdOption.objects.get_or_create(
               sp_searchd_id = section_instance_id, 
               sp_option_id = option.id, 
               value = value,
               value_hash = value_hash)
       elif section == 'index':
-        o = IndexOption.objects.create(
+        o = IndexOption.objects.get_or_create(
               sp_index_id = section_instance_id,
               sp_option_id = option.id,
               value = value,
               value_hash = value_hash)
       elif section == 'source':
-        o = SourceOption.objects.create(
+        o = SourceOption.objects.get_or_create(
               sp_source_id = section_instance_id,
               sp_option_id = option.id,
               value = value,
               value_hash = value_hash)
-      options_stored.append(o.id)
+      if o[1]:
+        options_created += 1
+      else:
+        options_found += 1
+      options_stored.append(o[0].id)
   if section == 'searchd':    
     options_stored = SearchdOption.objects.filter(id__in = options_stored)
   elif section == 'index':    
     options_stored = IndexOption.objects.filter(id__in = options_stored) 
   elif section == 'source':    
     options_stored = SourceOption.objects.filter(id__in = options_stored)
-  return _response(options_stored)
+  options_stored = { 'created' : options_created, 'found' : options_found, 'options' : options_stored }
+  return _response(options_stored, request)
 
 def index(request, index_id = 0):
   ''' Add or modify information for an index '''
-  r = request_data(request)
-  fields = model_fields(Index, r)
+  data = request_data(request)
+  fields = model_fields(Index, data)
+  ci = None
   if index_id == 0:
     try:
-      i = Index.objects.create(**fields)
-      if 'conf_id' in r:
-        ConfigurationIndex.objects.create(sp_index_id = i.id, sp_configuration_id = r['conf_id'], is_active = 1)
-      i = Index.objects.filter(pk = i.id)
+      index = Index.objects.create(**fields)
+      if 'configuration_id' in r:
+        ci = ConfigurationIndex.objects.create(sp_index_id = i.id, 
+                                               sp_configuration_id = int(r['configuration_id']), 
+                                               is_active = 1)
+      index = Index.objects.filter(pk = i.id)
     except IntegrityError as e:
-      Index.objects.filter(name = fields['name']).update(**fields)
-      i = Index.objects.get(name = fields['name'])
+      index = Index.objects.filter(name = fields['name']).update(**fields)
+      index = Index.objects.filter(pk = index.id)
   else:
     try:
-      i = Index.objects.get(pk = index_id)
+      index = Index.objects.filter(pk = index_id)
     except:
-      return _error()
-  return _response(i)
+      return _error(message = 'Error while retrieving object with primary key "%d"' % index_id)
+  return _response({ 'index' : index, 'configurations' : ci }, request)
 
 def index_list(request):
   ''' Return a JSON Array with all indexes '''
-  return _response(Index.objects.all())
+  return _response(Index.objects.all(), request)
 
 def configuration_list(request):
   ''' Return a JSON Array with all configurations '''
-  return _response( Configuration.objects.all())
+  return _response(Configuration.objects.all(), request)
 
 def searchd(request, searchd_id = 0):
   ''' Store a new searchd '''
-  r = request_data(request)
-  fields = model_fields(Searchd, r)
+  data = request_data(request)
+  fields = model_fields(Searchd, data)
   if searchd_id > 0:
     s = Searchd.objects.filter(pk = searchd_id).update(**fields)
   else:
     s = Searchd.objects.create(**fields)
-    searchd_id = s.id
-    s = Searchd.objects.filter(pk = searchd_id)
-  if 'conf_id' in r:
-    cs = ConfigurationSearchd.objects.create(sp_configuration_id = int(r['conf_id']), sp_searchd_id = searchd_id)
-  return _response(s)
+  cs = None
+  if 'configuration_id' in r:
+    cs = ConfigurationSearchd.objects.create(sp_configuration_id = int(r['configuration_id']), sp_searchd_id = searchd_id)
+  return _response({ 'searchd' : s, 'configurations' : cs }, request)
 
-def configuration(request, conf_id = 0):
+def configuration(request, configuration_id = 0):
   ''' Get or update information for a configuration '''
-  r = request_data(request)
-  fields = model_fields(Configuration, r)
-  if conf_id > 0:
-    c = Configuration.objects.get(pk = conf_id)
+  data = request_data(request)
+  fields = model_fields(Configuration, data)
+  if configuration_id > 0:
+    configuration = Configuration.objects.get(pk = conf_id)
   else:
     if not regex_check(r['name']):
-      return _error('Illegal configuration name "%s"' % r['name'])
+      return _error(message = 'Illegal configuration name "%s"' % r['name'])
     try:
       c = Configuration.objects.create(**fields)
-      c.hash = hashlib.md5(str(c.id) + c.name).hexdigest()
+      c.hash = md5(str(c.id) + c.name).hexdigest()
       c.save(update_fields = ['hash'])
-      c = Configuration.objects.filter(pk = c.id)
+      configuration = Configuration.objects.filter(pk = c.id)
     except Exception as e:
-      return _error(str(e))
+      return _error(message = str(e))
     except IntegrityError as e:
       return _error('IntegrityError: ' + str(e))
-  return _response(c)
+  return _response(configuration, request)
 
 def batch_indexer(request, action, index_id):
   '''
   Bulk indexing 
   '''
   action = action.lower()
-  r = request_data(request)
-  if 'queue' in r:
-    queue = (int(r['queue']) == 1)
-    del r['queue']
-  try:
-    data = json.loads(r['data'])
-  except:
-    return _error(message = 'Invalid JSON document passed with "data" parameter')
+  data = request_data(request)
+  queue = is_queued(request)  
   if not isinstance(data, list):
-    data = [data]
+    data = [ data ]
   responses = []
   if action == 'insert':
     values = []
@@ -195,8 +227,7 @@ def batch_indexer(request, action, index_id):
     fields = data[0].keys()
     fields.remove('id')
     for document in data:
-      doc_id = document['id']
-      responses.append( update(index_id, doc_id, fields, [ document[field] for field in fields ], queue) )
+      responses.append( update(index_id, document['id'], fields, [ document[field] for field in fields ], queue) )
   elif action == 'delete':
     for document in data:
       responses.append(delete(index_id, document['id'], queue))
@@ -204,18 +235,19 @@ def batch_indexer(request, action, index_id):
     return _error(message = 'Unknown action. Valid types are [ insert, update, delete ]')
   return _response(responses)    
 
+def is_queued(request):
+  if 'queue' in request.REQUEST:
+    return ( int(request.REQUEST['queue']) == 1 )
+  else:
+    return False
+
 def indexer(request, action, index_id, doc_id = 0):
   ''' Add, delete, update documents '''
   action = action.lower()
-  r = request_data(request)
-  if 'data' in r:
-    data = json.loads(r['data'])
-    if 'id' in data and doc_id == 0:
-      doc_id = int(data['id'])
-  queue = False  
-  if 'queue' in r:
-    queue = (int(r['queue']) == 1)
-    del r['queue']
+  data = request_data(request)
+  if 'id' in data and doc_id == 0:
+    doc_id = int(data['id'])
+  queue = is_queued(request)  
   if action == 'insert':
     response = insert(index_id, data.keys(), [ data.values() ], queue)
   elif action == 'update':
@@ -223,7 +255,7 @@ def indexer(request, action, index_id, doc_id = 0):
   elif action == 'delete':
     response = delete(index_id, doc_id, queue) 
   else:
-    return _error('Invalid action "%s"' % (action,))
+    return _error(message = 'Unknown action. Valid types are [ insert, update, delete ]')
   return _response(response)
 
 def insert(index_id, fields, values, queue = True):
@@ -234,9 +266,6 @@ def insert(index_id, fields, values, queue = True):
   index = fetch_index_name(index_id)
   sql  = "INSERT INTO %s(%s) VALUES" % (index, ',' . join(fields))
   sql += '(' + ','.join([ '%s' for v in values[0] ]) + ')'
-  '''
-  Possible issue when quoting signed rt_attr_bigint values (could this originate from 32-bit systems arch?)
-  '''
   return modify_index(index_id, sql, queue, values)
 
 def delete(index_id, doc_id, queue = True):
@@ -262,7 +291,7 @@ def modify_index(index_id, sql, queue, values = None, retries = 0):
   in order to store the request to the alternative
   '''
   if retries > settings.MAX_RETRIES: 
-    return _error(message = 'Maximum retries %d exceeded' % MAX_RETRIES)
+    return _error(message = 'Maximum retries %d exceeded' % retries)
   queue_action = None
   if sql.find('INSERT') == 0:
     queue_action = 'insert'
@@ -297,9 +326,22 @@ def modify_index(index_id, sql, queue, values = None, retries = 0):
 def fetch_index_name(index_id):
   ''' Fetch index name by id '''
   try:
-    return Index.objects.filter(pk = index_id).values()[0]['name']
+    c = Cache()
+    if not c.exists('structures:indexes'):
+      for index in Index.objects.all():
+        if index_id == index.id:
+          index_name = index.name
+        c.hset('structures:indexes', str(index.id), index.name, True)
+    else:
+      indexes = c.hget('structures:indexes')
+      index_id = str(index_id)
+      if index_id in indexes:
+        index_name = indexes[index_id]
+      else:
+        return _error(message = 'No such index')
+    return index_name
   except Exception as e:
-    return _error(message = 'No such index')
+    return _error(message = 'Error while retrieving index')
 
 def rqueue(queue, index_id, sql, values):
   '''
@@ -333,7 +375,7 @@ def search(request, index_id):
   if 'data' in r:
     r = r['data']
   if settings.SEARCH_CACHE:
-    cache_key = hashlib.md5(index + r).hexdigest()
+    cache_key = md5(index + r).hexdigest()
     lock_key = 'lock:' + cache_key
     version = cache.version(index_id)
     cache_key = 'cache:search:%s:%d:%s' % (cache_key, index_id, version)
@@ -494,7 +536,7 @@ def excerpts(request, index_id):
   '''
   index = fetch_index_name(index_id)
   r = request_data(request)
-  cache_key = hashlib.md5(index + r['data']).hexdigest()
+  cache_key = md5(index + r['data']).hexdigest()
   lock_key = 'lock:' + cache_key
   version = cache.version(index_id)
   cache_key = 'cache:excerpts:%s:%d:%s' % (cache_key, index_id, version)
@@ -588,11 +630,12 @@ def excerpts(request, index_id):
         'excerpts' : dict(zip(document_ids, excerpts)), 
         'cache-key' : cache_key,        
         }
-      return _response(json.dumps(excerpts), 200, False)
+      return _response(json.dumps(excerpts), request)
   except Exception as e:
     return _error(message = 'Error while building excerpts ' + str(e))
 
 def generate(request, configuration_id):
+  import codecs
   ''' 
   Generate configuration file and restart searchd 
   Response contains a dictionary with the configuration file contents, 
@@ -645,11 +688,11 @@ def generate(request, configuration_id):
     stopped = os.system(searchd_stop % params)
     started = os.system(searchd_start % params)
   except Exception as e:
-    return _error('Error while restarting searchd ' + str(e))
+    return _error(message = 'Error while restarting searchd ' + str(e))
   response = { 
     'configuration' : configuration, 
     'stopped' : { 'command' : searchd_stop % params,  'status' : not bool(stopped) }, 
     'started' : { 'command' : searchd_start % params, 'status' : not bool(started) },
     }
-  return _response(response)
+  return _response(response, request)
 

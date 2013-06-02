@@ -1,6 +1,6 @@
 import os, imp
 import MySQLdb
-import re
+import re, json
 import redis
 settings_path = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[0:-1])
 settings = imp.load_source('settings', os.path.join( settings_path,  'settings.py'))
@@ -48,6 +48,8 @@ def request_data(req):
     r[k] = v
   for k, v in p.iteritems():
     r[k] = v
+  if 'data' in r:
+    r = json.loads(r['data'])
   return r
 
 def model_fields(model, r):  
