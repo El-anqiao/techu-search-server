@@ -21,7 +21,7 @@ RESTful search built on top of Sphinx full-text search engine.
 * Redis in-memory key-value storage
 * MySQL
 
-Take a look at the [overview page](http://georgepsarakis.github.io/techu-search-server/).
+Take a look at the [overview page](http://techusearch.org).
 
 -----
 
