@@ -81,11 +81,15 @@ class Cache:
   
   def version(self, index_id):
     index_key = 'version:%d' % (index_id,)
-    return self.get(index_key, False)
+    version = self.get(index_key, False)
+    if version is None:
+      return 1
+    else:
+      return int(version)
    
-  def dirty(self, index_id, action):
+  def dirty(self, index_id, action = ''):
     modification_time = int(time.time() * 10**6)
-    index_key = 'version:%d' % (index_id,)
+    index_key = 'version:%s' % (str(index_id),)
     old_version = self.R.get(index_key)
     p = self.R.pipeline()
     p.watch(index_key)

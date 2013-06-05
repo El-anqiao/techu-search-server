@@ -1,4 +1,4 @@
-import os
+import os, sys
 import json, time, datetime
 from hashlib import md5
 import marshal
@@ -303,7 +303,7 @@ def modify_index(index_id, sql, queue, values = None, retries = 0):
   cache = Cache()
   if not queue:
     try:
-      c = connections['sphinx:' + index]
+      c = connections['sphinx:' + str(index_id)]
       cursor = c.cursor()
       if queue_action == 'delete':
         cursor.execute( sql )
@@ -314,6 +314,7 @@ def modify_index(index_id, sql, queue, values = None, retries = 0):
       cache.dirty(index_id)
       response = { 'searchd' : 'ok' }
     except Exception as e:
+      return str(e)
       response = modify_index(index_id, sql, True, values, retries + 1)
   else:
     try:
@@ -353,7 +354,7 @@ def rqueue(queue, index_id, sql, values):
   r = redis26()
   c = r.incr(settings.TECHU_COUNTER)
   request_time = int(time.time()*10**6)
-  key = ':' . join(map(str, [ queue, index, request_time, c ]))
+  key = ':' . join(map(str, [ queue, index_id, request_time, c ]))
   if queue == 'delete':
     data = { 'sql' : sql, 'values' : [] }
   else:
@@ -530,21 +531,23 @@ def search(request, index_id):
 def excerpts(request, index_id):
   cache = Cache()
   ''' 
-  --- FEATURE UNDER CONSTRUCTION ---
   Returns highlighted snippets 
   Caches responses in Redis
   '''
+  index_id = int(index_id)
   index = fetch_index_name(index_id)
   r = request_data(request)
-  cache_key = md5(index + r['data']).hexdigest()
+  cache_key = md5(index + json.dumps(r)).hexdigest()
   lock_key = 'lock:' + cache_key
   version = cache.version(index_id)
   cache_key = 'cache:excerpts:%s:%d:%s' % (cache_key, index_id, version)
+  if not 'docs' in r:
+    return _response({})
   if settings.EXCERPTS_CACHE:
     try:   
       response = cache.get(cache_key) 
       if not response is None:
-        return _response(response, 200, False) 
+        return _response(response, request, code = 200, serialize = False) 
       ''' lock this key for re-caching '''
       start = time.time()
       lock = cache.get(lock_key)
@@ -555,13 +558,11 @@ def excerpts(request, index_id):
       ''' check if key now exists in cache '''
       response = cache.get(cache_key)
       if not response is None:
-        return _response(response, 200, False)
+        return _response(response, request, code = 200, serialize = False)
       ''' otherwise acquire lock for this session '''
       cache.set(lock_key, 1, True, settings.CACHE_LOCK_TIMEOUT) # expire in 10sec         
     except:
-      pass    
-  else:
-    r = json.loads(r['data'])
+      return _error(message = 'Error while examining excerpts cache')    
 
   options = {
       "before_match"      : '<b>',
@@ -571,7 +572,7 @@ def excerpts(request, index_id):
       "around"            : 5,    
       "exact_phrase"      : False,
       "use_boundaries"    : False,
-      "query_mode"        : False,
+      "query_mode"        : True,
       "weight_order"      : False,
       "force_all_words"   : False,
       "limit_passages"    : 0,
@@ -593,7 +594,7 @@ def excerpts(request, index_id):
   if 'ttl' in r:      
     cache_expiration = int(r['ttl'])
   else:
-    cache_expiration = settings.EXCERTS_CACHE_EXPIRE
+    cache_expiration = settings.EXCERPTS_CACHE_EXPIRE
   if isinstance(r['docs'], dict):
     document_ids = r['docs'].keys()
     documents = r['docs'].values()
@@ -601,29 +602,32 @@ def excerpts(request, index_id):
     document_ids = range(len(r['docs'])) # get a list of numeric indexes from the list
     documents = r['docs']
   else:
-    return _error('Documents are passed as a list or dictionary structure')
+    return _error(message = 'Documents are passed as a list or dictionary structure')
   del r['docs'] # free up some memory
   '''
   docs = { 838393 : 'a document with lots of text', 119996 : 'another document with text' }
   '''
-  ci = ConfigurationIndex.objects.filter(sp_index_id = index_id)
-  searchd_id = ConfigurationSearchd.objects.filter(sp_configuration_id = ci.sp_configuration_id)
+  ci = ConfigurationIndex.objects.filter(sp_index_id = index_id)[0]
+  searchd_id = ConfigurationSearchd.objects.filter(sp_configuration_id = ci.sp_configuration_id)[0].sp_searchd_id
+  ''' TODO: convert hard coded option ids to constants '''
   so = SearchdOption.objects.filter(sp_searchd_id = searchd_id, sp_option_id = 138,).exclude(value__endswith = ':mysql41')
-  sphinx_port = int(so.value)
-  so = SearchdOption.objects.filter(sp_searchd_id = searchd_id, sp_option_id = 188,)
+  sphinx_port = int(so[0].value)
   try:
-    sphinx_host = so.value
+    so = SearchdOption.objects.filter(sp_searchd_id = searchd_id, sp_option_id = 188,)
+    if so:
+      sphinx_host = so[0].value
+    else:
+      sphinx_host = 'localhost'
   except:
     sphinx_host = 'localhost'
   try:
     cl = SphinxClient()
     cl.SetServer(host = sphinx_host, port = sphinx_port)
-    excerpts = cl.BuildExcerpts( documents, index, r['q'], options)
+    excerpts = cl.BuildExcerpts( documents, index, r['q'], options )
     del documents
     if not excerpts:
       return _error(message = 'Sphinx Excerpts Error: ' + cl.GetLastError())
     else:      
-      cache_key = ''
       if settings.EXCERPTS_CACHE:
         cache.set(cache_key, excerpts, True, cache_expiration, lock_key)
       excerpts = { 
@@ -681,7 +685,7 @@ def generate(request, configuration_id):
   configuration.append('}')
   configuration.append("")
   configuration = "\n" . join(configuration)
-  f = codecs.open(params['config'], 'w', 'utf-8')
+  f = codecs.open(params['config'], mode = 'w', encoding = 'utf-8')
   f.write(configuration)
   f.close()
   try:
