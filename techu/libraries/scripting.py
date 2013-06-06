@@ -1,0 +1,24 @@
+from generic import settings
+import PyV8 
+import json
+
+class Scripting(object):
+  def __init__(self, fn):
+    self.fn = fn
+  
+  def __call__(self, *args, **kwargs):
+    response = self.fn(*args, **kwargs)
+    request = args[0]
+    if not settings.SCRIPTING:
+      return response
+    if hasattr(response, 'content') and response.status_code == 200:
+      if 'callback' in request.REQUEST:
+        callback = request.REQUEST['callback']
+        response_object = json.loads(response.content)
+        js_context = PyV8.JSContext({'response' : response_object})
+        js_context.enter()
+        js_context.eval(callback)
+        js_context.leave()
+        response.content = json.dumps(response_object)
+    return response
+        

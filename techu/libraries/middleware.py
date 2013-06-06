@@ -2,7 +2,6 @@ from django.conf import settings
 from django.db import connections, connection
 from generic import *
 from copy import deepcopy
-from time import time
 
 class ConnectionMiddleware(object):
   def process_request(self, request):
@@ -45,9 +44,3 @@ class ConnectionMiddleware(object):
         connections.databases[alias]['PORT'] = ports[searchd]
     return None
 
-class Profiler(object):
-  def process_view(self, request, view_func, view_args, view_kwargs):
-    if settings.PROFILER:
-      r = redis26()
-      r.incr('hits:' + view_func.__name__)
-      r.set('time:' + view_func.__name__, time())

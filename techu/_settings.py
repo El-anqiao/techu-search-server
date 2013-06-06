@@ -92,11 +92,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-#    'django.contrib.sessions.middleware.SessionMiddleware',
-#    'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'django.contrib.messages.middleware.MessageMiddleware',
     'techu.libraries.middleware.ConnectionMiddleware',
-    'techu.libraries.middleware.Profiler',
     )
 
 ROOT_URLCONF = 'techu.urls'
@@ -152,6 +148,7 @@ import os
     Techu Project Settings 
     Version 0.1beta
 '''
+PROFILER = True
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 TECHU_COUNTER = '84920c64c98c9cf2a7ab4af756c84b33'
 MAX_RETRIES = 10

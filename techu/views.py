@@ -9,9 +9,10 @@ from techu.models import *
 from libraries.sphinxapi import *
 from libraries.caching import Cache
 import settings 
+from libraries.profiler import Profiler
+from libraries.scripting import Scripting
 
 modules = None
-
 def _import(module_list):
   ''' 
   Dynamic imports may boost performance since functions require different packages 
@@ -21,6 +22,12 @@ def _import(module_list):
   for m in map(__import__, module_list):
     if not m in modules:
       modules.append(m)
+
+def is_queued(request):
+  if 'queue' in request.REQUEST:
+    return ( int(request.REQUEST['queue']) == 1 )
+  else:
+    return False
 
 class Serializer(json.JSONEncoder):
   ''' JSON serializer for list, dict and QuerySet objects '''
@@ -88,13 +95,17 @@ def debug(r):
   ''' Serialize and return object for debugging '''
   return _response(r)
 
+@Scripting
+@Profiler
 def home(request):
   ''' Home/Index page '''
-  return HttpResponse("<h1>Techu Indexing Server</h1>\n")
+  return _response({'greetings' : "Techu Indexing Server"})
 
+@Profiler
 def option_list(request):
   return _response(Option.objects.all(), request)
 
+@Profiler
 def option(request, section, section_instance_id):
   ''' Connect options with searchd, indexes & sources and store their values '''
   section = section.lower()
@@ -143,6 +154,7 @@ def option(request, section, section_instance_id):
   options_stored = { 'created' : options_created, 'found' : options_found, 'options' : options_stored }
   return _response(options_stored, request)
 
+@Profiler
 def index(request, index_id = 0):
   ''' Add or modify information for an index '''
   data = request_data(request)
@@ -166,14 +178,17 @@ def index(request, index_id = 0):
       return _error(message = 'Error while retrieving object with primary key "%d"' % index_id)
   return _response({ 'index' : index, 'configurations' : ci }, request)
 
+@Profiler
 def index_list(request):
   ''' Return a JSON Array with all indexes '''
   return _response(Index.objects.all(), request)
 
+@Profiler
 def configuration_list(request):
   ''' Return a JSON Array with all configurations '''
   return _response(Configuration.objects.all(), request)
 
+@Profiler
 def searchd(request, searchd_id = 0):
   ''' Store a new searchd '''
   data = request_data(request)
@@ -187,6 +202,7 @@ def searchd(request, searchd_id = 0):
     cs = ConfigurationSearchd.objects.create(sp_configuration_id = int(r['configuration_id']), sp_searchd_id = searchd_id)
   return _response({ 'searchd' : s, 'configurations' : cs }, request)
 
+@Profiler
 def configuration(request, configuration_id = 0):
   ''' Get or update information for a configuration '''
   data = request_data(request)
@@ -207,6 +223,7 @@ def configuration(request, configuration_id = 0):
       return _error('IntegrityError: ' + str(e))
   return _response(configuration, request)
 
+@Profiler
 def batch_indexer(request, action, index_id):
   '''
   Bulk indexing 
@@ -235,12 +252,7 @@ def batch_indexer(request, action, index_id):
     return _error(message = 'Unknown action. Valid types are [ insert, update, delete ]')
   return _response(responses)    
 
-def is_queued(request):
-  if 'queue' in request.REQUEST:
-    return ( int(request.REQUEST['queue']) == 1 )
-  else:
-    return False
-
+@Profiler
 def indexer(request, action, index_id, doc_id = 0):
   ''' Add, delete, update documents '''
   action = action.lower()
@@ -324,6 +336,7 @@ def modify_index(index_id, sql, queue, values = None, retries = 0):
       response = modify_index(index_id, sql, False, values, retries + 1)
   return response
 
+@Profiler
 def fetch_index_name(index_id):
   ''' Fetch index name by id '''
   try:
@@ -368,6 +381,7 @@ def rqueue(queue, index_id, sql, values):
   p.execute()
   return key
 
+@Profiler
 def search(request, index_id):
   cache = Cache()
   index = fetch_index_name(index_id)
@@ -528,6 +542,7 @@ def search(request, index_id):
     return _error(message = str(e))
   return _response(response)
 
+@Profiler
 def excerpts(request, index_id):
   cache = Cache()
   ''' 
@@ -638,6 +653,7 @@ def excerpts(request, index_id):
   except Exception as e:
     return _error(message = 'Error while building excerpts ' + str(e))
 
+@Profiler
 def generate(request, configuration_id):
   import codecs
   ''' 

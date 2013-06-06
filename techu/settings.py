@@ -92,11 +92,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-#    'django.contrib.sessions.middleware.SessionMiddleware',
-#    'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'django.contrib.messages.middleware.MessageMiddleware',
     'techu.libraries.middleware.ConnectionMiddleware',
-    'techu.libraries.middleware.Profiler',
     )
 
 ROOT_URLCONF = 'techu.urls'
@@ -153,6 +149,7 @@ import os
     Version 0.1beta
 '''
 PROFILER = True
+SCRIPTING = True
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
 TECHU_COUNTER = '84920c64c98c9cf2a7ab4af756c84b33'
 MAX_RETRIES = 10
@@ -162,7 +159,7 @@ SEARCH_FAILURE_LEVEL = SEARCH_FAIL_WARNING
 SEARCH_CACHE = True
 EXCERPTS_CACHE = True
 EXCERPTS_CACHE_EXPIRE = 10 # Cache expiration in seconds
-APPHOST = 'techu.local'
+APPHOST = 'techu'
 CACHE_LOCK_TIMEOUT = 10
 SEARCH_CACHE_EXPIRE = 120.
 ''' Redis '''
