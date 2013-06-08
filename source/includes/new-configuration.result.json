@@ -1,0 +1,13 @@
+[
+    {
+        "fields": {
+            "date_inserted": "2013-05-14T19:29:49",
+            "description": "StackOverflow Posts Indexing Configuration",
+            "hash": "46ee0a09bcbb064b49b224a9e8efd39a",
+            "is_active": 1,
+            "name": "stackoverflow"
+        },
+        "model": "techu.configuration",
+        "pk": 25
+    }
+]   

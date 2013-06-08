@@ -1,0 +1,67 @@
+[
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 138, 
+            "sp_searchd_id": 6, 
+            "value": "9312", 
+            "value_hash": "b6dfd41875bc090bd31d0b1740eb5b1b"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 14
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 138, 
+            "sp_searchd_id": 6, 
+            "value": "9306:mysql41", 
+            "value_hash": "73da79255eec41caa827f711f4d287a0"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 15
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 148, 
+            "sp_searchd_id": 6, 
+            "value": "1000", 
+            "value_hash": "a9b7ba70783b617e9998dc4dd82eb3c5"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 16
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 147, 
+            "sp_searchd_id": 6, 
+            "value": "/var/run/stackoverfow_searchd.pid", 
+            "value_hash": "c3a29d1b495b5f6a29a2f84f51bb935c"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 17
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T20:24:25", 
+            "date_modified": "2013-05-15T20:24:25", 
+            "is_active": null, 
+            "sp_option_id": 165, 
+            "sp_searchd_id": 6, 
+            "value": "threads", 
+            "value_hash": "0919fe44fdbbd233e5e2e8587006b7b2"
+        }, 
+        "model": "techu.searchdoption", 
+        "pk": 18
+    }
+]

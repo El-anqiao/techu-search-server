@@ -68,6 +68,8 @@
       <a id="download-source" href="https://github.com/georgepsarakis/techu-search-server/archive/master.zip">or download source</a>
     </div>
   </div>
+
+
   <div id="features" class="clearfix">
     <div class="content-wrapper" class="clearfix">
       <h2>FEATURES</h2>
@@ -88,6 +90,8 @@
       <div id="gears"></div>
     </div>
   </div>
+
+
   <div id="how-it-works" class="clearfix">    
     <div id="how-it-works-text-container">
       <div id="how-it-works-text" class="clearfix">
@@ -140,6 +144,8 @@
       </div>
     </div>    
   </div>
+
+
   <div id="installation" class="clearfix">
     <div class="content-wrapper" class="clearfix">
       <h2>INSTALLATION</h2>
@@ -180,7 +186,11 @@
           <div class="number">2.</div>
           <div class="command">easy_install django</div>
         </li>
-        </ul>
+        <li class="odd">
+          <div class="number">3.</div>
+          <div class="command">easy_install django_graceful</div>
+        </li>
+      </ul>
       <h3>PYTHON PACKAGES (OPTIONAL)</h3>    
       <ul class="command-list">
         <li class="odd">
@@ -208,7 +218,7 @@
         </li>
         <li class="even">
           <div class="number">4.</div>
-          <div class="command">./configure &amp;&amp; make install</div>
+          <div class="command">./configure &amp;&amp; make &amp;&amp; make install</div>
         </li>       
       </ul>              
       <h3>CONFIGURATION</h3>
@@ -232,18 +242,30 @@
         </div>
       </div>
       <div class="file-contents">
-<pre>server {
-  listen 81;
-  server_name techu;
-  access_log /var/log/nginx/techu.access.log;
-  error_log /var/log/nginx/techu.error.log;
+        <pre>server {
+    listen 81;
+    listen 443 ssl;
+    server_name techu;
+    access_log /var/log/nginx/techu.access.log;
+    error_log /var/log/nginx/techu.error.log;
+    
+    ssl on;
+    ssl_certificate /etc/nginx/ssl/server.crt;
+    ssl_certificate_key /etc/nginx/ssl/server.key;
+     
+    location / {
+        include fastcgi_params;
+        fastcgi_pass unix:/home/techu-search-server/run/fastcgi.socket;
+        fastcgi_split_path_info ^()(.*)$;
+    }
 
-  location / {
-    include fastcgi_params;
-    fastcgi_pass 127.0.0.1:8080;
-    fastcgi_split_path_info ^()(.*)$;
-  }
-}</pre>
+    location /admin/static/ {
+      autoindex on;
+      alias /home/techu-search-server/techu/admin/static/;
+    }
+}
+
+</pre>
       </div>
       </div>
       <div class="clearfix" style="height: 30px;"></div>
@@ -260,7 +282,7 @@
         </div>
       </div>
       <div class="file-contents">      
-<pre>DATABASES = {
+        <pre>DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'techu',                              
@@ -269,7 +291,8 @@
         'HOST': 'localhost',                  
         'PORT': '3306',                       # Set to empty string for default.
     },
-}</pre>
+}
+</pre>
       </div>      
       </div>
       <div class="clearfix" style="height: 30px;"></div>      
@@ -280,12 +303,14 @@
         </li>
         <li class="odd">
           <div class="number">5.</div>
-          <div class="command">cd techu-search-server &amp;&amp; ./run #Start FastCGI processes for Nginx</div>
+          <div class="command">cd techu-search-server &amp;&amp; ./manage.py update #Start FastCGI processes for Nginx</div>
         </li>
       </ul>
       <div class="clearfix" style="height: 50px"></div>                
     </div>
   </div>
+
+
   <div id="examples" class="clearfix">
     <div class="content-wrapper" class="clearfix">
       <h2>EXAMPLES</h2>
@@ -296,26 +321,13 @@
             <li class="odd">
               <div class="number">1.</div>
               <div class="command">
-              curl 'http://techu.local:81/configuration/?name=stackoverflow&description=StackOverflow Posts Indexing Configuration'
+              curl -XPOST 'http://techu:81/configuration/' --data-urlencode name='stackoverflow' --data-urlencode description='StackOverflow Posts Indexing Configuration'
               </div>
             </li>
           </ul>
           <div class="odd">
             <div class="example-result">
-            <pre>
-[
-    {
-        "fields": {
-            "date_inserted": "2013-05-14T19:29:49",
-            "description": "StackOverflow Posts Indexing Configuration",
-            "hash": "46ee0a09bcbb064b49b224a9e8efd39a",
-            "is_active": 1,
-            "name": "stackoverflow"
-        },
-        "model": "techu.configuration",
-        "pk": 25
-    }
-]           </pre>
+              <pre>{{ new-configuration.result.json }}</pre>
             </div>
           </div>
         </div>
@@ -327,26 +339,14 @@
           <ul class="command-list">
             <li class="odd">
               <div class="number">1.</div>
-              <div class="command single-line">
-              curl 'http://techu.local:81/searchd/?name=stackoverflow&conf_id=25'
+              <div class="command">
+              curl -XPOST 'http://techu:81/searchd/' --data-urlencode name='stackoverflow' --data-urlencode configuration_id='25'
               </div>
             </li>
           </ul>
           <div class="odd">
             <div class="example-result">
-            <pre>
-[
-    {
-        "fields": {
-            "date_inserted": "2013-05-15T18:11:41",
-            "date_modified": "2013-05-15T18:11:41",
-            "is_active": 1,
-            "name": "stackoverflow"
-        },
-        "model": "techu.searchd",
-        "pk": 6
-    }
-]</pre>
+              <pre>{{ new-searchd.result.json }}</pre>
             </div>
           </div>
         </div>
@@ -356,24 +356,24 @@
         <div class="example-box-content">
           <div class="example-title">SEARCHD OPTIONS</div>
           <ul class="command-list">
-            <li class="odd">
-              <div class="number">1.</div>
-              <div class="command">
-python techu-search-server/techu/data/encode.py data '{"listen" : ["9312", "9306:mysql41"], "workers" : "threads", "pid_file" : "/var/run/stackoverfow_searchd.pid", "max_matches" : 1000 }'
+            <li class="odd" style="height: 260px!important;">
+              <div class="number" style="height: 240px!important;">1.</div>
+              <div class="command" style="height: 240px!important;"><pre>
+curl 'http://techu:81/option/searchd/6/' --data-urlencode data='{
+  "listen" : [ 
+    "9312", 
+    "9306:mysql41" 
+    ], 
+  "workers" : "threads", 
+  "pid_file" : "/var/run/stackoverfow_searchd.pid", 
+  "max_matches" : 1000 
+  }'</pre>
               </div>
             </li>
-            <li class="even">
-              <div class="number">2.</div>
-              <div class="command single-line">
-                <div class="command-inner">
-                  curl 'http://techu.local:81/option/searchd/6/' -d 'data=%7B%22listen%22+%3A+%5B%229312%22%2C+%229306%3Amysql41%22%5D%2C+%22workers%22+%3A+%22threads%22%2C+%22pid_file%22+%3A+%22%2Fvar%2Frun%2Fstackoverfow_searchd.pid%22%2C+%22max_matches%22+%3A+1000+%7D'
-                </div> 
-              </div>
-            </li>          
           </ul>
           <div class="even">
             <div id="searchd-options-setup-json" class="example-result 400">
-            <pre>[
+              <pre>[
     {
         "fields": {
             "date_inserted": "2013-05-15T20:24:25", 
@@ -439,7 +439,8 @@ python techu-search-server/techu/data/encode.py data '{"listen" : ["9312", "9306
         "model": "techu.searchdoption", 
         "pk": 18
     }
-]</pre>
+]
+</pre>
             </div>
           </div>
         </div>
@@ -452,14 +453,13 @@ python techu-search-server/techu/data/encode.py data '{"listen" : ["9312", "9306
             <li class="odd">
               <div class="number">1.</div>
               <div class="command single-line">
-              curl 'http://techu.local:81/index/?name=so_posts_rt&conf_id=25'
+              curl 'http://techu:81/index/' --data-urlencode name='so_posts_rt' --data-urlencode configuration_id='25'
               </div>
             </li>
           </ul>
           <div class="odd">
             <div class="example-result">
-            <pre>
-[
+              <pre>[
     {
         "fields": {
             "date_inserted": "2013-05-15T18:21:11",
@@ -472,7 +472,8 @@ python techu-search-server/techu/data/encode.py data '{"listen" : ["9312", "9306
         "model": "techu.index",
         "pk": 28
     }
-]</pre>
+]
+</pre>
             </div>
           </div>
         </div>
@@ -482,24 +483,32 @@ python techu-search-server/techu/data/encode.py data '{"listen" : ["9312", "9306
         <div class="example-box-content">
           <div class="example-title">INDEX OPTIONS</div>
           <ul class="command-list">
-            <li class="odd" style="height: 72px!important;">
-              <div class="number" style="height: 72px!important;">1.</div>
-              <div class="command">
-python techu-search-server/techu/data/encode.py data '{"rt_field" : ["title", "body"], "rt_attr_timestamp" : ["creation_date", "last_activity_date"], "rt_attr_uint" : ["is_answer","user_id"], "rt_attr_bigint" : "score","type" : "rt", "path" : "/usr/local/sphinx/data/so_posts_rt"}' 
+            <li class="odd" style="height: 500px!important;">
+              <div class="number" style="height: 450px!important;">1.</div>
+              <div class="command" style="height: 450px!important;"><pre>
+curl 'http://techu:81/option/index/28/' --data-urlencode data='{
+  "rt_field" : [ 
+    "title", 
+    "body"
+    ], 
+  "rt_attr_timestamp" : [ 
+    "creation_date", 
+    "last_activity_date"
+    ], 
+  "rt_attr_uint" : [ 
+    "is_answer", 
+    "user_id"
+    ], 
+  "rt_attr_bigint" : "score",
+  "type" : "rt", 
+  "path" : "/usr/local/sphinx/data/so_posts_rt"
+}'</pre>
               </div>
             </li>
-            <li class="even">
-              <div class="number">2.</div>
-              <div class="command single-line">
-                <div class="command-inner">
-curl 'http://techu.local:81/option/index/28/' -d 'data=%7B%22rt_field%22+%3A+%5B%22title%22%2C+%22body%22%5D%2C+%22rt_attr_timestamp%22+%3A+%5B%22creation_date%22%2C+%22last_activity_date%22%5D%2C+%22rt_attr_uint%22+%3A+%5B%22is_answer%22%2C%22user_id%22%5D%2C+%22rt_attr_bigint%22+%3A+%22score%22%2C%22type%22+%3A+%22rt%22%2C+%22path%22+%3A+%22%2Fusr%2Flocal%2Fsphinx%2Fdata%2Fso_posts_rt%22%7D
-                </div> 
-              </div>
-            </li>          
           </ul>
           <div class="even">
             <div id="index-options-setup-json" class="example-result json-400">
-            <pre>[
+              <pre>[
     {
         "fields": {
             "date_inserted": "2013-05-17T20:58:28", 
@@ -617,7 +626,8 @@ curl 'http://techu.local:81/option/index/28/' -d 'data=%7B%22rt_field%22+%3A+%5B
         "model": "techu.indexoption", 
         "pk": 47
     }
-]</pre>
+]
+</pre>
             </div>
           </div>
         </div>
@@ -631,13 +641,13 @@ curl 'http://techu.local:81/option/index/28/' -d 'data=%7B%22rt_field%22+%3A+%5B
             <li class="odd">
               <div class="number">1.</div>
               <div class="command single-line">
-              curl 'http://techu.local:81/generate/25/'
+              curl -XPOST 'http://techu:81/generate/25/'
               </div>
             </li>
           </ul>
           <div class="odd">
             <div class="example-result">
-            <pre>{
+              <pre>{
     "configuration": "index so_posts_rt {
       type                           = rt
       path                           = /usr/local/sphinx/data/so_posts_rt
@@ -665,7 +675,8 @@ curl 'http://techu.local:81/option/index/28/' -d 'data=%7B%22rt_field%22+%3A+%5B
         "command": "searchd --config /home/techu-search-server/techu/sphinx-conf/stackoverflow.conf --stopwait",
         "status": true
     }
-}</pre>
+}
+</pre>
             </div>
           </div>
         </div>
@@ -675,20 +686,24 @@ curl 'http://techu.local:81/option/index/28/' -d 'data=%7B%22rt_field%22+%3A+%5B
         <div class="example-box-content">
           <div class="example-title">INSERT A DOCUMENT TO THE INDEX</div>
           <ul class="command-list">
-            <li class="odd" style="height: 270px!important;">
-              <div class="number" style="height: 270px!important; line-height: 50px!important;">1.</div>
-              <div class="command" style="height: 270px!important;">
-python techu-search-server/techu/data/encode.py data '{"body": "\nI have in my Symfony 2.1 RC app a simple Comment model (using Doctrine 2). Every comment has a user and a message.\nCurrently, the CommentBundle manages comments on articles. I'd like it to be more generic to be able to comment any kind of entity without copying code across different bundles dedicated to comments...\nFor this to work, I also need a way to reference any entity from the comment one. I think having two fields entity_type and entity_id can be a nice solution. However, I can't get the object from these without mapping entity_type to classes manually and using the find method.\nSo how do I reference an entity from a comment ? And how can I create generic behavior working  on several entities ?\n", "user_id": 893390, "title": "Generic comment system in Symfony2", "last_activity_date": 1368868178, "creation_date": 1346167729, "score": 1, "is_answer": 0, "id": 12162609}' 
+            <li class="odd" style="height: 550px!important;">
+              <div class="number" style="height: 500px!important; line-height: 50px!important;">1.</div>
+              <div class="command" style="height: 500px!important;"><pre>
+curl -XPOST 'http://techu:81/indexer/insert/28/' --data-urlencode data='{
+  "body": "I have in my Symfony 2.1 RC app a simple Comment model (using Doctrine 2). Every comment has a user and a message.
+    Currently, the CommentBundle manages comments on articles. I'd like it to be more generic to be able to comment any kind of entity without copying code across different bundles dedicated to comments...
+    For this to work, I also need a way to reference any entity from the comment one. I think having two fields entity_type and entity_id can be a nice solution. However, I can't get the object from these without mapping entity_type to classes manually and using the find method.
+    So how do I reference an entity from a comment ? And how can I create generic behavior working  on several entities ?", 
+    "user_id": 893390, 
+    "title": "Generic comment system in Symfony2", 
+    "last_activity_date": 1368868178, 
+    "creation_date": 1346167729, 
+    "score": 1, 
+    "is_answer": 0, 
+    "id": 12162609
+    }'</pre>
               </div>
             </li>
-            <li class="even">
-              <div class="number">2.</div>
-              <div class="command single-line" style="height: 50px!important; line-height: 50px!important;">
-                <div class="command-inner">
-curl --silent 'http://techu.local:81/indexer/insert/28/' -d 'data=%7B%22body%22%3A+%22%5CnI+have+in+my+Symfony+2.1+RC+app+a+simple+Comment+model+%28using+Doctrine+2%29.+Every+comment+has+a+user+and+a+message.%5CnCurrently%2C+the+CommentBundle+manages+comments+on+articles.+I%27d+like+it+to+be+more+generic+to+be+able+to+comment+any+kind+of+entity+without+copying+code+across+different+bundles+dedicated+to+comments...%5CnFor+this+to+work%2C+I+also+need+a+way+to+reference+any+entity+from+the+comment+one.+I+think+having+two+fields+entity_type+and+entity_id+can+be+a+nice+solution.+However%2C+I+can%27t+get+the+object+from+these+without+mapping+entity_type+to+classes+manually+and+using+the+find+method.%5CnSo+how+do+I+reference+an+entity+from+a+comment+%3F+And+how+can+I+create+generic+behavior+working++on+several+entities+%3F%5Cn%22%2C+%22user_id%22%3A+893390%2C+%22title%22%3A+%22Generic+comment+system+in+Symfony2%22%2C+%22last_activity_date%22%3A+1368868178%2C+%22creation_date%22%3A+1346167729%2C+%22score%22%3A+1%2C+%22is_answer%22%3A+0%2C+%22id%22%3A+12162609%7D%0A'
-                </div> 
-              </div>
-            </li>          
           </ul>
           <div class="even">
             <div class="example-result">
@@ -708,7 +723,7 @@ curl --silent 'http://techu.local:81/indexer/insert/28/' -d 'data=%7B%22body%22%
             <li class="odd">
               <div class="number">1.</div>
               <div class="command single-line">
-curl 'http://techu.local:81/indexer/delete/28/16528355' 
+curl 'http://techu:81/indexer/delete/28/16528355' 
               </div>
             </li>          
           </ul>
@@ -727,20 +742,21 @@ curl 'http://techu.local:81/indexer/delete/28/16528355'
         <div class="example-box-content">
           <div class="example-title">UPDATE A DOCUMENT IN THE INDEX</div>
           <ul class="command-list">
-            <li class="odd">
-              <div class="number">1.</div>
-              <div class="command">
-python techu-search-server/techu/data/encode.py data '{ "title" : "Generic comment system in Symfony2 framework", "last_activity_date" : 1368868278 }' 
+            <li class="odd" style="height: 180px!important;">
+              <div class="number" style="height: 120px!important;">1.</div>
+              <div class="command" style="height: 120px!important;"><pre>
+curl -XPOST 'http://techu:81/indexer/update/28/' --data-urlencode data='{ 
+  "title" : "Generic comment system in Symfony2 framework", 
+  "last_activity_date" : 1368868278 
+}'</pre>
               </div>
             </li>
-            <li class="even" style="height: 80px!important;">
-              <div class="number" style="height: 80px!important;">2.</div>
-              <div class="command" style="height: 80px!important;">curl --silent 'http://techu.local:81/indexer/update/28/' -d 'data=%7B+%22title%22+%3A+%22Generic+comment+system+in+Symfony2+framework%22%2C+%22last_activity_date%22+%3A+1368868278+%7D'</div>
-            </li>          
           </ul>
           <div class="odd">
             <div class="example-result">
-              <pre>{ "searchd" : "ok" }</pre>
+              <pre>{ 
+                "searchd" : "ok" 
+                }</pre>
             </div>
           </div>
         </div>
@@ -751,18 +767,14 @@ python techu-search-server/techu/data/encode.py data '{ "title" : "Generic comme
         <div class="example-box-content">
           <div class="example-title">SEARCH</div>
           <ul class="command-list">
-            <li class="odd">
-              <div class="number">1.</div>
-              <div class="command single-line">
-python techu-search-server/techu/data/encode.py data '{ "q" : "(mysql+php+issue) | python" }'
+            <li class="odd" style="height: 160px!important;">
+              <div class="number" style="height: 100px!important;">1.</div>
+              <div class="command" style="height: 100px!important;">
+              <pre>curl -XPOST 'http://techu:81/search/28/' --data-urlencode data='{
+  "q" : "(mysql php issue) | python" 
+}'</pre>
               </div>
             </li>
-            <li class="even">
-              <div class="number">2.</div>
-              <div class="command">
-curl 'http://techu.local:81/search/28/' -d 'data=%7B%22q%22+%3A+%22%28mysql+php+issue%2A%29%7Cpython%22%7D'  
-              </div>
-            </li>          
           </ul>
           <div class="even">
             <div id="search-json" class="example-result json-400">
@@ -1047,7 +1059,8 @@ curl 'http://techu.local:81/search/28/' -d 'data=%7B%22q%22+%3A+%22%28mysql+php+
             "user_id": 1044110
         }
     ]
-}</pre>
+}
+</pre>
             </div>
           </div>
         </div>
@@ -1056,6 +1069,8 @@ curl 'http://techu.local:81/search/28/' -d 'data=%7B%22q%22+%3A+%22%28mysql+php+
                                   
     </div>
   </div>
+
+
   <div id="whats-next" class="clearfix">
     <div class="content-wrapper" class="clearfix">
       <h2>WHAT'S NEXT</h2>
@@ -1081,6 +1096,8 @@ curl 'http://techu.local:81/search/28/' -d 'data=%7B%22q%22+%3A+%22%28mysql+php+
       <div id="arrows"></div>      
     </div>    
   </div>
+
+
   <div id="footer">
     <div class="content-wrapper">
       <div class="pull-left small">
@@ -1092,12 +1109,12 @@ curl 'http://techu.local:81/search/28/' -d 'data=%7B%22q%22+%3A+%22%28mysql+php+
     </div>
   </div>
 </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-  <script src="js/jquery-plugins/jquery.mousewheel.js"></script>
-  <script src="js/jquery-plugins/jquery.perfect-scrollbar.js"></script>
-  <script src="js/plugins.js"></script>
-  <script src="js/main.js"></script>
-  <!--<script src="js/zero-clipboard/ZeroClipboard.min.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="js/jquery-plugins/jquery.mousewheel.js"></script>
+<script src="js/jquery-plugins/jquery.perfect-scrollbar.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Techu Search Server v0.1-beta</title>
+  <meta name="description" content="Techu is a REST API implementing Sphinx full-text search engine realtime document indexing and 
+  accepting JSON formatted requests. Works along with Redis for buffering and request queueing. 
+  Powered by Nginx and the Django Python framework.">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/perfect-scrollbar.css">
+  <link href="http://fonts.googleapis.com/css?family=Oswald:400,700,300&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  <link rel="icon" href="./favicon.png" sizes="32x32" type="image/png">
+  <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-18744331-5', 'techusearch.org');
+    ga('send', 'pageview');
+  </script>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-18744331-4']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+<body>
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+<![endif]-->
+<div id="wrapper">
+  <div id="header" class="clearfix">
+    <div class="content-wrapper"> 
+      <ul id="top-menu" class="clearfix">
+        <li><a href="#features">FEATURES</a></li>
+        <li><a href="#how-it-works">HOW IT WORKS</a></li>
+        <li><a href="#installation">INSTALLATION</a></li>
+        <li><a href="#examples">EXAMPLES</a></li>
+        <li><a href="./docs">DOCS</a></li>
+      </ul>          
+      <h1 id="logo"><a href="./">TECHU</a></h1>      
+      <h2>RESTFUL REALTIME FULL-TEXT SEARCH</h2>
+      <p>
+        Techu exposes a RESTful API for realtime indexing and searching with the   
+        <a href="http://sphinxsearch.com/" target="_blank">Sphinx full-text search engine</a>.
+        <br />We leverage <a href="http://redis.io" target="_blank">Redis</a>, <a href="http://nginx.org/" target="_blank">Nginx</a> 
+        and the Python <a href="https://www.djangoproject.com/" target="_blank">Django framework</a> to make searching easy to handle &amp; flexible.
+      </p>
+      <a id="github-repo-button" href="https://github.com/georgepsarakis/techu-search-server/">
+        GITHUB REPO
+      </a>      
+      <a id="download-source" href="https://github.com/georgepsarakis/techu-search-server/archive/master.zip">or download source</a>
+    </div>
+  </div>
+

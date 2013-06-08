@@ -339,6 +339,10 @@ ul.command-list {
   margin-bottom: 45px;    
 }
 
+.example-result pre, .command pre {
+  font-family: "Open Sans";
+}
+
 .json-400 {
   height: 400px!important;
 }

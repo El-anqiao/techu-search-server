@@ -1,0 +1,131 @@
+  <div id="installation" class="clearfix">
+    <div class="content-wrapper" class="clearfix">
+      <h2>INSTALLATION</h2>
+      <h3>UBUNTU PACKAGES</h3>    
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">apt-get install python-setuptools build-essential</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">apt-get install mysql-server mysql-client</div>
+        </li>
+        <li class="odd">
+          <div class="number">3.</div>
+          <div class="command">apt-get install redis-server</div>
+        </li>
+        <li class="even">
+          <div class="number">4.</div>
+          <div class="command">apt-get install nginx</div>
+        </li>
+        <li class="odd">
+          <div class="number">5.</div>
+          <div class="command">apt-get install python-mysqldb python-flup</div>
+        </li>
+        <li class="even">
+          <div class="number">6.</div>
+          <div class="command">apt-get install git</div>
+        </li>
+      </ul>
+      <h3>PYTHON PACKAGES (REQUIRED)</h3>    
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">easy_install redis</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">easy_install django</div>
+        </li>
+        <li class="odd">
+          <div class="number">3.</div>
+          <div class="command">easy_install django_graceful</div>
+        </li>
+      </ul>
+      <h3>PYTHON PACKAGES (OPTIONAL)</h3>    
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">easy_install hiredis</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">easy_install beautifulsoup4</div>
+        </li>        
+      </ul>
+      <h3>SPHINX</h3>
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">wget http://sphinxsearch.com/files/sphinx-2.1.1-beta.tar.gz</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">tar -zxvf sphinx-2.1.1-beta.tar.gz</div>
+        </li> 
+        <li class="odd">
+          <div class="number">3.</div>
+          <div class="command">cd sphinx-2.1.1-beta</div>
+        </li>
+        <li class="even">
+          <div class="number">4.</div>
+          <div class="command">./configure &amp;&amp; make &amp;&amp; make install</div>
+        </li>       
+      </ul>              
+      <h3>CONFIGURATION</h3>
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">1.</div>
+          <div class="command">git clone https://github.com/georgepsarakis/techu-search-server.git</div>
+        </li>
+        <li class="even">
+          <div class="number">2.</div>
+          <div class="command">vim /etc/nginx/sites-available/techu</div>          
+        </li>                                    
+      </ul>
+      <div class="even" style="position: relative;">
+      <div class="note">
+        <div class="content">
+          <span class="small">Add the domain <b class="small">techu</b> (or <b class="small">techu.local</b>) 
+          in your <b class="small">/etc/hosts</b> file, pointing to your server's internal IP, not <b class="small">localhost</b> 
+          in order to connect to Sphinx <b class="small">searchd</b> with the MySQL protocol on a specific port.
+          </span>
+        </div>
+      </div>
+      <div class="file-contents">
+        <pre>{{ techu.nginx.conf }}</pre>
+      </div>
+      </div>
+      <div class="clearfix" style="height: 30px;"></div>
+      <ul class="command-list">
+        <li class="odd">
+          <div class="number">3.</div>
+          <div class="command">vim techu-search-server/techu/settings.py</div>
+        </li>                                  
+      </ul>
+      <div class="odd" style="position: relative;">
+      <div class="note">
+        <div class="content">
+          Change database settings in Django and setup MySQL schema
+        </div>
+      </div>
+      <div class="file-contents">      
+        <pre>{{ django.db.settings }}</pre>
+      </div>      
+      </div>
+      <div class="clearfix" style="height: 30px;"></div>      
+      <ul class="command-list no-margin-top no-margin-bottom">
+        <li class="even">
+          <div class="number">4.</div>
+          <div class="command">cat techu-search-server/techu/sql/schema.latest.sql | mysql -uroot -p</div>
+        </li>
+        <li class="odd">
+          <div class="number">5.</div>
+          <div class="command">cd techu-search-server &amp;&amp; ./manage.py update #Start FastCGI processes for Nginx</div>
+        </li>
+      </ul>
+      <div class="clearfix" style="height: 50px"></div>                
+    </div>
+  </div>
+

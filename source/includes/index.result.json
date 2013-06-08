@@ -1,0 +1,14 @@
+[
+    {
+        "fields": {
+            "date_inserted": "2013-05-15T18:21:11",
+            "date_modified": "2013-05-15T18:21:11",
+            "index_type": 1,
+            "is_active": 1,
+            "name": "so_posts_rt",
+            "parent_id": 0
+        },
+        "model": "techu.index",
+        "pk": 28
+    }
+]

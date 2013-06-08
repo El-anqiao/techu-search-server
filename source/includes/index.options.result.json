@@ -1,0 +1,119 @@
+[
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 3, 
+            "value": "/usr/local/sphinx/data/so_posts_rt", 
+            "value_hash": "911f381580aa9d7f3b92ba810a7b0603"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 39
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 59, 
+            "value": "creation_date", 
+            "value_hash": "8424d087ffe39bb2ee8db173c7e07ba5"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 40
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 59, 
+            "value": "last_activity_date", 
+            "value_hash": "bf84b3567d0bdc4db28495bbbd52f728"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 41
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 54, 
+            "value": "is_answer", 
+            "value_hash": "ee945c9fbab205b74e166342a3f53218"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 42
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 54, 
+            "value": "user_id", 
+            "value_hash": "e8701ad48ba05a91604e480dd60899a3"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 43
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 55, 
+            "value": "score", 
+            "value_hash": "ca1cd3c3055991bf20499ee86739f7e2"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 44
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 53, 
+            "value": "title", 
+            "value_hash": "d5d3db1765287eef77d7927cc956f50a"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 45
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 53, 
+            "value": "body", 
+            "value_hash": "841a2d689ad86bd1611447453c22c6fc"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 46
+    }, 
+    {
+        "fields": {
+            "date_inserted": "2013-05-17T20:58:28", 
+            "date_modified": "2013-05-17T20:58:28", 
+            "is_active": null, 
+            "sp_index_id": 28, 
+            "sp_option_id": 1, 
+            "value": "rt", 
+            "value_hash": "822050d9ae3c47f54bee71b85fce1487"
+        }, 
+        "model": "techu.indexoption", 
+        "pk": 47
+    }
+]
