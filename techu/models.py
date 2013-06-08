@@ -107,4 +107,11 @@ class SearchdOption(models.Model):
 
   class Meta:
     db_table = "sp_searchd_option"
- 
+
+class Authentication(models.Model):
+  consumer_key = models.CharField(primary_key = True, max_length = 8)
+  secret = models.CharField(max_length = 16)
+  date_inserted = models.DateTimeField(auto_now = False, auto_now_add = True)
+
+  class Meta:
+    db_table = "authentication"

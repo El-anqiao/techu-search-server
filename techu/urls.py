@@ -20,3 +20,6 @@ urlpatterns = patterns('techu.views',
   url(r'^[/]*$', 'home', name = 'home'),
 )
 
+urlpatterns += patterns('techu.admin.views',
+  url(r'^admin[/]*$', 'home', name = 'admin_home'),
+)

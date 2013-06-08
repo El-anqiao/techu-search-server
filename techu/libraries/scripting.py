@@ -1,4 +1,5 @@
 from generic import settings
+from generic import R
 import PyV8 
 import json
 
@@ -15,10 +16,10 @@ class Scripting(object):
       if 'callback' in request.REQUEST:
         callback = request.REQUEST['callback']
         response_object = json.loads(response.content)
-        js_context = PyV8.JSContext({'response' : response_object})
+        js_context = PyV8.JSContext({ 'response' : response_object })
         js_context.enter()
         js_context.eval(callback)
         js_context.leave()
-        response.content = json.dumps(response_object)
+        return R(response_object)
     return response
         
