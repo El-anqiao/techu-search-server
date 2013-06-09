@@ -1,0 +1,59 @@
+{% include "header.html" %}
+
+{% include "menu.html" %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+  
+});
+</script>
+
+<style>
+.wrapper {
+  width: 90%;
+  margin: 10px auto;
+}
+.configuration-menu{
+  margin-left: 20px;
+}
+.list-group {
+  margin-left: -6px;
+  font-weight:bold;
+}
+</style>
+<div class="row">
+  <div class="span3">
+    <div class="well configuration-menu">
+      <ul class="nav">
+        <li class="list-group">Configuration &amp; Setup</li>
+        <li><a href="/admin/api-playground/configuration">/configuration</a></li>
+        <li><a href="/admin/api-playground/options">/configuration/list</a></li>
+        <li><a href="/admin/api-playground/generate">/generate</a></li>
+        <li><a href="/admin/api-playground/index">/index</a></li>
+        <li><a href="/admin/api-playground/indexes">/index/list</a></li>
+        <li><a href="/admin/api-playground/option">/option</a></li>
+        <li><a href="/admin/api-playground/options">/option/list</a></li>
+        <li class="list-group">Indexing</li>
+        <li><a href="/admin/api-playground/batch">/batch</a></li>
+        <li><a href="/admin/api-playground/indexer">/indexer</a></li>
+        <li class="list-group">Searching &amp; Excerpts</li>
+        <li><a href="/admin/api-playground/excerpts">/excerpts</a></li>
+        <li><a href="/admin/api-playground/search">/search</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="span9">
+    <div class="well">
+      <div class="url">
+        <a id="url" href="javascript:;">{{ url }}</a>
+      </div>
+    </div>
+    <div class="well">
+      <div class="response">
+        <pre>{{ response }}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}
