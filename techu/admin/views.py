@@ -10,15 +10,26 @@ def home(request):
 
 
 def api_playground(request, request_type = ''):
-  params = { 'request_type' : request_type }
+  base_url = 'https://techu'
+  params = { 
+    'request_type' : request_type,
+    'url'          : base_url + '/' + request_type,    
+    'data'         : {}
+    }
+  if request_type == '':
+    api_response = fetch_url(params['url'], params['data']) 
+    params['api_response'] = api_response
   return render(request, 'api-playground.html', params)
+
+def fetch_url(url, data):
+  r = requests.post(url, data = data, verify = False)
+  r.encoding = 'utf-8'
+  return r.content
 
 def fetch_api(request):
   url = request.POST['url']
-  data = request.POST['data']  
-  r = requests.post(url, data = data)
-  r.encoding = 'utf-8'
-  response = HttpResponse()
-  response.content = r.content
-  response.status_code = 200
-
+  if 'data' in request.POST:
+    data = request.POST['data']  
+  else:
+    data = {}
+  return R(json.loads(fetch_url(url, data)), request)

@@ -2,13 +2,38 @@
 
 {% include "menu.html" %}
 
+<div id="ajax-loader" style="display: none;">
+  <div class="progress progress-striped progress-success active">
+    <div class="bar" style="width: 100%;"></div>
+  </div>
+</div>
 <script type="text/javascript">
 $(document).ready(function(){
-  
+  $('.request-types').click(function(){
+    $('#url').text('https://techu' + $(this).text());
+  });
+  $('#btn-run').click(function(){
+    $('#response').html($('#ajax-loader').html());
+    var data = $('#api-data').serialize();
+    data += '&url=' + encodeURIComponent($('#url').text());
+    $.ajax({
+      'type'    : 'POST',
+      'url'     : '/admin/api',
+      'data'    : data,
+      'cache'   : false,
+      'success' : function(data){
+        $('#response').html('<pre>' + data + '</pre>');
+      }
+    });
+  }); 
 });
 </script>
 
 <style>
+#json-data {
+  width: 98%;
+  height: 300px;
+}
 .wrapper {
   width: 90%;
   margin: 10px auto;
@@ -26,19 +51,19 @@ $(document).ready(function(){
     <div class="well configuration-menu">
       <ul class="nav">
         <li class="list-group">Configuration &amp; Setup</li>
-        <li><a href="/admin/api-playground/configuration">/configuration</a></li>
-        <li><a href="/admin/api-playground/options">/configuration/list</a></li>
-        <li><a href="/admin/api-playground/generate">/generate</a></li>
-        <li><a href="/admin/api-playground/index">/index</a></li>
-        <li><a href="/admin/api-playground/indexes">/index/list</a></li>
-        <li><a href="/admin/api-playground/option">/option</a></li>
-        <li><a href="/admin/api-playground/options">/option/list</a></li>
+        <li><a class="request-types" href="#configuration">/configuration</a></li>
+        <li><a class="request-types" href="#options">/configuration/list</a></li>
+        <li><a class="request-types" href="#generate">/generate</a></li>
+        <li><a class="request-types" href="#index">/index</a></li>
+        <li><a class="request-types" href="#indexes">/index/list</a></li>
+        <li><a class="request-types" href="#option">/option</a></li>
+        <li><a class="request-types" href="#options">/option/list</a></li>
         <li class="list-group">Indexing</li>
-        <li><a href="/admin/api-playground/batch">/batch</a></li>
-        <li><a href="/admin/api-playground/indexer">/indexer</a></li>
+        <li><a class="request-types" href="#batch">/batch</a></li>
+        <li><a class="request-types" href="#indexer">/indexer</a></li>
         <li class="list-group">Searching &amp; Excerpts</li>
-        <li><a href="/admin/api-playground/excerpts">/excerpts</a></li>
-        <li><a href="/admin/api-playground/search">/search</a></li>
+        <li><a class="request-types" href="#excerpts">/excerpts</a></li>
+        <li><a class="request-types" href="#search">/search</a></li>
       </ul>
     </div>
   </div>
@@ -46,11 +71,23 @@ $(document).ready(function(){
     <div class="well">
       <div class="url">
         <a id="url" href="javascript:;">{{ url }}</a>
+        <a id="btn-run" class="pull-right btn btn-info btn-small">Run</a>
+        <div class="well" style="margin-top: 20px;">
+          <form id="api-data">
+            <label class="checkbox">pretty
+              <input type="checkbox" value="1" name="pretty" />
+            </label>
+          </form>
+        </div>
       </div>
     </div>
+    <div class="clearfix well well-small">
+      <textarea id="json-data" disabled>
+      </textarea>
+    </div>
     <div class="well">
-      <div class="response">
-        <pre>{{ response }}</pre>
+      <div id="response">
+        <pre>{{ api_response }}</pre>
       </div>
     </div>
   </div>
