@@ -2,14 +2,48 @@
 
 {% include "menu.html" %}
 
+<!--
+SEARCH:
+
+indexes
+fields
+group_by
+limit : { 'offset' : 0, 'count' }
+order_by : [[field_1, direction_asc],[field_2, direction_desc]]
+order_within_group : [[field_1, direction_asc],[field_2, direction_desc]]
+where : { 'date_from' : [[ '>', 1323243203 ]] }
+q -> query
+option : { 'option_name' : 'option_value' }
+
+-->
+
+<script type="text/javascript">
+  {{ json_data|safe }}
+</script>
+
 <div id="ajax-loader" style="display: none;">
   <div class="progress progress-striped progress-success active">
     <div class="bar" style="width: 100%;"></div>
   </div>
 </div>
 <script type="text/javascript">
+function optionize(element, data){
+  $.each(data, function(index, item){
+    $(element).append('<option value="' + item.id + '">' + item.name + '</option>');
+  });
+}
 $(document).ready(function(){
-  $('.request-types').click(function(){
+  optionize('#searchd', searchd); 
+  optionize('#options', options);
+  optionize('#indexes', indexes);
+  optionize('#configurations', configurations);
+
+  $('.request-types').click(function(){    
+    if ( $(this).hasClass('has-data') ){
+      $('#json-data-container').show();
+    } else {
+      $('#json-data-container').hide();
+    }
     $('#url').text('https://techu' + $(this).text());
   });
   $('#btn-run').click(function(){
@@ -32,7 +66,7 @@ $(document).ready(function(){
 <style>
 #json-data {
   width: 98%;
-  height: 300px;
+  min-height: 100px;
 }
 .wrapper {
   width: 90%;
@@ -46,6 +80,7 @@ $(document).ready(function(){
   font-weight:bold;
 }
 </style>
+
 <div class="row">
   <div class="span3">
     <div class="well configuration-menu">
@@ -59,11 +94,11 @@ $(document).ready(function(){
         <li><a class="request-types" href="#option">/option</a></li>
         <li><a class="request-types" href="#options">/option/list</a></li>
         <li class="list-group">Indexing</li>
-        <li><a class="request-types" href="#batch">/batch</a></li>
-        <li><a class="request-types" href="#indexer">/indexer</a></li>
+        <li><a class="request-types has-data" href="#batch">/batch</a></li>
+        <li><a class="request-types has-data" href="#indexer">/indexer</a></li>
         <li class="list-group">Searching &amp; Excerpts</li>
-        <li><a class="request-types" href="#excerpts">/excerpts</a></li>
-        <li><a class="request-types" href="#search">/search</a></li>
+        <li><a class="request-types has-data" href="#excerpts">/excerpts</a></li>
+        <li><a class="request-types has-data" href="#search">/search</a></li>
       </ul>
     </div>
   </div>
@@ -71,19 +106,54 @@ $(document).ready(function(){
     <div class="well">
       <div class="url">
         <a id="url" href="javascript:;">{{ url }}</a>
-        <a id="btn-run" class="pull-right btn btn-info btn-small">Run</a>
-        <div class="well" style="margin-top: 20px;">
+        <a id="btn-run" class="pull-right btn btn-info">Run</a>
+        <div class="clearfix"></div>
+        <div class="well clearfix" style="margin-top: 20px;">
           <form id="api-data">
-            <label class="checkbox">pretty
-              <input type="checkbox" value="1" name="pretty" />
+            <label class="checkbox pull-left" style="margin-top: 4px;margin-right: 10px;">Pretty Print
+              <input type="checkbox" value="1" name="pretty" checked />
             </label>
+            <label class="checkbox pull-left" style="margin-top: 4px;margin-right: 10px;">Callback
+              <input type="checkbox" value="1" name="callback" onchange="$('#callback-container').slideToggle('slow');" />
+            </label>
+            <textarea id="callback-container" style="width: 100%; height: 200px; display: none;">
+//Write some JS code to manipulate the response object!
+//Example: (for the /home request)
+// response["Greetings-From"] = "Hello everyone from "
+            </textarea>
+            <div class="clearfix"></div>
+            <select id="dml-type" name="dml-type" class="data-controls batch indexer">
+              <option selected value="-1">Operation...</option>
+              <option value="insert">INSERT</option>
+              <option value="update">UPDATE</option>
+              <option value="delete">DELETE</option>
+            </select>
+            <select id="section" name="section" class="data-controls option">
+              <option selected value="-1">Section...</option>
+              <option value="index">INDEX</option>
+              <option value="searchd">SEARCHD</option>
+              <option value="source">SOURCE</option>
+            </select>
+            <div class="clearfix"></div>            
+            <select id="indexes" name="indexes">
+              <option value="-1">Index...</option>
+            </select>
+            <select id="configurations" name="configurations">
+              <option value="-1">Configuration...</option>
+            </select>
+            <select id="searchd" name="searchd">
+              <option value="-1">Searchd...</option>
+            </select>
+            <select id="options" name="options">
+              <option value="-1">Option...</option>
+            </select>
           </form>
         </div>
       </div>
     </div>
-    <div class="clearfix well well-small">
-      <textarea id="json-data" disabled>
-      </textarea>
+    <div id="json-data-container" class="clearfix well well-small">
+      <div id="json-data" contenteditable="true">
+      </div>
     </div>
     <div class="well">
       <div id="response">

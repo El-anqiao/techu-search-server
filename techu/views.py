@@ -298,16 +298,15 @@ def rqueue(queue, index_id, sql, values):
   p.execute()
   return key
 
+@Scripting
 @Profiler
 def search(request, index_id):
   cache = Cache()
   index = fetch_index_name(index_id)
   ''' Search wrapper with SphinxQL '''
   r = request_data(request)
-  if 'data' in r:
-    r = r['data']
   if settings.SEARCH_CACHE:
-    cache_key = md5(index + r).hexdigest()
+    cache_key = md5(index + request.REQUEST['data']).hexdigest()
     lock_key = 'lock:' + cache_key
     version = cache.version(index_id)
     cache_key = 'cache:search:%s:%d:%s' % (cache_key, index_id, version)
@@ -332,7 +331,6 @@ def search(request, index_id):
     except:
       pass    
   
-  r = json.loads(r)  
   option_mapping = {
     'mode' : {
         'extended' : SPH_MATCH_EXTENDED2,
@@ -388,7 +386,6 @@ def search(request, index_id):
   try:
     ''' Check attributes from request with stored options (sp_index_option) '''
     ''' Preload host and ports per index '''
-    ''' Support query batch (RunQueries) '''
     '''
     SELECT
     select_expr [, select_expr ...]
@@ -459,6 +456,7 @@ def search(request, index_id):
     return E(message = str(e))
   return R(response)
 
+@Scripting
 @Profiler
 def excerpts(request, index_id):
   cache = Cache()

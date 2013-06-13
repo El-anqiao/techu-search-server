@@ -13,34 +13,63 @@
   margin-left: 0;
   margin-top: 10px;
 }
+.btn-group .main-btn {
+  width: 134px;
+}
 </style>
+
+<div class="hide">
+
+<div id="configuration-button-container">
+  <div id="configuration-ID" class="btn-group">
+    <button class="btn btn-primary main-btn"></button>
+    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu"></ul>
+  </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+  {{ json_data|safe }}
+</script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    ci = {};
+    $.each(configuration_index, function(i, item){
+      if ( !(item.sp_configuration_id in ci) )
+        ci[item.sp_configuration_id] = [];
+      ci[item.sp_configuration_id].push(item.sp_index_id);
+    });
+    cs = {};
+    $.each(configuration_searchd, function(i, item){
+      cs[item.sp_configuration_id] = item.sp_searchd_id;
+    });
+    sphinx_indexes = {};
+    $.each(indexes, function(i, item){
+      console.log(item);
+      sphinx_indexes[item.id] = item;
+    });
+    console.log('sphinx indexes');
+    console.log(sphinx_indexes);
+    $.each(configurations, function(i, item){
+      $('#configurations').append($('#configuration-button-container').html().replace('ID', item.id));
+      $('#configuration-' + item.id + ' .main-btn').text(item.name);
+      console.log('configuration indexes');
+      console.log(ci[item.id]);
+      $.each(ci[item.id], function(n, index){
+        console.log(index);
+        if ( index in sphinx_indexes )
+          $('#configuration-' + item.id + ' .dropdown-menu').append('<li><a><i class="icon-th-list" style="margin-right: 30px;"></i>' + sphinx_indexes[index].name + '</a></li>');
+      });
+    });
+  });
+</script>
 <div class="row">
   <div class="span3">
-    <div class="well configuration-menu">
-      <div class="btn-group">
-        <button class="btn btn-primary">Configuration #1</button>
-        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a>Index #1</a></li>
-          <li><a>Index #2</a></li>
-          <li><a>Searchd</a></li>
-          <li><a>Source #1</a></li>
-        </ul>
-      </div>  
-      <div class="btn-group">
-        <button class="btn btn-primary">Configuration #2</button>
-        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a>Index #1</a></li>
-          <li><a>Index #2</a></li>
-          <li><a>Searchd</a></li>
-          <li><a>Source #1</a></li>
-        </ul>
-      </div>  
+    <div id="configurations" class="well configuration-menu">
     </div>
   </div>
   <div class="span9">

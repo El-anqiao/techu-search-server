@@ -6,6 +6,7 @@ settings_path = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[
 settings = imp.load_source('settings', os.path.join( settings_path,  'settings.py'))
 from django.http import HttpResponse
 from django.db import models
+from time import mktime
 
 modules = None
 def _import(module_list):
@@ -52,7 +53,7 @@ class Serializer(json.JSONEncoder):
         obj.append(data)
       return obj
     if isinstance(o, datetime.datetime):
-      return int( time.mktime(o.timetuple()) )
+      return int( mktime(o.timetuple()) )
     return json.JSONEncoder.default(self, o)
 
 def E(code = 500, **kwargs):
