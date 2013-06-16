@@ -16,7 +16,7 @@ from libraries.scripting import Scripting
 @Profiler
 def home(request):
   ''' Home/Index page '''
-  return R({'Greetings-From' : "Techu Indexing Server"})
+  return R({'Greetings-From' : "Techu Indexing Server"}, request)
 
 @Profiler
 def option_list(request):

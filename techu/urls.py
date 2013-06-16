@@ -25,4 +25,5 @@ urlpatterns += patterns('techu.admin.views',
   url(r'^admin/api-playground/(?P<request_type>[a-z]+)[/]*$', 'api_playground', name = 'admin_api_playground'),
   url(r'^admin/api-playground[/]*$', 'api_playground', name = 'admin_api_playground'),
   url(r'^admin/api[/]*$', 'fetch_api', name = 'fetch_api'),
+  url(r'^admin/highlighter[/]*$', 'highlighter', name = 'highlighter'),
 )

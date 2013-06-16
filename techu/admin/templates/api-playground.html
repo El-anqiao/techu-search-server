@@ -19,6 +19,17 @@ option : { 'option_name' : 'option_value' }
 
 <script type="text/javascript">
   {{ json_data|safe }}
+  search = [ 
+    { 'id' : 'indexes', 'name' : 'indexes' },
+    { 'id' : 'fields',  'name' : 'fields'  },
+    { 'id' : 'group_by', 'name' : 'group_by' },
+    { 'id' : 'limit', 'name'   : 'limit' },
+    { 'id' : 'order_by', 'name' : 'order_by' },
+    { 'id' : 'order_within_group', 'name' : 'order_within_group' },
+    { 'id' : 'where', 'name'    : 'where' },
+    { 'id' : 'q', 'name' : 'q' },
+    { 'id' : 'option', 'name' : 'option' }
+  ];
 </script>
 
 <div id="ajax-loader" style="display: none;">
@@ -27,17 +38,58 @@ option : { 'option_name' : 'option_value' }
   </div>
 </div>
 <script type="text/javascript">
+function show_callback_editor(el){
+  if ( $(el).attr('checked') ){
+    $('#callback-container').slideDown('slow');
+  } else {
+    $('#callback-container').slideUp('fast');
+  }
+}
+function add_json_value(){  
+  text = $('#json-data').text();
+  data = {};
+  if ( text.replace(/\s+/,'') != '' ){
+    data = JSON.parse(text);
+  }
+  key = $('#json-key').text();
+  value = JSON.parse('"' + $('#json-value').val() + '"');
+  data[key] = value;
+  $.ajax({
+    'async'   : false,
+    'url'     : '/admin/highlighter',
+    'data'    : 'code=' + encodeURIComponent(JSON.stringify(data, undefined, 2)),
+    'success' : function(data){
+      $('#json-data').html(data.code);
+    }
+  });
+  $('#modal-container').modal('hide');
+  $('#json-value').val('');
+}
 function optionize(element, data){
   $.each(data, function(index, item){
     $(element).append('<option value="' + item.id + '">' + item.name + '</option>');
   });
 }
 $(document).ready(function(){
+  $('#callback-container').popover({
+    'placement' : 'right',
+    'html'      : true,
+    'trigger'   : 'focus',
+    'title'     : 'Scripting',
+    'content'   : 'You can write Javascript code to manipulate <br />the <code>response</code> object! ' + 
+                  '<br /> Example for the <i>/home/</i> request: <br /> ' + 
+                  '<code>response["Greetings-From"] = ' + "<br />\n" +
+                  '  "Hello everyone from ";</code>'
+  });
+  optionize('#search', search);
   optionize('#searchd', searchd); 
   optionize('#options', options);
   optionize('#indexes', indexes);
   optionize('#configurations', configurations);
-
+  $('#api-data select.value-required').change(function(){
+    $('#modal-container .modal-body label').text($(this).children('option:selected').text());
+    $('#modal-container').modal();    
+  });
   $('.request-types').click(function(){    
     if ( $(this).hasClass('has-data') ){
       $('#json-data-container').show();
@@ -114,25 +166,21 @@ $(document).ready(function(){
               <input type="checkbox" value="1" name="pretty" checked />
             </label>
             <label class="checkbox pull-left" style="margin-top: 4px;margin-right: 10px;">Callback
-              <input type="checkbox" value="1" name="callback" onchange="$('#callback-container').slideToggle('slow');" />
+              <input type="checkbox" value="1" name="callback" onchange="show_callback_editor($(this));" />
             </label>
             <textarea id="callback-container" style="width: 100%; height: 200px; display: none;">
-//Write some JS code to manipulate the response object!
-//Example: (for the /home request)
-// response["Greetings-From"] = "Hello everyone from "
             </textarea>
             <div class="clearfix"></div>
             <select id="dml-type" name="dml-type" class="data-controls batch indexer">
               <option selected value="-1">Operation...</option>
-              <option value="insert">INSERT</option>
-              <option value="update">UPDATE</option>
-              <option value="delete">DELETE</option>
+              <option value="insert">Insert</option>
+              <option value="update">Update</option>
+              <option value="delete">Delete</option>
             </select>
             <select id="section" name="section" class="data-controls option">
               <option selected value="-1">Section...</option>
-              <option value="index">INDEX</option>
-              <option value="searchd">SEARCHD</option>
-              <option value="source">SOURCE</option>
+              <option value="index">Index</option>
+              <option value="searchd">Searchd</option>
             </select>
             <div class="clearfix"></div>            
             <select id="indexes" name="indexes">
@@ -144,8 +192,12 @@ $(document).ready(function(){
             <select id="searchd" name="searchd">
               <option value="-1">Searchd...</option>
             </select>
-            <select id="options" name="options">
+            <select id="options" name="options" class="value-required">
               <option value="-1">Option...</option>
+            </select>
+            <div class="clearfix"></div>
+            <select id="search" class="value-required">
+              <option value="-1">Parameters</option>
             </select>
           </form>
         </div>
@@ -160,6 +212,21 @@ $(document).ready(function(){
         <pre>{{ api_response }}</pre>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="modal-container" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>JSON Value</h3>
+  </div>
+  <div class="modal-body">
+    <label id="json-key" style="font-weight: bold;"></label>
+    <input type="text" id="json-value" placeholder="Enter a value" />    
+  </div>
+  <div class="modal-footer">
+    <a href="javascript:;" onclick="$('#modal-container').modal('hide');return false;" class="btn">Close</a>
+    <a href="javascript:;" onclick="add_json_value();" class="btn btn-primary">Save changes</a>
   </div>
 </div>
 

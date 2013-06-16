@@ -75,10 +75,8 @@ def R(data, request = None, **kwargs):
   if not request is None:
     if 'pretty' in request.REQUEST:
       kwargs['pretty'] = (request.REQUEST['pretty'].lower() in [ '1', 'true'])
-  r = HttpResponse()
   defaults = { 'code' : 200, 'serialize' : True, 'pretty' : False }
   kwargs = dict(defaults.items() + kwargs.items())
-  r.status_code = kwargs['code']
   if kwargs['pretty']:
     indent = 4
     separators = (',', ': ')
@@ -87,8 +85,7 @@ def R(data, request = None, **kwargs):
     separators = (',', ':')
   if kwargs['serialize']:
     data = json.dumps(data, cls=Serializer, indent = indent, separators = separators)
-  r.content = data
-  r.content_type = 'application/json;charset=utf-8'
+  r = HttpResponse(content = data, status = kwargs['code'], content_type = 'application/json;charset=utf-8')
   return r
 
 def redis26():

@@ -21,19 +21,31 @@
   text-decoration: none;
 }
 </style>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#nav-menu li').removeClass('active');
+  if ( window.location.href.match(/playground/) !== null ){
+    $('a[href="/admin/api-playground"]').parent('li').addClass('active');
+  } else if ( window.location.href.match(/admin$/) !== null ){
+    $('a[href="/admin"]').parent('li').addClass('active');
+  } else if ( window.location.href.match(/faq-help/) !== null ){
+    $('a[href="/admin/faq-help"]').parent('li').addClass('active');
+  }
+});
+</script>
 <div class="row">
   <div class="navbar">
     <div class="navbar-inner">
       <a id="logo" href="./">TECHU</a>
-      <ul class="nav">
+      <ul id="nav-menu" class="nav">
         <li class="active">
           <a href="/admin">Dashboard</a>
         </li>
-        <li>
+        <li>         
           <a href="/admin/api-playground">API Playground</a>
         </li>
         <li>
-          <a href="#">FAQ &amp; Help</a>
+          <a href="/admin/faq-help">FAQ &amp; Help</a>
         </li>
       </ul>
     </div>
