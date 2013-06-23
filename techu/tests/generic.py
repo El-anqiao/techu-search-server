@@ -7,7 +7,7 @@ from libraries.generic import *
 class TestGeneric(unittest.TestCase):
 
   def testRedisConnection(self):
-    self.assertTrue(isinstance(redis26(), redis.StrictRedis))
+    self.assertTrue(isinstance(redis_client(), redis.StrictRedis))
 
   def testRegexCheck(self):
     self.assertTrue(regex_check('techu_123'))

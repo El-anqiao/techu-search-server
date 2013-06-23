@@ -1,0 +1,950 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Techu 0.2-beta documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2-beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="None" href="index.html#document-index" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="index.html#document-index">Techu 0.2-beta documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-techu-s-documentation">
+<h1>Welcome to Techu&#8217;s documentation!<a class="headerlink" href="#welcome-to-techu-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="models-views">
+<h2>Models &amp; Views<a class="headerlink" href="#models-views" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<span id="document-modules/models"></span><div class="section" id="module-techu.models">
+<span id="techu-models"></span><h3>techu.models<a class="headerlink" href="#module-techu.models" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="techu.models.Authentication">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Authentication</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Authentication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>authentication</em>: stores consumer key/secret pairs for authenticated requests.</p>
+<dl class="exception">
+<dt id="techu.models.Authentication.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Authentication.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Authentication.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Authentication.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Authentication.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Authentication.get_next_by_date_inserted">
+<tt class="descclassname">Authentication.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Authentication.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Authentication.get_previous_by_date_inserted">
+<tt class="descclassname">Authentication.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Authentication.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Authentication.objects">
+<tt class="descclassname">Authentication.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x377ff90&gt;</em><a class="headerlink" href="#techu.models.Authentication.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.Configuration">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Configuration</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table sp_configurations: stores Sphinx Configurations.</p>
+<dl class="exception">
+<dt id="techu.models.Configuration.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Configuration.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Configuration.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Configuration.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Configuration.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Configuration.get_next_by_date_inserted">
+<tt class="descclassname">Configuration.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Configuration.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Configuration.get_previous_by_date_inserted">
+<tt class="descclassname">Configuration.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Configuration.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Configuration.objects">
+<tt class="descclassname">Configuration.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x37405d0&gt;</em><a class="headerlink" href="#techu.models.Configuration.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.ConfigurationIndex">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">ConfigurationIndex</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>sp_configuration_index</em>: stores the connections between configurations and indexes.</p>
+<dl class="exception">
+<dt id="techu.models.ConfigurationIndex.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.ConfigurationIndex.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.ConfigurationIndex.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">ConfigurationIndex.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.ConfigurationIndex.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.ConfigurationIndex.get_next_by_date_inserted">
+<tt class="descclassname">ConfigurationIndex.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationIndex.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.ConfigurationIndex.get_next_by_date_modified">
+<tt class="descclassname">ConfigurationIndex.</tt><tt class="descname">get_next_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationIndex.get_next_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.ConfigurationIndex.get_previous_by_date_inserted">
+<tt class="descclassname">ConfigurationIndex.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationIndex.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.ConfigurationIndex.get_previous_by_date_modified">
+<tt class="descclassname">ConfigurationIndex.</tt><tt class="descname">get_previous_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationIndex.get_previous_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.ConfigurationIndex.objects">
+<tt class="descclassname">ConfigurationIndex.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3779190&gt;</em><a class="headerlink" href="#techu.models.ConfigurationIndex.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.ConfigurationSearchd">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">ConfigurationSearchd</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationSearchd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>sp_configuration_searchd</em>: stores the connections between configurations and searchd entities.</p>
+<dl class="exception">
+<dt id="techu.models.ConfigurationSearchd.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.ConfigurationSearchd.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.ConfigurationSearchd.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">ConfigurationSearchd.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.ConfigurationSearchd.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.ConfigurationSearchd.objects">
+<tt class="descclassname">ConfigurationSearchd.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x377f310&gt;</em><a class="headerlink" href="#techu.models.ConfigurationSearchd.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.ConfigurationSource">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">ConfigurationSource</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>sp_configuration_source</em>: stores the connections between configurations and datasource entities.</p>
+<dl class="exception">
+<dt id="techu.models.ConfigurationSource.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.ConfigurationSource.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.ConfigurationSource.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">ConfigurationSource.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.ConfigurationSource.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.ConfigurationSource.objects">
+<tt class="descclassname">ConfigurationSource.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3779fd0&gt;</em><a class="headerlink" href="#techu.models.ConfigurationSource.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.Constants">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Constants</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table constants: various constants (ENUM replacement).</p>
+<dl class="exception">
+<dt id="techu.models.Constants.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Constants.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Constants.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Constants.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Constants.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Constants.objects">
+<tt class="descclassname">Constants.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3740250&gt;</em><a class="headerlink" href="#techu.models.Constants.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Constants.save">
+<tt class="descclassname">Constants.</tt><tt class="descname">save</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Constants.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.Index">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Index</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table sp_indexes: stores indexes.</p>
+<dl class="exception">
+<dt id="techu.models.Index.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Index.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Index.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Index.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Index.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Index.get_next_by_date_inserted">
+<tt class="descclassname">Index.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Index.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Index.get_next_by_date_modified">
+<tt class="descclassname">Index.</tt><tt class="descname">get_next_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Index.get_next_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Index.get_previous_by_date_inserted">
+<tt class="descclassname">Index.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Index.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Index.get_previous_by_date_modified">
+<tt class="descclassname">Index.</tt><tt class="descname">get_previous_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Index.get_previous_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Index.objects">
+<tt class="descclassname">Index.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3740dd0&gt;</em><a class="headerlink" href="#techu.models.Index.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.IndexOption">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">IndexOption</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.IndexOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>sp_index_option</em>: stores the connections between options and indexes.</p>
+<dl class="exception">
+<dt id="techu.models.IndexOption.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.IndexOption.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.IndexOption.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">IndexOption.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.IndexOption.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.IndexOption.get_next_by_date_inserted">
+<tt class="descclassname">IndexOption.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.IndexOption.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.IndexOption.get_next_by_date_modified">
+<tt class="descclassname">IndexOption.</tt><tt class="descname">get_next_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.IndexOption.get_next_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.IndexOption.get_previous_by_date_inserted">
+<tt class="descclassname">IndexOption.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.IndexOption.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.IndexOption.get_previous_by_date_modified">
+<tt class="descclassname">IndexOption.</tt><tt class="descname">get_previous_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.IndexOption.get_previous_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.IndexOption.objects">
+<tt class="descclassname">IndexOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x37795d0&gt;</em><a class="headerlink" href="#techu.models.IndexOption.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.Option">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Option</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table sp_options: stores available options.</p>
+<dl class="exception">
+<dt id="techu.models.Option.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Option.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Option.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Option.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Option.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Option.objects">
+<tt class="descclassname">Option.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3740990&gt;</em><a class="headerlink" href="#techu.models.Option.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.Searchd">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Searchd</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Searchd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>sp_searchd</em>: stores searchd entities.</p>
+<dl class="exception">
+<dt id="techu.models.Searchd.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Searchd.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Searchd.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Searchd.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Searchd.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Searchd.get_next_by_date_inserted">
+<tt class="descclassname">Searchd.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Searchd.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Searchd.get_next_by_date_modified">
+<tt class="descclassname">Searchd.</tt><tt class="descname">get_next_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Searchd.get_next_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Searchd.get_previous_by_date_inserted">
+<tt class="descclassname">Searchd.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Searchd.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Searchd.get_previous_by_date_modified">
+<tt class="descclassname">Searchd.</tt><tt class="descname">get_previous_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Searchd.get_previous_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Searchd.objects">
+<tt class="descclassname">Searchd.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3779d10&gt;</em><a class="headerlink" href="#techu.models.Searchd.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.SearchdOption">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">SearchdOption</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.SearchdOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>sp_searchd_option</em>: stores the connections between searchd entities and options.</p>
+<dl class="exception">
+<dt id="techu.models.SearchdOption.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.SearchdOption.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.SearchdOption.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">SearchdOption.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.SearchdOption.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.SearchdOption.get_next_by_date_inserted">
+<tt class="descclassname">SearchdOption.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.SearchdOption.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.SearchdOption.get_next_by_date_modified">
+<tt class="descclassname">SearchdOption.</tt><tt class="descname">get_next_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.SearchdOption.get_next_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.SearchdOption.get_previous_by_date_inserted">
+<tt class="descclassname">SearchdOption.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.SearchdOption.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.SearchdOption.get_previous_by_date_modified">
+<tt class="descclassname">SearchdOption.</tt><tt class="descname">get_previous_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.SearchdOption.get_previous_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.SearchdOption.objects">
+<tt class="descclassname">SearchdOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x377fc10&gt;</em><a class="headerlink" href="#techu.models.SearchdOption.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.SourceOption">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">SourceOption</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.SourceOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>sp_source_option</em>: stores the connections between datasource entities and options.</p>
+<dl class="exception">
+<dt id="techu.models.SourceOption.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.SourceOption.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.SourceOption.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">SourceOption.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.SourceOption.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.SourceOption.get_next_by_date_inserted">
+<tt class="descclassname">SourceOption.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.SourceOption.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.SourceOption.get_next_by_date_modified">
+<tt class="descclassname">SourceOption.</tt><tt class="descname">get_next_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.SourceOption.get_next_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.SourceOption.get_previous_by_date_inserted">
+<tt class="descclassname">SourceOption.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.SourceOption.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.SourceOption.get_previous_by_date_modified">
+<tt class="descclassname">SourceOption.</tt><tt class="descname">get_previous_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.SourceOption.get_previous_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.SourceOption.objects">
+<tt class="descclassname">SourceOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x377f790&gt;</em><a class="headerlink" href="#techu.models.SourceOption.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.Sources">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Sources</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>sp_sources</em>: stores datasource entities.</p>
+<dl class="exception">
+<dt id="techu.models.Sources.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Sources.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Sources.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Sources.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Sources.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Sources.get_next_by_date_inserted">
+<tt class="descclassname">Sources.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Sources.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Sources.get_next_by_date_modified">
+<tt class="descclassname">Sources.</tt><tt class="descname">get_next_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Sources.get_next_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Sources.get_previous_by_date_inserted">
+<tt class="descclassname">Sources.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Sources.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Sources.get_previous_by_date_modified">
+<tt class="descclassname">Sources.</tt><tt class="descname">get_previous_by_date_modified</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Sources.get_previous_by_date_modified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Sources.objects">
+<tt class="descclassname">Sources.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3779990&gt;</em><a class="headerlink" href="#techu.models.Sources.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<span id="document-modules/views"></span><div class="section" id="module-techu.views">
+<span id="techu-views"></span><h3>techu.views<a class="headerlink" href="#module-techu.views" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="techu.views.delete">
+<tt class="descclassname">techu.views.</tt><tt class="descname">delete</tt><big>(</big><em>index_id</em>, <em>doc_id</em>, <em>queue=True</em><big>)</big><a class="headerlink" href="#techu.views.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build DELETE statement</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.views.insert">
+<tt class="descclassname">techu.views.</tt><tt class="descname">insert</tt><big>(</big><em>index_id</em>, <em>fields</em>, <em>values</em>, <em>queue=True</em><big>)</big><a class="headerlink" href="#techu.views.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build INSERT statement. 
+Supports multiple VALUES sets for batch inserts.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.views.modify_index">
+<tt class="descclassname">techu.views.</tt><tt class="descname">modify_index</tt><big>(</big><em>index_id</em>, <em>sql</em>, <em>queue</em>, <em>values=None</em>, <em>retries=0</em><big>)</big><a class="headerlink" href="#techu.views.modify_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Either adds to index directly or queues statements 
+for async execution by storing them in Redis 
+If either Redis or searchd is unresponsive MAX_RETRIES attempts will be performed 
+in order to store the request to the alternative</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.views.rqueue">
+<tt class="descclassname">techu.views.</tt><tt class="descname">rqueue</tt><big>(</big><em>queue</em>, <em>index_id</em>, <em>sql</em>, <em>values</em><big>)</big><a class="headerlink" href="#techu.views.rqueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Redis queue for incoming requests
+Applier daemon continuously reads from this queue 
+and executes asynchronously 
+TODO: check if it works better with Pub/Sub</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.views.update">
+<tt class="descclassname">techu.views.</tt><tt class="descname">update</tt><big>(</big><em>index_id</em>, <em>doc_id</em>, <em>fields</em>, <em>values</em>, <em>queue=True</em><big>)</big><a class="headerlink" href="#techu.views.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build UPDATE statement</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="libraries">
+<h2>Libraries<a class="headerlink" href="#libraries" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<span id="document-modules/applier"></span><div class="section" id="module-techu.libraries.applier">
+<span id="techu-libraries-applier"></span><h3>techu.libraries.applier<a class="headerlink" href="#module-techu.libraries.applier" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="techu.libraries.applier.QueueDaemon">
+<em class="property">class </em><tt class="descclassname">techu.libraries.applier.</tt><tt class="descname">QueueDaemon</tt><big>(</big><em>pidfile</em>, <em>stdin='/dev/null'</em>, <em>stdout='/dev/null'</em>, <em>stderr='/dev/null'</em><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Daemon script that applies queued operations to indexes</div>
+</div>
+<p><em>Notes</em>
+* Different instances should be spawned for each index</p>
+<dl class="attribute">
+<dt id="techu.libraries.applier.QueueDaemon.Logger">
+<tt class="descname">Logger</tt><em class="property"> = None</em><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.Logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.applier.QueueDaemon.fetch_indexes">
+<tt class="descname">fetch_indexes</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.fetch_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all active realtime indexes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.applier.QueueDaemon.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.run" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>UNDER DEVELOPMENT</strong>
+The actual code for applying operations.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span id="document-modules/auth"></span><div class="section" id="module-techu.libraries.authentication">
+<span id="techu-libraries-authentication"></span><h3>techu.libraries.authentication<a class="headerlink" href="#module-techu.libraries.authentication" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="techu.libraries.authentication.Auth">
+<em class="property">class </em><tt class="descclassname">techu.libraries.authentication.</tt><tt class="descname">Auth</tt><big>(</big><em>consumer_key=''</em><big>)</big><a class="headerlink" href="#techu.libraries.authentication.Auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authentication protocol
+Resembles OAuth process: 
+*  Client receives a Consumer Key/Secret pair
+*  Constructs an authentication token with HMAC-SHA1 which is sent on each request.
+The Consumer Key and the Secret are comprised from ASCII uppercase &amp; lowercase letters &amp; digits
+This script can also be used as a command-line executable to generate key/secret pairs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>__token_salt</strong> &#8211; a salt for the generated secret</li>
+<li><strong>__consumer_key</strong> &#8211; the consumer_key sent on each request and is unique for each client (8 characters)</li>
+<li><strong>__secret</strong> &#8211; the secret from which a the request token is generated (16 characters)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="techu.libraries.authentication.Auth.generate">
+<tt class="descname">generate</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.authentication.Auth.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a consumer key &amp; secret pair.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.authentication.Auth.generate_secret">
+<tt class="descname">generate_secret</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.authentication.Auth.generate_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a random secret with a length of 16 characters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.authentication.Auth.get_secret">
+<tt class="descname">get_secret</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.authentication.Auth.get_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the secret for a consumer key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.authentication.Auth.randomize">
+<tt class="descname">randomize</tt><big>(</big><em>length</em>, <em>elements=None</em><big>)</big><a class="headerlink" href="#techu.libraries.authentication.Auth.randomize" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Return a random string of specified length.</div>
+<div class="line">If <em>elements</em> parameter is <em>None</em> (default) ASCII uppercase, lowercase &amp; digits are used as selection group.</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.authentication.Auth.update_secret">
+<tt class="descname">update_secret</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.authentication.Auth.update_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-generate secret for a specific consumer key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.authentication.Auth.verify">
+<tt class="descname">verify</tt><big>(</big><em>token</em><big>)</big><a class="headerlink" href="#techu.libraries.authentication.Auth.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test token using HMAC-SHA1.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span id="document-modules/caching"></span><div class="section" id="module-techu.libraries.caching">
+<span id="techu-libraries-caching"></span><h3>techu.libraries.caching<a class="headerlink" href="#module-techu.libraries.caching" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="techu.libraries.caching.Cache">
+<em class="property">class </em><tt class="descclassname">techu.libraries.caching.</tt><tt class="descname">Cache</tt><a class="headerlink" href="#techu.libraries.caching.Cache" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Caching wrapper around Redis client.</div>
+<div class="line">Supports setting keys with <em>WATCH</em> as a CAS device along with expiration.</div>
+<div class="line">Also supports hash (dictionary) operations, handles invalidations and marks indexes as &#8220;dirty&#8221;.</div>
+</div>
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.delete">
+<tt class="descname">delete</tt><big>(</big><em>keys</em>, <em>expires=500</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.delete" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Set key expiration at specified time in milliseconds.</div>
+<div class="line">Allows <em>soft</em> deletion by setting low expiration times.</div>
+<div class="line">If you set the <em>expires</em> parameter to 0 an immediate delete is performed (via the <em>DELETE</em> command)</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.dirty">
+<tt class="descname">dirty</tt><big>(</big><em>index_id</em>, <em>action=u''</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.dirty" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Mark an index as &#8220;dirty&#8221; thus containing changes that </div>
+<div class="line">require cache entries concerning that index to be invalidated.</div>
+<div class="line">Specific actions will give finer control over invalidations in the future.</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.exists">
+<tt class="descname">exists</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a key exists in Redis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.get">
+<tt class="descname">get</tt><big>(</big><em>key</em>, <em>unserialize=True</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a value from Redis.
+Optionally transforms result ( when <em>unserialize</em> parameter is True - default ) through <a class="reference external" href="http://docs.python.org/2/library/marshal.html#marshal.loads">marshal.loads</a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.hget">
+<tt class="descname">hget</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.hget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all entries in a Redis hash structure as a dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.hset">
+<tt class="descname">hset</tt><big>(</big><em>key</em>, <em>inner_key</em>, <em>value</em>, <em>watch=False</em>, <em>expire=0.0</em>, <em>lock=None</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.hset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a hash entry in the structure specified by <em>key</em> and hash key <em>inner_key</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.invalidate">
+<tt class="descname">invalidate</tt><big>(</big><em>index_id</em>, <em>version</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.invalidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalidate cache entries</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.set">
+<tt class="descname">set</tt><big>(</big><em>key</em>, <em>value</em>, <em>watch=False</em>, <em>expire=0.0</em>, <em>lock=None</em>, <em>keylist=None</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.set" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Store a key-value pair in Redis.</div>
+<div class="line">Optionally add <em>WATCH</em> for implementing CAS.</div>
+<div class="line">Supports also key-lock releasing in case cache locks are implemented (avoiding stampeding herd).</div>
+<div class="line"><em>expire</em> parameter is in seconds but of float type, multiplied by 10**3 and passed to <em>PEXPIRE</em> command</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.transaction">
+<tt class="descname">transaction</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a consistent &amp; isolated operation (transaction)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.version">
+<tt class="descname">version</tt><big>(</big><em>index_id</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index version</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.libraries.caching.FunctionCache">
+<em class="property">class </em><tt class="descclassname">techu.libraries.caching.</tt><tt class="descname">FunctionCache</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.FunctionCache" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Creates a key with the function name and a hash of the arguments.</div>
+<div class="line">Parameter values (or keyword argument parameter values) <strong>must be serializable</strong>.</div>
+<div class="line">Used as a view decorator.</div>
+</div>
+</dd></dl>
+
+</div>
+<span id="document-modules/generic"></span><div class="section" id="module-techu.libraries.generic">
+<span id="techu-libraries-generic"></span><h3>techu.libraries.generic<a class="headerlink" href="#module-techu.libraries.generic" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="techu.libraries.generic.E">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">E</tt><big>(</big><em>code=500</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an HttpResponse with error code.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.R">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">R</tt><big>(</big><em>data</em>, <em>request=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.R" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Return a successful, normal HttpResponse (status code 200).   </div>
+<div class="line">Serializes by default any object passed.</div>
+<div class="line">Passing the GET/POST parameter <em>pretty=1</em> will result in pretty-printed output.</div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.libraries.generic.Serializer">
+<em class="property">class </em><tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">Serializer</tt><big>(</big><em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>encoding='utf-8'</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.Serializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>JSON serializer for list, dict and QuerySet objects.</p>
+<dl class="method">
+<dt id="techu.libraries.generic.Serializer.default">
+<tt class="descname">default</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.Serializer.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.cursorfetchall">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">cursorfetchall</tt><big>(</big><em>cursor</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.cursorfetchall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all rows from a DB cursor as a dictionary</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.debug">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">debug</tt><big>(</big><em>r</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exception so that passes through the Exception logging middleware.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.identq">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">identq</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.identq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quote an SQL identifier.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.is_model">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">is_model</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.is_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a variable is instance of Model. Returns Boolean.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.is_queryset">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">is_queryset</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.is_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a variable is QuerySet. Returns Boolean.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.is_queued">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">is_queued</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.is_queued" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a request requires operation queueing. Returns Boolean.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.model_fields">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">model_fields</tt><big>(</big><em>model</em>, <em>r</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.model_fields" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Filter values from dictionary parameter <em>r</em> which are fields of the model parameter <em>model</em>.</div>
+<div class="line">Returns dictionary with the model field values and fields as keys.</div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.model_to_dict">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">model_to_dict</tt><big>(</big><em>instance</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.model_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a model instance to dictionary.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.redis_client">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">redis_client</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.generic.redis_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Redis 2.6 <a class="reference external" href="https://github.com/andymccurdy/redis-py">client instance</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.regex_check">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">regex_check</tt><big>(</big><em>s</em>, <em>r='[^a-zA-Z0-9\\-_]+'</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.regex_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regex check for ASCII letters &amp; digits, dash &amp; underscore</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.request_data">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">request_data</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.request_data" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Combine GET &amp; POST dictionaries. POST has higher priority.</div>
+<div class="line">If request contains <em>data</em> parameter then it is unserialized from JSON format and the result is returned.  </div>
+</div>
+</dd></dl>
+
+</div>
+<span id="document-modules/middleware"></span><div class="section" id="module-techu.libraries.middleware">
+<span id="techu-libraries-middleware"></span><h3>techu.libraries.middleware<a class="headerlink" href="#module-techu.libraries.middleware" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="techu.libraries.middleware.ConnectionMiddleware">
+<em class="property">class </em><tt class="descclassname">techu.libraries.middleware.</tt><tt class="descname">ConnectionMiddleware</tt><a class="headerlink" href="#techu.libraries.middleware.ConnectionMiddleware" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Automatically setup connections to the mysql41 interface of the Sphinx realtime indexes. </div>
+<div class="line">One connection is created for each index. </div>
+<div class="line">This is implemented as a middleware in order to make connections available to all requests.</div>
+</div>
+<dl class="method">
+<dt id="techu.libraries.middleware.ConnectionMiddleware.process_request">
+<tt class="descname">process_request</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#techu.libraries.middleware.ConnectionMiddleware.process_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.libraries.middleware.ExceptionLoggingMiddleware">
+<em class="property">class </em><tt class="descclassname">techu.libraries.middleware.</tt><tt class="descname">ExceptionLoggingMiddleware</tt><a class="headerlink" href="#techu.libraries.middleware.ExceptionLoggingMiddleware" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Exception middleware which allows more clear &amp; efficient printouts of errors raised.</div>
+<div class="line">Particularly, it overrides the default debug pages of Django which contain extensive HTML</div>
+<div class="line">and returns plain text in case the request is performed with the <em>curl</em> command-line tool</div>
+<div class="line">or JSON-formatted as an API response inside client applications.</div>
+</div>
+<dl class="method">
+<dt id="techu.libraries.middleware.ExceptionLoggingMiddleware.process_response">
+<tt class="descname">process_response</tt><big>(</big><em>request</em>, <em>response</em><big>)</big><a class="headerlink" href="#techu.libraries.middleware.ExceptionLoggingMiddleware.process_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<span id="document-modules/profiler"></span><div class="section" id="module-techu.libraries.profiler">
+<span id="techu-libraries-profiler"></span><h3>techu.libraries.profiler<a class="headerlink" href="#module-techu.libraries.profiler" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="techu.libraries.profiler.Profiler">
+<em class="property">class </em><tt class="descclassname">techu.libraries.profiler.</tt><tt class="descname">Profiler</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#techu.libraries.profiler.Profiler" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Simple Profiling. Stores number of requests and total time for a function.</div>
+<div class="line">Used as a view decorator. Can be disabled by setting <cite>PROFILER = False</cite> in <em>settings.py</em>.</div>
+</div>
+</dd></dl>
+
+</div>
+<span id="document-modules/scripting"></span><div class="section" id="module-techu.libraries.scripting">
+<span id="techu-libraries-scripting"></span><h3>techu.libraries.scripting<a class="headerlink" href="#module-techu.libraries.scripting" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="techu.libraries.scripting.Scripting">
+<em class="property">class </em><tt class="descclassname">techu.libraries.scripting.</tt><tt class="descname">Scripting</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#techu.libraries.scripting.Scripting" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line-block">
+<div class="line">Javascript Scripting for responses with PyV8</div>
+<div class="line">JS code is passed through the request in the <em>callback</em> parameter.</div>
+</div>
+<div class="line">Used as a view decorator. Can be deactivated by setting <cite>SCRIPTING =False</cite> in <em>settings.py</em></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html#document-index">Table Of Contents</a></h3>
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/models">techu.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/views">techu.views</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/applier">techu.libraries.applier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/auth">techu.libraries.authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/caching">techu.libraries.caching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/generic">techu.libraries.generic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/middleware">techu.libraries.middleware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/profiler">techu.libraries.profiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-modules/scripting">techu.libraries.scripting</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="index.html#document-index">Techu 0.2-beta documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, George Psarakis.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

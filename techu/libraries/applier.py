@@ -2,27 +2,28 @@
 import imp, os, sys
 import time, re 
 import marshal
-from django.core.management import setup_environ
-settings_path = '/'.join(os.path.dirname(os.path.realpath(__file__)).split('/')[0:-1])
-settings = imp.load_source('settings', os.path.join( settings_path,  'settings.py'))
-setup_environ(settings)
+from generic import *
 from django.db import transaction, connections
 from django.db import IntegrityError, DatabaseError
 from daemon import Daemon
-from generic import *
-import logging
 from middleware import ConnectionMiddleware
+import logging
 
 class QueueDaemon(Daemon):
   '''
-  *NOTES*
-  - different instances should be spawned for each index
+  |  Daemon script that applies queued operations to indexes
+  
+  *Notes*
+  * Different instances should be spawned for each index
   '''
   Logger = None
   def fetch_indexes(self):
+    '''
+    Get all active realtime indexes.
+    '''
     sql = '''SELECT i.id, i.name FROM sp_indexes i 
       JOIN sp_configuration_index sci ON i.id = sci.sp_index_id 
-      WHERE sci.is_active'''
+      WHERE sci.is_active AND i.index_type = 1'''
     c = connections['default'].cursor()
     c.execute(sql)
     indexes = {}
@@ -31,10 +32,14 @@ class QueueDaemon(Daemon):
     return indexes
 
   def run(self):
+    '''
+    **UNDER DEVELOPMENT**
+    The actual code for applying operations.
+    '''
     sys.stdout.write("Applier daemon started ...\n" )
     sys.stdout.flush()
     indexes = self.fetch_indexes()
-    r = redis26()
+    r = redis_client()
     replace = re.compile(r'^INSERT\s+')
     while(True):
       for index_id, index in indexes.iteritems():

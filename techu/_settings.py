@@ -39,11 +39,11 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -65,10 +65,11 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
+STATIC_URL = '/admin/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    '/home/techu-search-server/techu/admin/static/'
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -101,6 +102,7 @@ ROOT_URLCONF = 'techu.urls'
 WSGI_APPLICATION = 'techu.wsgi.application'
 
 TEMPLATE_DIRS = (
+    '/home/techu-search-server/techu/admin/templates/'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -143,13 +145,15 @@ LOGGING = {
 }
 
 
-import os
+import os, sys
 ''' 
     Techu Project Settings 
     Version 0.1beta
 '''
 PROFILER = True
+SCRIPTING = True
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(PROJECT_ROOT)
 TECHU_COUNTER = '84920c64c98c9cf2a7ab4af756c84b33'
 MAX_RETRIES = 10
 SEARCH_FAIL_ERROR = 1
@@ -158,7 +162,7 @@ SEARCH_FAILURE_LEVEL = SEARCH_FAIL_WARNING
 SEARCH_CACHE = True
 EXCERPTS_CACHE = True
 EXCERPTS_CACHE_EXPIRE = 10 # Cache expiration in seconds
-APPHOST = 'techu.local'
+APPHOST = 'techu'
 CACHE_LOCK_TIMEOUT = 10
 SEARCH_CACHE_EXPIRE = 120.
 ''' Redis '''
@@ -167,3 +171,4 @@ REDIS_HOST = 'localhost'
 REDIS_PASSWORD = None
 ''' Graceful restart (thanks to https://github.com/andreiko/django_graceful) '''
 GRACEFUL_STATEDIR = '/home/techu-search-server/run/'
+SPHINX_CONFIGURATION_DIR = '/home/techu-search-server/techu/sphinx.conf'

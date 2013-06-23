@@ -1,30 +1,75 @@
-import os, sys
-import json, time
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os, sys, time
+import json, marshal
 from hashlib import md5
-import marshal
+import settings 
 from django.db import connections, IntegrityError, DatabaseError
 from libraries.generic import *
 from techu.models import *
 from libraries.sphinxapi import *
-from libraries.caching import Cache
-import settings 
+from libraries.caching import Cache, FunctionCache
 from libraries.profiler import Profiler
 from libraries.scripting import Scripting
-
 
 @Scripting
 @Profiler
 def home(request):
-  ''' Home/Index page '''
-  return R({'Greetings-From' : "Techu Indexing Server"}, request)
+  '''
+  Home Page 
+  '''
+  return R({ "Greetings-From" : "Techu Indexing Server" }, request)
+
+@FunctionCache
+def constants():
+  '''
+  |  Read all constants values from the database and associate via a 2-level dictionary
+  |  1st level contains *name_of_table_name_of_field* keys and the 2nd level contains the constant value.
+  '''
+  constant_list = Constants.objects.all()  
+  constants_hash = {}
+  for c in constant_list:
+    constant_key = c.table_name + '_' + c.table_field
+    if not constant_key in constants_hash:
+      constants_hash[constant_key] = {}
+    constants_hash[constant_key][c.constant_value] = c.constant_name  
+  return constants_hash
 
 @Profiler
 def option_list(request):
-  return R(Option.objects.all(), request)
+  ''' 
+  |  Return a list of all available configuration options.
+  |  Accepts the *data* parameter with a JSON object containing:
+
+  1. *section* [1, 2, 3, 4] (see *constants* table for value meaning)
+  2. *name* filter options by matching the start of their name with this value
+
+  |  Example call:
+  |  `curl -k --compressed 'https://techu/option/list/?pretty=1' --data-urlencode data='{ "section" : 4, "name" : "sql_attr" }'
+  |  Returns all options belonging to datasources starting with "sql_attr".
+  '''
+  r = request_data(request)
+  constant_list = constants()['sp_options_section']
+  constant_list['0'] = '-'
+  conditions = {}
+  if 'name' in r:
+    conditions['name__startswith'] = r['name']
+  if 'section' in r:
+    conditions['section__exact'] = int(r['section'])
+  if not conditions:
+    options = Option.objects.all().order_by('name')
+  else:
+    options = Option.objects.filter(**conditions).order_by('name')
+  option_list = [ { 'id' : o.id, 'name' : o.name, 'section' : constant_list[unicode(o.section)] } for o in options ] 
+  return R(option_list, request)
 
 @Profiler
 def option(request, section, section_instance_id):
-  ''' Connect options with searchd, indexes & sources and store their values '''
+  ''' 
+  |  Connect options with searchd, indexes & sources and store their values.
+  |  Receives a JSON object with the *data* parameter containing options (keys) and their values. 
+  |  You can group parameters and assign values with a list.
+  '''
   section = section.lower()
   data = request_data(request)
   options = Option.objects.filter(name__in = data.keys())
@@ -36,7 +81,7 @@ def option(request, section, section_instance_id):
       values = [data[option.name]]
     else:
       values = data[option.name]
-    for value in values:
+    for value in values:      
       value = unicode(value)
       value_hash = md5(value).hexdigest()
       if section == 'searchd':      
@@ -73,7 +118,10 @@ def option(request, section, section_instance_id):
 
 @Profiler
 def index(request, index_id = 0):
-  ''' Add or modify information for an index '''
+  ''' 
+  |  Add or modify information for an index.
+  |  It can be associated with a configuration entity with the *configuration_id* parameter.
+  '''
   data = request_data(request)
   fields = model_fields(Index, data)
   ci = None
@@ -97,17 +145,23 @@ def index(request, index_id = 0):
 
 @Profiler
 def index_list(request):
-  ''' Return a JSON Array with all indexes '''
+  ''' 
+  Return a JSON Array with all indexes 
+  '''
   return R(Index.objects.all(), request)
 
 @Profiler
 def configuration_list(request):
-  ''' Return a JSON Array with all configurations '''
+  ''' 
+  Return a JSON Array with all configurations 
+  '''
   return R(Configuration.objects.all(), request)
 
 @Profiler
 def searchd(request, searchd_id = 0):
-  ''' Store a new searchd '''
+  ''' 
+  Store a new searchd 
+  '''
   data = request_data(request)
   fields = model_fields(Searchd, data)
   if searchd_id > 0:
@@ -121,7 +175,9 @@ def searchd(request, searchd_id = 0):
 
 @Profiler
 def configuration(request, configuration_id = 0):
-  ''' Get or update information for a configuration '''
+  ''' 
+  Get or update information for a configuration 
+  '''
   data = request_data(request)
   fields = model_fields(Configuration, data)
   if configuration_id > 0:
@@ -281,7 +337,7 @@ def rqueue(queue, index_id, sql, values):
   and executes asynchronously 
   TODO: check if it works better with Pub/Sub
   '''
-  r = redis26()
+  r = redis_client()
   c = r.incr(settings.TECHU_COUNTER)
   request_time = int(time.time()*10**6)
   key = ':' . join(map(str, [ queue, index_id, request_time, c ]))
@@ -572,16 +628,26 @@ def excerpts(request, index_id):
 def generate(request, configuration_id):
   import codecs
   ''' 
-  Generate configuration file and restart searchd 
+  Generate configuration file and restart searchd instances. 
   Response contains a dictionary with the configuration file contents, 
-  the stop/start commands and status
+  the stop/start commands and the current status.
+  
+  **Parameters**
+  *dryrun*
+      Whether to store/overwrite the generated configuration and restart searchd.
+      Useful in cases when you want to inspect a configuration file.
+      *Values*
+        [0,1]
+      **Example**
+      curl -k --data-urlencode data='{ "dryrun" : 1 }'
   '''
+  r = request_data(request)
   searchd_start = 'searchd --config %(config)s %(switches)s'
   searchd_stop  = 'searchd --config %(config)s --stopwait'
   params = {}
   params['switches'] = ' '.join([ '--iostats', '--cpustats' ])
   c = Configuration.objects.get(pk = configuration_id)
-  params['config'] = os.path.join(settings.PROJECT_ROOT, 'sphinx-conf', c.name) + '.conf'
+  params['config'] = os.path.join(settings.PROJECT_ROOT, settings.SPHINX_CONFIGURATION_DIR, c.name) + '.conf'
   ci = ConfigurationIndex.objects.filter(sp_configuration_id = configuration_id).exclude(is_active = 0)
   si = ConfigurationSearchd.objects.filter(sp_configuration_id = configuration_id)
   searchd_options = SearchdOption.objects.filter(sp_searchd_id = si[0].sp_searchd_id)
@@ -608,22 +674,25 @@ def generate(request, configuration_id):
         configuration.append('  %s = %s' % ( unicode(option_names[option.sp_option_id]).ljust(30), unicode(option.value)))
       if option.sp_index_id == index.id:
         configuration.append('  %s = %s' % ( unicode(option_names[option.sp_option_id]).ljust(30), unicode(option.value)))
-    configuration.append('}')
-  
+    configuration.append('}')  
   configuration.append('searchd {')
   for option in searchd_options:    
     configuration.append('  %s = %s' % ( unicode(option_names[option.sp_option_id].ljust(30)), unicode(option.value)))
   configuration.append('}')
   configuration.append("")
   configuration = "\n" . join(configuration)
-  f = codecs.open(params['config'], mode = 'w', encoding = 'utf-8')
-  f.write(configuration)
-  f.close()
-  try:
-    stopped = os.system(searchd_stop % params)
-    started = os.system(searchd_start % params)
-  except Exception as e:
-    return E(message = 'Error while restarting searchd ' + str(e))
+  if 'dryrun' in r and int(r['dryrun']) != 1:
+    f = codecs.open(params['config'], mode = 'w', encoding = 'utf-8')
+    f.write(configuration)
+    f.close()
+    try:
+      stopped = os.system(searchd_stop % params)
+      started = os.system(searchd_start % params)
+    except Exception as e:
+      return E(message = 'Error while restarting searchd ' + str(e))
+  else:
+    stopped = 1
+    started = 1
   response = { 
     'configuration' : configuration, 
     'stopped' : { 'command' : searchd_stop % params,  'status' : not bool(stopped) }, 

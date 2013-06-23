@@ -92,6 +92,8 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.gzip.GZipMiddleware',
+    'techu.libraries.middleware.ExceptionLoggingMiddleware',
     'django.middleware.common.CommonMiddleware',
     'techu.libraries.middleware.ConnectionMiddleware',
     )
@@ -171,3 +173,5 @@ REDIS_HOST = 'localhost'
 REDIS_PASSWORD = None
 ''' Graceful restart (thanks to https://github.com/andreiko/django_graceful) '''
 GRACEFUL_STATEDIR = '/home/techu-search-server/run/'
+SPHINX_CONFIGURATION_DIR = '/home/techu-search-server/techu/sphinx.conf'
+FUNCTION_CACHE = True

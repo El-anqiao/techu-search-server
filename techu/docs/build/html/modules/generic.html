@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>techu.libraries.generic &mdash; Techu 0.2-beta documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2-beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Techu 0.2-beta documentation" href="../index.html" />
+    <link rel="next" title="techu.libraries.middleware" href="middleware.html" />
+    <link rel="prev" title="techu.libraries.caching" href="caching.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="middleware.html" title="techu.libraries.middleware"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="caching.html" title="techu.libraries.caching"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Techu 0.2-beta documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-techu.libraries.generic">
+<span id="techu-libraries-generic"></span><h1>techu.libraries.generic<a class="headerlink" href="#module-techu.libraries.generic" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="techu.libraries.generic.E">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">E</tt><big>(</big><em>code=500</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an HttpResponse with error code.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.R">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">R</tt><big>(</big><em>data</em>, <em>request=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.R" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Return a successful, normal HttpResponse (status code 200).   </div>
+<div class="line">Serializes by default any object passed.</div>
+<div class="line">Passing the GET/POST parameter <em>pretty=1</em> will result in pretty-printed output.</div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.libraries.generic.Serializer">
+<em class="property">class </em><tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">Serializer</tt><big>(</big><em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>encoding='utf-8'</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.Serializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>JSON serializer for list, dict and QuerySet objects.</p>
+<dl class="method">
+<dt id="techu.libraries.generic.Serializer.default">
+<tt class="descname">default</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.Serializer.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.cursorfetchall">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">cursorfetchall</tt><big>(</big><em>cursor</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.cursorfetchall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all rows from a DB cursor as a dictionary</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.debug">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">debug</tt><big>(</big><em>r</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise exception so that passes through the Exception logging middleware.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.identq">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">identq</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.identq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quote an SQL identifier.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.is_model">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">is_model</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.is_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a variable is instance of Model. Returns Boolean.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.is_queryset">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">is_queryset</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.is_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a variable is QuerySet. Returns Boolean.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.is_queued">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">is_queued</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.is_queued" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a request requires operation queueing. Returns Boolean.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.model_fields">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">model_fields</tt><big>(</big><em>model</em>, <em>r</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.model_fields" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Filter values from dictionary parameter <em>r</em> which are fields of the model parameter <em>model</em>.</div>
+<div class="line">Returns dictionary with the model field values and fields as keys.</div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.model_to_dict">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">model_to_dict</tt><big>(</big><em>instance</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.model_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a model instance to dictionary.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.redis_client">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">redis_client</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.generic.redis_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Redis 2.6 <a class="reference external" href="https://github.com/andymccurdy/redis-py">client instance</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.regex_check">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">regex_check</tt><big>(</big><em>s</em>, <em>r='[^a-zA-Z0-9\\-_]+'</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.regex_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regex check for ASCII letters &amp; digits, dash &amp; underscore</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techu.libraries.generic.request_data">
+<tt class="descclassname">techu.libraries.generic.</tt><tt class="descname">request_data</tt><big>(</big><em>req</em><big>)</big><a class="headerlink" href="#techu.libraries.generic.request_data" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Combine GET &amp; POST dictionaries. POST has higher priority.</div>
+<div class="line">If request contains <em>data</em> parameter then it is unserialized from JSON format and the result is returned.  </div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="caching.html"
+                        title="previous chapter">techu.libraries.caching</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="middleware.html"
+                        title="next chapter">techu.libraries.middleware</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/generic.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="middleware.html" title="techu.libraries.middleware"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="caching.html" title="techu.libraries.caching"
+             >previous</a> |</li>
+        <li><a href="../index.html">Techu 0.2-beta documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, George Psarakis.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

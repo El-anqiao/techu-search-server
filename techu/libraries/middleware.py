@@ -2,14 +2,36 @@ from django.conf import settings
 from django.db import connections, connection
 from generic import *
 from copy import deepcopy
+from traceback import format_exception
+import sys, re
+
+class ExceptionLoggingMiddleware(object):
+  '''
+  |  Exception middleware which allows more clear & efficient printouts of errors raised.
+  |  Particularly, it overrides the default debug pages of Django which contain extensive HTML
+  |  and returns plain text in case the request is performed with the *curl* command-line tool
+  |  or JSON-formatted as an API response inside client applications.
+  '''
+  def process_response(self, request, response):
+    if response.status_code != 200:
+      ''' 
+      If called from command line print output plain text, otherwise return as JSON
+      '''
+      if not re.match(r'^curl/', request.META['HTTP_USER_AGENT'].lower()) is None:
+        response.content = r
+      else:      
+        indent = 4
+        separators = (',', ': ')
+        response.content = json.dumps(r, cls=Serializer, indent = indent, separators = separators)
+    return response
 
 class ConnectionMiddleware(object):
+  '''    
+  |  Automatically setup connections to the mysql41 interface of the Sphinx realtime indexes. 
+  |  One connection is created for each index. 
+  |  This is implemented as a middleware in order to make connections available to all requests.
+  '''
   def process_request(self, request):
-    '''
-    Automatically setup connections to the mysql41 interface
-    of the Sphinx realtime indexes. 
-    One connection is created for each index.
-    '''
     cursor = connection.cursor()
     sql = '''SELECT sp_searchd_id, value FROM sp_searchd_option 
              WHERE sp_option_id = 138 AND value LIKE "%%mysql41"'''

@@ -1,68 +1,97 @@
 #!/usr/bin/python
-import sys
-sys.path.append('../../../')
-from django.core.management import setup_environ
-from techu import settings
-setup_environ(settings)
+from generic import settings
+import sys, hmac
 from techu.models import Authentication
 from time import time
-import hashlib
+from hashlib import sha1
 from random import choice
 from string import digits, ascii_letters
-import hmac 
 
 class Auth(object):
-  token_salt   = ''
-  consumer_key = ''
-  secret       = ''
+  '''
+  Authentication protocol
+  Resembles OAuth process: 
+  *  Client receives a Consumer Key/Secret pair
+  *  Constructs an authentication token with HMAC-SHA1 which is sent on each request.
+  The Consumer Key and the Secret are comprised from ASCII uppercase & lowercase letters & digits
+  This script can also be used as a command-line executable to generate key/secret pairs
+
+  :ivar __token_salt: a salt for the generated secret
+  :ivar __consumer_key: the consumer_key sent on each request and is unique for each client (8 characters)
+  :ivar __secret: the secret from which a the request token is generated (16 characters)
+  '''
+  __token_salt   = ''
+  __consumer_key = ''
+  __secret       = ''
 
   def __init__(self, consumer_key = ''):
-    self.token_salt = str(time())
-    self.consumer_key = consumer_key
+    self.__token_salt = str(time())
+    self.__consumer_key = consumer_key
 
   def get_secret(self):
-    if self.consumer_key == '': 
+    '''
+    Returns the secret for a consumer key.
+    '''
+    if self.__consumer_key == '': 
       return True
-    auth = Authentication.objects.filter(consumer_key=self.consumer_key)
+    auth = Authentication.objects.filter(consumer_key=self.__consumer_key)
     if not auth:
       return False
     else:
       return auth[0].secret
 
-  def update_secret(self, old_secret):
-    if self.consumer_key != '':
-      auth = Authentication.objects.filter(consumer_key = self.consumer_key, secret = old_secret)
+  def update_secret(self):
+    '''
+    Re-generate secret for a specific consumer key.
+    '''
+    if self.__consumer_key != '':
+      auth = Authentication.objects.filter(consumer_key = self.__consumer_key, secret = self.__secret)
       if not auth:
         return False
       else:
         auth.secret = self.generate_secret()
         auth.save()
-        return auth.secret
+        self.__secret = auth.secret
+        return True
     return False
 
   def randomize(self, length, elements = None):
+    '''
+    |  Return a random string of specified length.
+    |  If *elements* parameter is *None* (default) ASCII uppercase, lowercase & digits are used as selection group.
+    '''
     if elements is None:
       elements = ascii_letters + digits
     return ''.join([ choice(elements) for n in range(length) ])
 
   def generate_secret(self):
-    return self.randomize(16, hashlib.sha1(self.token_salt + self.randomize(20)).hexdigest())
+    '''
+    Generate a random secret with a length of 16 characters.
+    '''   
+    return self.randomize(16, sha1(self.__token_salt + self.randomize(20)).hexdigest())
     
   def generate(self):
-    ''' Generates consumer_key & secret pair '''
-    self.consumer_key = ''
+    '''
+    Returns a consumer key & secret pair.
+    '''
+    self.__consumer_key = self.randomize(8)
     while self.get_secret():
-      self.consumer_key = self.randomize(8)
-    self.secret = self.generate_secret()
-    Authentication.objects.create(consumer_key = self.consumer_key, secret = self.secret)
+      self.__consumer_key = self.randomize(8)
+    self.__secret = self.generate_secret()
+    Authentication.objects.create(consumer_key = self.__consumer_key, secret = self.__secret)
    
   def verify(self, token):
-    h = hmac.new(str(self.get_secret()), str(self.consumer_key), hashlib.sha1)
-    print h.hexdigest()
-    return ( h.hexdigest() == token )
+    '''
+    Test token using HMAC-SHA1.
+    '''
+    h = hmac.new(str(self.get_secret()), str(self.__consumer_key), sha1)
+    return ( h.hexdigest() == token, token )
   
   def __str__(self):
-    return self.consumer_key + ' ' + self.secret
+    '''
+    Print consumer key/secret pair.
+    '''
+    return self.__consumer_key + ' ' + self.__secret
 
 if __name__ == '__main__':
   if len(sys.argv) == 1:
@@ -72,7 +101,7 @@ if __name__ == '__main__':
     test_consumer = 'NBA1e4Ah'
     test_secret = '1e7fc2c4a1d5d7d1'
     auth = Auth(test_consumer)
-    token = hmac.new(test_secret, test_consumer, hashlib.sha1).hexdigest()
+    token = hmac.new(test_secret, test_consumer, sha1).hexdigest()
     print token
     print auth.verify(token)  
   elif sys.argv[1] == 'generate':

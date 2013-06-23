@@ -4,6 +4,11 @@ import PyV8
 import json
 
 class Scripting(object):
+  '''
+  |  Javascript Scripting for responses with PyV8
+  |  JS code is passed through the request in the *callback* parameter.
+  | Used as a view decorator. Can be deactivated by setting `SCRIPTING =False` in *settings.py*
+  '''
   def __init__(self, fn):
     self.fn = fn
   
