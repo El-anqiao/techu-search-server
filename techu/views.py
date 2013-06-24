@@ -16,7 +16,7 @@ from libraries.scripting import Scripting
 @Profiler
 def home(request):
   '''
-  Home Page 
+  Home Page
   '''
   return R({ "Greetings-From" : "Techu Indexing Server" }, request)
 
@@ -51,15 +51,8 @@ def option_list(request):
   r = request_data(request)
   constant_list = constants()['sp_options_section']
   constant_list['0'] = '-'
-  conditions = {}
-  if 'name' in r:
-    conditions['name__startswith'] = r['name']
-  if 'section' in r:
-    conditions['section__exact'] = int(r['section'])
-  if not conditions:
-    options = Option.objects.all().order_by('name')
-  else:
-    options = Option.objects.filter(**conditions).order_by('name')
+  conditions = filter_list(r, { 'name' : 'startswith', 'section' : None })
+  options = Option.objects.filter(**conditions).order_by('name')
   option_list = [ { 'id' : o.id, 'name' : o.name, 'section' : constant_list[unicode(o.section)] } for o in options ] 
   return R(option_list, request)
 
@@ -69,6 +62,15 @@ def option(request, section, section_instance_id):
   |  Connect options with searchd, indexes & sources and store their values.
   |  Receives a JSON object with the *data* parameter containing options (keys) and their values. 
   |  You can group parameters and assign values with a list.
+  `curl -k --compressed 'https://techu/option/searchd/6/' --data-urlencode data='{
+    "listen" : [ 
+      "9312", 
+      "9306:mysql41" 
+      ], 
+    "workers" : "threads", 
+    "pid_file" : "/var/run/stackoverfow_searchd.pid", 
+    "max_matches" : 1000 
+  }'`
   '''
   section = section.lower()
   data = request_data(request)
@@ -121,6 +123,7 @@ def index(request, index_id = 0):
   ''' 
   |  Add or modify information for an index.
   |  It can be associated with a configuration entity with the *configuration_id* parameter.
+  `curl -k --compressed 'https://techu/index/' --data-urlencode name='so_posts_rt' --data-urlencode configuration_id='25'`
   '''
   data = request_data(request)
   fields = model_fields(Index, data)
@@ -153,7 +156,7 @@ def index_list(request):
 @Profiler
 def configuration_list(request):
   ''' 
-  Return a JSON Array with all configurations 
+  Return a list of all configurations.
   '''
   return R(Configuration.objects.all(), request)
 
@@ -628,18 +631,18 @@ def excerpts(request, index_id):
 def generate(request, configuration_id):
   import codecs
   ''' 
-  Generate configuration file and restart searchd instances. 
-  Response contains a dictionary with the configuration file contents, 
-  the stop/start commands and the current status.
+  |  Generate configuration file and restart searchd instances. 
+  |  Response contains a dictionary with the configuration file contents, 
+  |  the stop/start commands and the current status.
   
   **Parameters**
   *dryrun*
-      Whether to store/overwrite the generated configuration and restart searchd.
-      Useful in cases when you want to inspect a configuration file.
-      *Values*
-        [0,1]
-      **Example**
-      curl -k --data-urlencode data='{ "dryrun" : 1 }'
+      |  Whether to store/overwrite the generated configuration and restart searchd.
+      |  Useful in cases when you want to inspect a configuration file.
+      |  Values [0,1]
+
+      Example:
+      `curl -k 'https://techu/generate/25/?pretty=1' --data-urlencode data='{ "dryrun" : 1 }'`
   '''
   r = request_data(request)
   searchd_start = 'searchd --config %(config)s %(switches)s'

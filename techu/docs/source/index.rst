@@ -10,7 +10,7 @@ Models & Views
 --------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    modules/models.rst
    modules/views.rst

@@ -21,6 +21,25 @@ def _import(module_list):
     if not m in modules:
       modules.append(m)
 
+def filter_list(r, fields):
+  '''
+  |  Filter conditions from a request and create an appropriate dictionary which is passed to *filter* as kwargs.
+  |  Example:
+
+  `filter_list(r, { 'name' : 'startswith', 'section' : None })`
+  
+  | Passing *None* will use *__exact* as an operator.
+  '''
+  conditions = {}
+  for param, field in fields.iteritems():
+    if param in r:
+      if field is None:
+        field = param + '__exact'
+      else:
+        field = param + '__' + field
+      conditions[field] = r[param]
+  return conditions
+
 def is_queryset(o):
   '''
   Check if a variable is QuerySet. Returns Boolean.
@@ -56,6 +75,9 @@ class Serializer(json.JSONEncoder):
   JSON serializer for list, dict and QuerySet objects.
   '''
   def default(self, o):
+    '''
+    Default serializer method. Enables QuerySet & datetime support.
+    '''
     if is_queryset(o):
       obj = []
       for q in o:
@@ -140,12 +162,15 @@ def identq(s):
   '''
   return '`' + s.replace('`', '') + '`'
 
-def model_to_dict(instance):
+def model_to_dict(instance, fields_only = []):
   '''
-  Convert a model instance to dictionary.
+  |  Convert a model instance to dictionary.
+  |  Use *fields_only* parameter to narrow down the returned field values.
   '''
   data = {}
   for field in instance._meta.fields:
+    if fields_only and not field in fields_only:
+      continue 
     data[field.name] = field.value_from_object(instance)
   return data
 
