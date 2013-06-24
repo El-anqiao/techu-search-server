@@ -1,4 +1,4 @@
-Techu v0.1-beta
+Techu v0.2-beta
 ===============
 
 RESTful search built on top of Sphinx full-text search engine. 
