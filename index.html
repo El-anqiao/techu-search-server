@@ -691,8 +691,8 @@ curl 'http://techu:81/option/index/28/' --data-urlencode data='{
               <div class="command" style="height: 500px!important;"><pre>
 curl -XPOST 'http://techu:81/indexer/insert/28/' --data-urlencode data='{
   "body": "I have in my Symfony 2.1 RC app a simple Comment model (using Doctrine 2). Every comment has a user and a message.
-    Currently, the CommentBundle manages comments on articles. I'd like it to be more generic to be able to comment any kind of entity without copying code across different bundles dedicated to comments...
-    For this to work, I also need a way to reference any entity from the comment one. I think having two fields entity_type and entity_id can be a nice solution. However, I can't get the object from these without mapping entity_type to classes manually and using the find method.
+    Currently, the CommentBundle manages comments on articles. I\\'d like it to be more generic to be able to comment any kind of entity without copying code across different bundles dedicated to comments...
+    For this to work, I also need a way to reference any entity from the comment one. I think having two fields entity_type and entity_id can be a nice solution. However, I can\\'t get the object from these without mapping entity_type to classes manually and using the find method.
     So how do I reference an entity from a comment ? And how can I create generic behavior working  on several entities ?", 
     "user_id": 893390, 
     "title": "Generic comment system in Symfony2", 

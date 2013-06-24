@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>techu.libraries.caching &mdash; Techu 0.2-beta documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2-beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Techu 0.2-beta documentation" href="../index.html" />
+    <link rel="next" title="techu.libraries.generic" href="generic.html" />
+    <link rel="prev" title="techu.libraries.authentication" href="auth.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generic.html" title="techu.libraries.generic"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="auth.html" title="techu.libraries.authentication"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Techu 0.2-beta documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-techu.libraries.caching">
+<span id="techu-libraries-caching"></span><h1>techu.libraries.caching<a class="headerlink" href="#module-techu.libraries.caching" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="techu.libraries.caching.Cache">
+<em class="property">class </em><tt class="descclassname">techu.libraries.caching.</tt><tt class="descname">Cache</tt><a class="headerlink" href="#techu.libraries.caching.Cache" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Caching wrapper around Redis client.</div>
+<div class="line">Supports setting keys with <em>WATCH</em> as a CAS device along with expiration.</div>
+<div class="line">Also supports hash (dictionary) operations, handles invalidations and marks indexes as &#8220;dirty&#8221;.</div>
+</div>
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.delete">
+<tt class="descname">delete</tt><big>(</big><em>keys</em>, <em>expires=500</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.delete" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Set key expiration at specified time in milliseconds.</div>
+<div class="line">Allows <em>soft</em> deletion by setting low expiration times.</div>
+<div class="line">If you set the <em>expires</em> parameter to 0 an immediate delete is performed (via the <em>DELETE</em> command)</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.dirty">
+<tt class="descname">dirty</tt><big>(</big><em>index_id</em>, <em>action=u''</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.dirty" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Mark an index as &#8220;dirty&#8221; thus containing changes that </div>
+<div class="line">require cache entries concerning that index to be invalidated.</div>
+<div class="line">Specific actions will give finer control over invalidations in the future.</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.exists">
+<tt class="descname">exists</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a key exists in Redis</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.get">
+<tt class="descname">get</tt><big>(</big><em>key</em>, <em>unserialize=True</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a value from Redis.
+Optionally transforms result ( when <em>unserialize</em> parameter is True - default ) through <a class="reference external" href="http://docs.python.org/2/library/marshal.html#marshal.loads">marshal.loads</a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.hget">
+<tt class="descname">hget</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.hget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all entries in a Redis hash structure as a dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.hset">
+<tt class="descname">hset</tt><big>(</big><em>key</em>, <em>inner_key</em>, <em>value</em>, <em>watch=False</em>, <em>expire=0.0</em>, <em>lock=None</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.hset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a hash entry in the structure specified by <em>key</em> and hash key <em>inner_key</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.invalidate">
+<tt class="descname">invalidate</tt><big>(</big><em>index_id</em>, <em>version</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.invalidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalidate cache entries</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.set">
+<tt class="descname">set</tt><big>(</big><em>key</em>, <em>value</em>, <em>watch=False</em>, <em>expire=0.0</em>, <em>lock=None</em>, <em>keylist=None</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.set" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Store a key-value pair in Redis.</div>
+<div class="line">Optionally add <em>WATCH</em> for implementing CAS.</div>
+<div class="line">Supports also key-lock releasing in case cache locks are implemented (avoiding stampeding herd).</div>
+<div class="line"><em>expire</em> parameter is in seconds but of float type, multiplied by 10**3 and passed to <em>PEXPIRE</em> command</div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.transaction">
+<tt class="descname">transaction</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a consistent &amp; isolated operation (transaction)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techu.libraries.caching.Cache.version">
+<tt class="descname">version</tt><big>(</big><em>index_id</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.Cache.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index version</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.libraries.caching.FunctionCache">
+<em class="property">class </em><tt class="descclassname">techu.libraries.caching.</tt><tt class="descname">FunctionCache</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#techu.libraries.caching.FunctionCache" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Creates a key with the function name and a hash of the arguments.</div>
+<div class="line">Parameter values (or keyword argument parameter values) <strong>must be serializable</strong>.</div>
+<div class="line">Used as a view decorator.</div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="auth.html"
+                        title="previous chapter">techu.libraries.authentication</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generic.html"
+                        title="next chapter">techu.libraries.generic</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/caching.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generic.html" title="techu.libraries.generic"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="auth.html" title="techu.libraries.authentication"
+             >previous</a> |</li>
+        <li><a href="../index.html">Techu 0.2-beta documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, George Psarakis.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

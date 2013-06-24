@@ -6,17 +6,28 @@
 Welcome to Techu's documentation!
 =================================
 
-Contents:
+Models & Views
+--------------
+
+.. toctree::
+   :maxdepth: 3
+
+   modules/models.rst
+   modules/views.rst
+
+Libraries
+---------
 
 .. toctree::
    :maxdepth: 2
 
-   modules/models.rst
-   modules/views.rst
-   modules/generic.rst
    modules/applier.rst
-   modules/daemon.rst
+   modules/auth.rst
+   modules/caching.rst
+   modules/generic.rst
    modules/middleware.rst
+   modules/profiler.rst
+   modules/scripting.rst
 
 Indices and tables
 ==================
@@ -25,3 +36,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+.. |br| raw:: html
+
+   <br />

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>techu.libraries.applier &mdash; Techu 0.2-beta documentation</title>
+    <title>techu.libraries.profiler &mdash; Techu 0.2-beta documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Techu 0.2-beta documentation" href="../index.html" />
-    <link rel="next" title="techu.libraries.authentication" href="auth.html" />
-    <link rel="prev" title="techu.views" href="views.html" /> 
+    <link rel="next" title="techu.libraries.scripting" href="scripting.html" />
+    <link rel="prev" title="techu.libraries.middleware" href="middleware.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,10 +38,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="auth.html" title="techu.libraries.authentication"
+          <a href="scripting.html" title="techu.libraries.scripting"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="views.html" title="techu.views"
+          <a href="middleware.html" title="techu.libraries.middleware"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Techu 0.2-beta documentation</a> &raquo;</li> 
       </ul>
@@ -52,34 +52,15 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-techu.libraries.applier">
-<span id="techu-libraries-applier"></span><h1>techu.libraries.applier<a class="headerlink" href="#module-techu.libraries.applier" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-techu.libraries.profiler">
+<span id="techu-libraries-profiler"></span><h1>techu.libraries.profiler<a class="headerlink" href="#module-techu.libraries.profiler" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="techu.libraries.applier.QueueDaemon">
-<em class="property">class </em><tt class="descclassname">techu.libraries.applier.</tt><tt class="descname">QueueDaemon</tt><big>(</big><em>pidfile</em>, <em>stdin='/dev/null'</em>, <em>stdout='/dev/null'</em>, <em>stderr='/dev/null'</em><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon" title="Permalink to this definition">¶</a></dt>
+<dt id="techu.libraries.profiler.Profiler">
+<em class="property">class </em><tt class="descclassname">techu.libraries.profiler.</tt><tt class="descname">Profiler</tt><big>(</big><em>fn</em><big>)</big><a class="headerlink" href="#techu.libraries.profiler.Profiler" title="Permalink to this definition">¶</a></dt>
 <dd><div class="line-block">
-<div class="line">Daemon script that applies queued operations to indexes</div>
+<div class="line">Simple Profiling. Stores number of requests and total time for a function.</div>
+<div class="line">Used as a view decorator. Can be disabled by setting <cite>PROFILER = False</cite> in <em>settings.py</em>.</div>
 </div>
-<p><em>Notes</em>
-* Different instances should be spawned for each index</p>
-<dl class="attribute">
-<dt id="techu.libraries.applier.QueueDaemon.Logger">
-<tt class="descname">Logger</tt><em class="property"> = None</em><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.Logger" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="techu.libraries.applier.QueueDaemon.fetch_indexes">
-<tt class="descname">fetch_indexes</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.fetch_indexes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all active realtime indexes.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="techu.libraries.applier.QueueDaemon.run">
-<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#techu.libraries.applier.QueueDaemon.run" title="Permalink to this definition">¶</a></dt>
-<dd><p><strong>UNDER DEVELOPMENT</strong>
-The actual code for applying operations.</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -91,14 +72,14 @@ The actual code for applying operations.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="views.html"
-                        title="previous chapter">techu.views</a></p>
+  <p class="topless"><a href="middleware.html"
+                        title="previous chapter">techu.libraries.middleware</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="auth.html"
-                        title="next chapter">techu.libraries.authentication</a></p>
+  <p class="topless"><a href="scripting.html"
+                        title="next chapter">techu.libraries.scripting</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/modules/applier.txt"
+    <li><a href="../_sources/modules/profiler.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -128,10 +109,10 @@ The actual code for applying operations.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="auth.html" title="techu.libraries.authentication"
+          <a href="scripting.html" title="techu.libraries.scripting"
              >next</a> |</li>
         <li class="right" >
-          <a href="views.html" title="techu.views"
+          <a href="middleware.html" title="techu.libraries.middleware"
              >previous</a> |</li>
         <li><a href="../index.html">Techu 0.2-beta documentation</a> &raquo;</li> 
       </ul>

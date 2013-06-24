@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>techu.models &mdash; Techu 0.1-beta documentation</title>
+    <title>techu.models &mdash; Techu 0.2-beta documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1-beta',
+        VERSION:     '0.2-beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Techu 0.1-beta documentation" href="../index.html" />
+    <link rel="top" title="Techu 0.2-beta documentation" href="../index.html" />
     <link rel="next" title="techu.views" href="views.html" />
     <link rel="prev" title="Welcome to Techu’s documentation!" href="../index.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="../index.html" title="Welcome to Techu’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Techu 0.1-beta documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Techu 0.2-beta documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,9 +55,40 @@
   <div class="section" id="module-techu.models">
 <span id="techu-models"></span><h1>techu.models<a class="headerlink" href="#module-techu.models" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
+<dt id="techu.models.Authentication">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Authentication</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Authentication" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table <em>authentication</em>: stores consumer key/secret pairs for authenticated requests.</p>
+<dl class="exception">
+<dt id="techu.models.Authentication.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Authentication.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Authentication.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Authentication.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Authentication.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Authentication.get_next_by_date_inserted">
+<tt class="descclassname">Authentication.</tt><tt class="descname">get_next_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Authentication.get_next_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Authentication.get_previous_by_date_inserted">
+<tt class="descclassname">Authentication.</tt><tt class="descname">get_previous_by_date_inserted</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="headerlink" href="#techu.models.Authentication.get_previous_by_date_inserted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Authentication.objects">
+<tt class="descclassname">Authentication.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3ff9390&gt;</em><a class="headerlink" href="#techu.models.Authentication.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="techu.models.Configuration">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Configuration</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Configuration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configuration(id, name, hash, description, is_active, date_inserted)</p>
+<dd><p>Table sp_configurations: stores Sphinx Configurations.</p>
 <dl class="exception">
 <dt id="techu.models.Configuration.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Configuration.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -80,7 +111,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.Configuration.objects">
-<tt class="descclassname">Configuration.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab5738c&gt;</em><a class="headerlink" href="#techu.models.Configuration.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Configuration.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3a5b990&gt;</em><a class="headerlink" href="#techu.models.Configuration.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -88,7 +119,7 @@
 <dl class="class">
 <dt id="techu.models.ConfigurationIndex">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">ConfigurationIndex</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>ConfigurationIndex(id, is_active, sp_index_id, sp_configuration_id, date_inserted, date_modified)</p>
+<dd><p>Table <em>sp_configuration_index</em>: stores the connections between configurations and indexes.</p>
 <dl class="exception">
 <dt id="techu.models.ConfigurationIndex.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.ConfigurationIndex.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -121,7 +152,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.ConfigurationIndex.objects">
-<tt class="descclassname">ConfigurationIndex.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab5c0cc&gt;</em><a class="headerlink" href="#techu.models.ConfigurationIndex.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ConfigurationIndex.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3a61550&gt;</em><a class="headerlink" href="#techu.models.ConfigurationIndex.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -129,7 +160,7 @@
 <dl class="class">
 <dt id="techu.models.ConfigurationSearchd">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">ConfigurationSearchd</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationSearchd" title="Permalink to this definition">¶</a></dt>
-<dd><p>ConfigurationSearchd(id, sp_configuration_id, sp_searchd_id)</p>
+<dd><p>Table <em>sp_configuration_searchd</em>: stores the connections between configurations and searchd entities.</p>
 <dl class="exception">
 <dt id="techu.models.ConfigurationSearchd.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.ConfigurationSearchd.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -142,7 +173,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.ConfigurationSearchd.objects">
-<tt class="descclassname">ConfigurationSearchd.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab8a84c&gt;</em><a class="headerlink" href="#techu.models.ConfigurationSearchd.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ConfigurationSearchd.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3ff46d0&gt;</em><a class="headerlink" href="#techu.models.ConfigurationSearchd.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -150,7 +181,7 @@
 <dl class="class">
 <dt id="techu.models.ConfigurationSource">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">ConfigurationSource</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.ConfigurationSource" title="Permalink to this definition">¶</a></dt>
-<dd><p>ConfigurationSource(id, sp_configuration_id, sp_source_id)</p>
+<dd><p>Table <em>sp_configuration_source</em>: stores the connections between configurations and datasource entities.</p>
 <dl class="exception">
 <dt id="techu.models.ConfigurationSource.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.ConfigurationSource.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -163,7 +194,33 @@
 
 <dl class="attribute">
 <dt id="techu.models.ConfigurationSource.objects">
-<tt class="descclassname">ConfigurationSource.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab8a3ec&gt;</em><a class="headerlink" href="#techu.models.ConfigurationSource.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">ConfigurationSource.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3ff43d0&gt;</em><a class="headerlink" href="#techu.models.ConfigurationSource.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="techu.models.Constants">
+<em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Constants</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Table constants: various constants (ENUM replacement).</p>
+<dl class="exception">
+<dt id="techu.models.Constants.DoesNotExist">
+<em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Constants.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="techu.models.Constants.MultipleObjectsReturned">
+<em class="property">exception </em><tt class="descclassname">Constants.</tt><tt class="descname">MultipleObjectsReturned</tt><a class="headerlink" href="#techu.models.Constants.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="techu.models.Constants.objects">
+<tt class="descclassname">Constants.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3a5b550&gt;</em><a class="headerlink" href="#techu.models.Constants.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techu.models.Constants.save">
+<tt class="descclassname">Constants.</tt><tt class="descname">save</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Constants.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -171,7 +228,7 @@
 <dl class="class">
 <dt id="techu.models.Index">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Index</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Index(id, name, index_type, is_active, parent_id, date_inserted, date_modified)</p>
+<dd><p>Table sp_indexes: stores indexes.</p>
 <dl class="exception">
 <dt id="techu.models.Index.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Index.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -204,7 +261,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.Index.objects">
-<tt class="descclassname">Index.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab57bcc&gt;</em><a class="headerlink" href="#techu.models.Index.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Index.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3a611d0&gt;</em><a class="headerlink" href="#techu.models.Index.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -212,7 +269,7 @@
 <dl class="class">
 <dt id="techu.models.IndexOption">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">IndexOption</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.IndexOption" title="Permalink to this definition">¶</a></dt>
-<dd><p>IndexOption(id, sp_index_id, sp_option_id, value, is_active, date_inserted, date_modified)</p>
+<dd><p>Table <em>sp_index_option</em>: stores the connections between options and indexes.</p>
 <dl class="exception">
 <dt id="techu.models.IndexOption.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.IndexOption.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -245,7 +302,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.IndexOption.objects">
-<tt class="descclassname">IndexOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab5c60c&gt;</em><a class="headerlink" href="#techu.models.IndexOption.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">IndexOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3a61990&gt;</em><a class="headerlink" href="#techu.models.IndexOption.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -253,7 +310,7 @@
 <dl class="class">
 <dt id="techu.models.Option">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Option</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Option(id, name, description, possible_values, section)</p>
+<dd><p>Table sp_options: stores available options.</p>
 <dl class="exception">
 <dt id="techu.models.Option.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Option.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -266,7 +323,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.Option.objects">
-<tt class="descclassname">Option.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab5760c&gt;</em><a class="headerlink" href="#techu.models.Option.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Option.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3a5bd50&gt;</em><a class="headerlink" href="#techu.models.Option.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -274,7 +331,7 @@
 <dl class="class">
 <dt id="techu.models.Searchd">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Searchd</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Searchd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Searchd(id, name, is_active, date_inserted, date_modified)</p>
+<dd><p>Table <em>sp_searchd</em>: stores searchd entities.</p>
 <dl class="exception">
 <dt id="techu.models.Searchd.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Searchd.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -307,7 +364,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.Searchd.objects">
-<tt class="descclassname">Searchd.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab5cf8c&gt;</em><a class="headerlink" href="#techu.models.Searchd.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Searchd.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3ff4110&gt;</em><a class="headerlink" href="#techu.models.Searchd.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -315,7 +372,7 @@
 <dl class="class">
 <dt id="techu.models.SearchdOption">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">SearchdOption</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.SearchdOption" title="Permalink to this definition">¶</a></dt>
-<dd><p>SearchdOption(id, sp_searchd_id, sp_option_id, value, is_active, date_inserted, date_modified)</p>
+<dd><p>Table <em>sp_searchd_option</em>: stores the connections between searchd entities and options.</p>
 <dl class="exception">
 <dt id="techu.models.SearchdOption.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.SearchdOption.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -348,7 +405,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.SearchdOption.objects">
-<tt class="descclassname">SearchdOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab8e52c&gt;</em><a class="headerlink" href="#techu.models.SearchdOption.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SearchdOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3ff4fd0&gt;</em><a class="headerlink" href="#techu.models.SearchdOption.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -356,7 +413,7 @@
 <dl class="class">
 <dt id="techu.models.SourceOption">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">SourceOption</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.SourceOption" title="Permalink to this definition">¶</a></dt>
-<dd><p>SourceOption(id, sp_source_id, sp_option_id, value, is_active, date_inserted, date_modified)</p>
+<dd><p>Table <em>sp_source_option</em>: stores the connections between datasource entities and options.</p>
 <dl class="exception">
 <dt id="techu.models.SourceOption.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.SourceOption.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -389,7 +446,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.SourceOption.objects">
-<tt class="descclassname">SourceOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab8aeac&gt;</em><a class="headerlink" href="#techu.models.SourceOption.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SourceOption.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3ff4b50&gt;</em><a class="headerlink" href="#techu.models.SourceOption.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -397,7 +454,7 @@
 <dl class="class">
 <dt id="techu.models.Sources">
 <em class="property">class </em><tt class="descclassname">techu.models.</tt><tt class="descname">Sources</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#techu.models.Sources" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sources(id, name, is_active, parent_id, date_inserted, date_modified)</p>
+<dd><p>Table <em>sp_sources</em>: stores datasource entities.</p>
 <dl class="exception">
 <dt id="techu.models.Sources.DoesNotExist">
 <em class="property">exception </em><tt class="descname">DoesNotExist</tt><a class="headerlink" href="#techu.models.Sources.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -430,7 +487,7 @@
 
 <dl class="attribute">
 <dt id="techu.models.Sources.objects">
-<tt class="descclassname">Sources.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0xab5cacc&gt;</em><a class="headerlink" href="#techu.models.Sources.objects" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Sources.</tt><tt class="descname">objects</tt><em class="property"> = &lt;django.db.models.manager.Manager object at 0x3a61d50&gt;</em><a class="headerlink" href="#techu.models.Sources.objects" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -486,7 +543,7 @@
         <li class="right" >
           <a href="../index.html" title="Welcome to Techu’s documentation!"
              >previous</a> |</li>
-        <li><a href="../index.html">Techu 0.1-beta documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Techu 0.2-beta documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
